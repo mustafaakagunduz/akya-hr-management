@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+
+# env files (gerçek secret'lar burada tutulur, asla commit edilmez)
+.env
+.env.local
+
+# build output
+dist/
+build/
+
+# logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# editor / tooling
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Playwright
+frontend/test-results/
+frontend/playwright-report/
+frontend/playwright/.cache/
+
+# bu repoya ait olmayan yerel dosyalar
+neon-db-bilgileri.png
+.claude/
