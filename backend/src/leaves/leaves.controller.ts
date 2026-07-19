@@ -1,0 +1,52 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { LeavesService } from './leaves.service';
+import { CreateLeaveRequestDto } from './dto/create-leave-request.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/roles.guard';
+import { Roles } from '../common/roles.decorator';
+import { CurrentUser } from '../common/current-user.decorator';
+import { User } from '../users/user.entity';
+import { UserRole } from '../common/enums';
+
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Controller('leaves')
+export class LeavesController {
+  constructor(private readonly leavesService: LeavesService) {}
+
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER)
+  @Post()
+  create(@CurrentUser() user: User, @Body() dto: CreateLeaveRequestDto) {
+    return this.leavesService.create(user, dto);
+  }
+
+  @Get('my')
+  findMy(@CurrentUser() user: User) {
+    return this.leavesService.findMy(user.id);
+  }
+
+  @Roles(UserRole.MANAGER)
+  @Get('pending')
+  findPending() {
+    return this.leavesService.findPending();
+  }
+
+  @Roles(UserRole.MANAGER)
+  @Patch(':id/approve')
+  approve(@Param('id') id: string) {
+    return this.leavesService.approve(id);
+  }
+
+  @Roles(UserRole.MANAGER)
+  @Patch(':id/reject')
+  reject(@Param('id') id: string) {
+    return this.leavesService.reject(id);
+  }
+}
