@@ -1,0 +1,89 @@
+{
+  "app": {
+    "title": "İK İzin Yönetim Sistemi"
+  },
+  "common": {
+    "logout": "Çıkış Yap",
+    "loading": "Yükleniyor...",
+    "save": "Kaydet",
+    "cancel": "Vazgeç",
+    "approve": "Onayla",
+    "reject": "Reddet",
+    "actions": "İşlemler",
+    "genericError": "Bir hata oluştu, lütfen tekrar deneyin",
+    "welcome": "Hoş geldiniz, {{name}}"
+  },
+  "nav": {
+    "panel": "Personel Paneli",
+    "manager": "Yönetici Paneli"
+  },
+  "auth": {
+    "login": {
+      "title": "Giriş Yap",
+      "email": "E-posta",
+      "password": "Şifre",
+      "submit": "Giriş Yap",
+      "noAccount": "Hesabınız yok mu?",
+      "registerLink": "Kayıt olun"
+    },
+    "register": {
+      "title": "Kayıt Ol",
+      "firstName": "Ad",
+      "lastName": "Soyad",
+      "nationalId": "TC Kimlik No",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "department": "Departman",
+      "position": "Pozisyon",
+      "startDate": "İşe Başlama Tarihi",
+      "birthDate": "Doğum Tarihi",
+      "password": "Şifre",
+      "submit": "Kayıt Ol",
+      "hasAccount": "Zaten hesabınız var mı?",
+      "loginLink": "Giriş yapın",
+      "success": "Kayıt başarılı, giriş yapabilirsiniz"
+    }
+  },
+  "leaves": {
+    "type": {
+      "label": "İzin Türü",
+      "DAILY": "Günlük",
+      "ANNUAL": "Yıllık"
+    },
+    "status": {
+      "label": "Durum",
+      "PENDING": "Beklemede",
+      "APPROVED": "Onaylandı",
+      "REJECTED": "Reddedildi"
+    },
+    "startDate": "Başlangıç Tarihi",
+    "endDate": "Bitiş Tarihi",
+    "description": "Açıklama",
+    "dayCount": "Gün Sayısı",
+    "submit": "Talep Oluştur",
+    "createSuccess": "İzin talebiniz oluşturuldu",
+    "myRequests": "Taleplerim",
+    "noRequests": "Henüz izin talebiniz yok",
+    "annualBalance": "Kalan Yıllık İzin Bakiyesi: {{count}} gün"
+  },
+  "panel": {
+    "title": "Personel Paneli",
+    "newRequest": "Yeni İzin Talebi"
+  },
+  "manager": {
+    "title": "Yönetici Paneli",
+    "pendingRequests": "Bekleyen Talepler",
+    "noPending": "Bekleyen talep yok",
+    "employee": "Personel",
+    "department": "Departman",
+    "approveSuccess": "Talep onaylandı",
+    "rejectSuccess": "Talep reddedildi"
+  },
+  "validation": {
+    "required": "Bu alan zorunludur",
+    "invalidEmail": "Geçerli bir e-posta adresi girin",
+    "nationalIdLength": "TC Kimlik No 11 haneli olmalı",
+    "minPasswordLength": "Şifre en az 6 karakter olmalı",
+    "endBeforeStart": "Bitiş tarihi başlangıç tarihinden önce olamaz"
+  }
+}
