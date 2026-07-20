@@ -138,10 +138,11 @@ body {
 @media (min-width: 900px) {
   .auth-visual {
     display: block;
+    flex: 5 1 0;
   }
 
   .auth-form-panel {
-    flex: 1 1 0;
+    flex: 2 1 0;
     padding: 48px 64px;
   }
 }

@@ -44,8 +44,8 @@
       }
     },
     "language": {
-      "title": "Dil",
-      "label": "Dil",
+      "title": "Tercih Edilen Dil",
+      "label": "Dil Seçiniz",
       "options": {
         "tr": "Türkçe",
         "en": "İngilizce"
