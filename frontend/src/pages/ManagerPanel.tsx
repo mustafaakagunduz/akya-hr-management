@@ -8,11 +8,13 @@ import {
 } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
 import { useSocket } from '../context/SocketContext';
+import { useToast } from '../context/ToastContext';
 import type { LeaveRequest } from '../api/types';
 
 export function ManagerPanel() {
   const { t } = useTranslation();
   const socket = useSocket();
+  const toast = useToast();
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -63,8 +65,11 @@ export function ManagerPanel() {
       await approveLeaveRequest(id);
       setRequests((prev) => prev.filter((r) => r.id !== id));
       setMessage(t('manager.approveSuccess'));
+      toast.success(t('manager.approveSuccess'));
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setProcessingId(null);
     }
@@ -78,8 +83,11 @@ export function ManagerPanel() {
       await rejectLeaveRequest(id);
       setRequests((prev) => prev.filter((r) => r.id !== id));
       setMessage(t('manager.rejectSuccess'));
+      toast.success(t('manager.rejectSuccess'));
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setProcessingId(null);
     }

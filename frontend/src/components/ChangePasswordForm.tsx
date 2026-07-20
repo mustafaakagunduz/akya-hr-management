@@ -2,9 +2,11 @@ import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { changePassword } from '../api/auth';
 import { getApiErrorMessage } from '../api/client';
+import { useToast } from '../context/ToastContext';
 
 export function ChangePasswordForm() {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -34,8 +36,11 @@ export function ChangePasswordForm() {
       setNewPassword('');
       setNewPasswordConfirm('');
       setSuccess(true);
+      toast.success(t('profile.changePassword.success'));
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }

@@ -4,6 +4,7 @@ import { AppLayout } from '../components/layout/AppLayout';
 import { LeaveRequestFields } from '../components/LeaveRequestFields';
 import { Modal } from '../components/Modal';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { createLeaveRequest } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
 import { formatDateTR } from '../utils/date';
@@ -12,6 +13,7 @@ import type { LeaveType } from '../api/types';
 export function CreateLeaveRequest() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const toast = useToast();
 
   const [type, setType] = useState<LeaveType>('DAILY');
   const [startDate, setStartDate] = useState('');
@@ -46,6 +48,7 @@ export function CreateLeaveRequest() {
         description: description || undefined,
       });
       setSuccess(true);
+      toast.success(t('leaves.createSuccess'));
       setIsConfirmOpen(false);
       setStartDate('');
       setEndDate('');
@@ -53,7 +56,9 @@ export function CreateLeaveRequest() {
       setFormKey((k) => k + 1);
     } catch (err) {
       setIsConfirmOpen(false);
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

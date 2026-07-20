@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../api/auth';
 import { getApiErrorMessage } from '../api/client';
+import { useToast } from '../context/ToastContext';
 import { DateField } from '../components/DateField';
 import type { Department, Position, RegisterPayload } from '../api/types';
 
@@ -41,6 +42,7 @@ type FieldErrors = Partial<Record<keyof RegisterPayload, string>>;
 export function Register() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [form, setForm] = useState<RegisterPayload>(EMPTY_FORM);
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -102,11 +104,14 @@ export function Register() {
     try {
       await register(form);
       setSuccess(true);
+      toast.success(t('auth.register.success'));
       setForm(EMPTY_FORM);
       setPasswordConfirm('');
       setTimeout(() => navigate('/login'), 1200);
     } catch (err) {
-      setSubmitError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setSubmitError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

@@ -4,6 +4,7 @@ import { Modal } from './Modal';
 import { DateField } from './DateField';
 import { adminUpdateUser } from '../api/users';
 import { getApiErrorMessage } from '../api/client';
+import { useToast } from '../context/ToastContext';
 import type {
   AdminUpdateUserPayload,
   Department,
@@ -39,6 +40,7 @@ interface EditUserModalProps {
 
 export function EditUserModal({ user, onClose, onSaved }: EditUserModalProps) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [form, setForm] = useState<AdminUpdateUserPayload>({
     firstName: user.firstName,
@@ -77,7 +79,9 @@ export function EditUserModal({ user, onClose, onSaved }: EditUserModalProps) {
       });
       onSaved(updated);
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }

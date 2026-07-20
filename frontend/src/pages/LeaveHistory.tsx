@@ -6,10 +6,12 @@ import { Modal } from '../components/Modal';
 import { BanIcon } from '../components/layout/icons';
 import { cancelLeaveRequest, fetchLeaveHistory } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
+import { useToast } from '../context/ToastContext';
 import type { LeaveRequest } from '../api/types';
 
 export function LeaveHistory() {
   const { t } = useTranslation();
+  const toast = useToast();
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [search, setSearch] = useState('');
 
@@ -33,8 +35,11 @@ export function LeaveHistory() {
         prev.map((request) => (request.id === updated.id ? updated : request)),
       );
       setCancelTarget(null);
+      toast.success(t('manager.cancelLeaveSuccess'));
     } catch (err) {
-      setCancelError(getApiErrorMessage(err, t('manager.cancelLeaveError')));
+      const message = getApiErrorMessage(err, t('manager.cancelLeaveError'));
+      setCancelError(message);
+      toast.error(message);
     } finally {
       setIsCancelling(false);
     }

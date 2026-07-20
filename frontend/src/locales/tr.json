@@ -58,6 +58,7 @@
       "submit": "Giriş Yap",
       "noAccount": "Hesabınız yok mu?",
       "registerLink": "Kayıt olun",
+      "success": "Giriş başarılı, hoş geldiniz",
       "demo": {
         "title": "Demo giriş bilgileri",
         "manager": "Yönetici",
@@ -114,8 +115,10 @@
     "confirmTitle": "İzin Talebini Onayla",
     "confirmSubtitle": "Aşağıdaki bilgilerle izin talebi oluşturulacak",
     "editTitle": "İzin Talebini Düzenle",
+    "editSuccess": "İzin talebiniz güncellendi",
     "deleteTitle": "İzin Talebini Sil",
-    "deleteSubtitle": "Bu izin talebini silmek istediğinize emin misiniz?"
+    "deleteSubtitle": "Bu izin talebini silmek istediğinize emin misiniz?",
+    "deleteSuccess": "İzin talebiniz silindi"
   },
   "panel": {
     "newRequest": "İzin Talebi Oluştur"
@@ -128,6 +131,7 @@
       "EMPLOYEE": "Personel",
       "MANAGER": "Yönetici"
     },
+    "updateSuccess": "Profiliniz güncellendi",
     "changePassword": {
       "title": "Şifre Değişikliği",
       "currentPassword": "Mevcut Şifre",
@@ -144,10 +148,12 @@
     "resetPasswordSubtitle": "Kullanıcının yeni şifresi aşağıdadır, lütfen kendisiyle güvenli bir şekilde paylaşın.",
     "newPassword": "Yeni Şifre",
     "resetPasswordError": "Şifre sıfırlanırken bir hata oluştu",
+    "resetPasswordSuccess": "Kullanıcının şifresi sıfırlandı",
     "resetBalance": "Yıllık İzin Bakiyesini Sıfırla",
     "resetBalanceTitle": "Yıllık İzin Bakiyesini Sıfırla",
-    "resetBalanceSubtitle": "{{name}} adlı kullanıcının yıllık izin bakiyesi 14 güne sıfırlanacak. Onaylıyor musunuz?",
+    "resetBalanceSubtitle": "{{name}} adlı kullanıcının yıllık izin bakiyesi {{count}} güne sıfırlanacak. Onaylıyor musunuz?",
     "resetBalanceError": "Bakiye sıfırlanırken bir hata oluştu",
+    "resetBalanceSuccess": "Yıllık izin bakiyesi sıfırlandı",
     "status": "Durum",
     "active": "Aktif",
     "inactive": "Pasif",
@@ -158,9 +164,12 @@
     "deactivateSubtitle": "{{name}} adlı kullanıcının hesabı pasifleştirilecek, kullanıcı giriş yapamayacak. Onaylıyor musunuz?",
     "activateSubtitle": "{{name}} adlı kullanıcının hesabı tekrar aktifleştirilecek. Onaylıyor musunuz?",
     "statusUpdateError": "Durum güncellenirken bir hata oluştu",
+    "deactivateSuccess": "Kullanıcının hesabı pasifleştirildi",
+    "activateSuccess": "Kullanıcının hesabı aktifleştirildi",
     "editTitle": "Kullanıcıyı Düzenle",
     "editRole": "Rol",
-    "editAnnualLeaveBalance": "Yıllık İzin Bakiyesi"
+    "editAnnualLeaveBalance": "Yıllık İzin Bakiyesi",
+    "editSuccess": "Kullanıcı bilgileri güncellendi"
   },
   "manager": {
     "title": "İzin Yönetimi",
@@ -177,7 +186,8 @@
     "cancelLeaveTitle": "İzni İptal Et",
     "cancelLeaveSubtitleAnnual": "{{name}} adlı personelin onaylanmış izni iptal edilecek ve {{count}} gün yıllık izin bakiyesine geri eklenecek. Onaylıyor musunuz?",
     "cancelLeaveSubtitleDaily": "{{name}} adlı personelin onaylanmış izni iptal edilecek. Onaylıyor musunuz?",
-    "cancelLeaveError": "İzin iptal edilirken bir hata oluştu"
+    "cancelLeaveError": "İzin iptal edilirken bir hata oluştu",
+    "cancelLeaveSuccess": "İzin iptal edildi"
   },
   "validation": {
     "required": "Bu alan zorunludur",

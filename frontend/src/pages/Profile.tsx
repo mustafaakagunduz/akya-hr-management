@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
 import { ChangePasswordForm } from '../components/ChangePasswordForm';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { updateProfile } from '../api/auth';
 import { getApiErrorMessage } from '../api/client';
 import { formatDateTR } from '../utils/date';
@@ -28,6 +29,7 @@ const POSITION_VALUES: Position[] = [
 export function Profile() {
   const { t } = useTranslation();
   const { user, refreshUser } = useAuth();
+  const toast = useToast();
 
   const [isEditing, setIsEditing] = useState(false);
   const [email, setEmail] = useState(user?.email ?? '');
@@ -62,8 +64,11 @@ export function Profile() {
       await updateProfile({ email, phone, department, position });
       await refreshUser();
       setIsEditing(false);
+      toast.success(t('profile.updateSuccess'));
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }

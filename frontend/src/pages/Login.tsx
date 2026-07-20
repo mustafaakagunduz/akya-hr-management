@@ -2,11 +2,13 @@ import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { getApiErrorMessage } from '../api/client';
 
 export function Login() {
   const { t } = useTranslation();
   const { login } = useAuth();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -20,9 +22,12 @@ export function Login() {
     setIsSubmitting(true);
     try {
       const user = await login({ email, password });
+      toast.success(t('auth.login.success'));
       navigate(user.role === 'MANAGER' ? '/leave-requests' : '/my-leaves');
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

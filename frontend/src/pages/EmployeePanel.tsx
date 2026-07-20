@@ -7,6 +7,7 @@ import { Modal } from '../components/Modal';
 import { PencilIcon, TrashIcon } from '../components/layout/icons';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
+import { useToast } from '../context/ToastContext';
 import {
   deleteLeaveRequest,
   fetchMyLeaveRequests,
@@ -20,6 +21,7 @@ export function EmployeePanel() {
   const { t } = useTranslation();
   const { user, refreshUser } = useAuth();
   const socket = useSocket();
+  const toast = useToast();
 
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
 
@@ -104,8 +106,11 @@ export function EmployeePanel() {
         ),
       );
       setEditingRequest(null);
+      toast.success(t('leaves.editSuccess'));
     } catch (err) {
-      setEditError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setEditError(message);
+      toast.error(message);
     } finally {
       setIsEditSubmitting(false);
     }
@@ -123,8 +128,11 @@ export function EmployeePanel() {
         prev.filter((request) => request.id !== deletingRequest.id),
       );
       setDeletingRequest(null);
+      toast.success(t('leaves.deleteSuccess'));
     } catch (err) {
-      setDeleteError(getApiErrorMessage(err, t('common.genericError')));
+      const message = getApiErrorMessage(err, t('common.genericError'));
+      setDeleteError(message);
+      toast.error(message);
     } finally {
       setIsDeleting(false);
     }

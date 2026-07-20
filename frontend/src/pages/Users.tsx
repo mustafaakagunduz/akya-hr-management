@@ -20,11 +20,13 @@ import {
 import { getApiErrorMessage } from '../api/client';
 import { formatDateTR } from '../utils/date';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import type { User } from '../api/types';
 
 export function Users() {
   const { t } = useTranslation();
   const { user: currentUser } = useAuth();
+  const toast = useToast();
   const [users, setUsers] = useState<Omit<User, 'password'>[]>([]);
   const [resettingId, setResettingId] = useState<string | null>(null);
   const [resetError, setResetError] = useState<string | null>(null);
@@ -59,8 +61,11 @@ export function Users() {
     try {
       const { newPassword: password } = await resetUserPassword(id);
       setNewPassword(password);
+      toast.success(t('users.resetPasswordSuccess'));
     } catch (err) {
-      setResetError(getApiErrorMessage(err, t('users.resetPasswordError')));
+      const message = getApiErrorMessage(err, t('users.resetPasswordError'));
+      setResetError(message);
+      toast.error(message);
     } finally {
       setResettingId(null);
     }
@@ -78,8 +83,11 @@ export function Users() {
         prev.map((user) => (user.id === updated.id ? updated : user)),
       );
       setBalanceTarget(null);
+      toast.success(t('users.resetBalanceSuccess'));
     } catch (err) {
-      setBalanceError(getApiErrorMessage(err, t('users.resetBalanceError')));
+      const message = getApiErrorMessage(err, t('users.resetBalanceError'));
+      setBalanceError(message);
+      toast.error(message);
     } finally {
       setIsResettingBalance(false);
     }
@@ -92,15 +100,21 @@ export function Users() {
     setStatusError(null);
     setIsUpdatingStatus(true);
     try {
-      const updated = statusTarget.isActive
+      const wasActive = statusTarget.isActive;
+      const updated = wasActive
         ? await deactivateUser(statusTarget.id)
         : await activateUser(statusTarget.id);
       setUsers((prev) =>
         prev.map((user) => (user.id === updated.id ? updated : user)),
       );
       setStatusTarget(null);
+      toast.success(
+        t(wasActive ? 'users.deactivateSuccess' : 'users.activateSuccess'),
+      );
     } catch (err) {
-      setStatusError(getApiErrorMessage(err, t('users.statusUpdateError')));
+      const message = getApiErrorMessage(err, t('users.statusUpdateError'));
+      setStatusError(message);
+      toast.error(message);
     } finally {
       setIsUpdatingStatus(false);
     }
@@ -120,6 +134,7 @@ export function Users() {
           <p className="modal-subtitle">
             {t('users.resetBalanceSubtitle', {
               name: `${balanceTarget.firstName} ${balanceTarget.lastName}`,
+              count: balanceTarget.defaultAnnualLeaveBalance,
             })}
           </p>
           {balanceError && <p className="form-error">{balanceError}</p>}
@@ -199,6 +214,7 @@ export function Users() {
               prev.map((user) => (user.id === updated.id ? updated : user)),
             );
             setEditTarget(null);
+            toast.success(t('users.editSuccess'));
           }}
         />
       )}
