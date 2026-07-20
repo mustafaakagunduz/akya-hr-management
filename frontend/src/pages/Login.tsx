@@ -20,7 +20,7 @@ export function Login() {
     setIsSubmitting(true);
     try {
       await login({ email, password });
-      navigate('/panel');
+      navigate('/my-leaves');
     } catch (err) {
       setError(getApiErrorMessage(err, t('common.genericError')));
     } finally {

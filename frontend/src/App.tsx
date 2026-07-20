@@ -11,7 +11,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/panel"
+        path="/my-leaves"
         element={
           <ProtectedRoute>
             <EmployeePanel />
@@ -19,15 +19,15 @@ function App() {
         }
       />
       <Route
-        path="/yonetici"
+        path="/leave-requests"
         element={
           <ProtectedRoute allowedRoles={['MANAGER']}>
             <ManagerPanel />
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to="/panel" replace />} />
-      <Route path="*" element={<Navigate to="/panel" replace />} />
+      <Route path="/" element={<Navigate to="/my-leaves" replace />} />
+      <Route path="*" element={<Navigate to="/my-leaves" replace />} />
     </Routes>
   );
 }

@@ -42,7 +42,7 @@ test.describe.serial('İK izin yönetim akışı', () => {
     await page.getByTestId('login-password').fill(employee.password);
     await page.getByTestId('login-submit').click();
 
-    await expect(page).toHaveURL(/\/panel$/);
+    await expect(page).toHaveURL(/\/my-leaves$/);
     await expect(page.getByTestId('annual-balance')).toContainText('14');
 
     await page.getByTestId('leave-type').selectOption('DAILY');
@@ -66,9 +66,9 @@ test.describe.serial('İK izin yönetim akışı', () => {
     await page.getByTestId('login-password').fill(ADMIN_PASSWORD);
     await page.getByTestId('login-submit').click();
 
-    await expect(page).toHaveURL(/\/panel$/);
+    await expect(page).toHaveURL(/\/my-leaves$/);
     await page.getByRole('link', { name: 'Yönetici Paneli' }).click();
-    await expect(page).toHaveURL(/\/yonetici$/);
+    await expect(page).toHaveURL(/\/leave-requests$/);
 
     const row = page.getByTestId('pending-row').filter({
       hasText: employee.lastName,
@@ -88,7 +88,7 @@ test.describe.serial('İK izin yönetim akışı', () => {
     await page.getByTestId('login-password').fill(employee.password);
     await page.getByTestId('login-submit').click();
 
-    await expect(page).toHaveURL(/\/panel$/);
+    await expect(page).toHaveURL(/\/my-leaves$/);
     const row = page.getByTestId('my-requests-table').locator('tbody tr').first();
     await expect(row.getByTestId('status-badge-APPROVED')).toBeVisible();
   });

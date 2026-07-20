@@ -16,8 +16,8 @@
     "welcome": "Hoş geldiniz, {{name}}"
   },
   "nav": {
-    "panel": "Personel Paneli",
-    "manager": "Yönetici Paneli"
+    "panel": "İzin Talebi",
+    "manager": "İzin Yönetimi"
   },
   "auth": {
     "login": {

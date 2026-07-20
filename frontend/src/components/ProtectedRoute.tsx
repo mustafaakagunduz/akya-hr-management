@@ -23,7 +23,7 @@ export function ProtectedRoute({
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/panel" replace />;
+    return <Navigate to="/my-leaves" replace />;
   }
 
   return <>{children}</>;

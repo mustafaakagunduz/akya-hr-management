@@ -13,6 +13,6 @@ test('hatalı bilgilerle giriş yapılamaz', async ({ page }) => {
 test('token yokken korumalı sayfa login sayfasına yönlendirir', async ({
   page,
 }) => {
-  await page.goto('/panel');
+  await page.goto('/my-leaves');
   await expect(page).toHaveURL(/\/login$/);
 });

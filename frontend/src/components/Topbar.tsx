@@ -10,9 +10,9 @@ export function Topbar() {
     <div className="topbar">
       <strong>{t('app.title')}</strong>
       <div className="topbar-links">
-        <Link to="/panel">{t('nav.panel')}</Link>
+        <Link to="/my-leaves">{t('nav.panel')}</Link>
         {user?.role === 'MANAGER' && (
-          <Link to="/yonetici">{t('nav.manager')}</Link>
+          <Link to="/leave-requests">{t('nav.manager')}</Link>
         )}
         <button
           type="button"
