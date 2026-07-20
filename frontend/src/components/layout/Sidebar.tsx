@@ -66,7 +66,9 @@ export function Sidebar({
       {mobileOpen && (
         <div role="dialog" aria-modal="true" className="mobile-drawer">
           <div className="mobile-drawer-header">
-            <span>{user ? `${user.firstName} ${user.lastName}` : ''}</span>
+            <span className="mobile-drawer-header-user">
+              {user ? `${user.firstName} ${user.lastName}` : ''}
+            </span>
             <button
               type="button"
               className="mobile-drawer-close"

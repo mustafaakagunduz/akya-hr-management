@@ -261,18 +261,20 @@ export function EmployeePanel() {
                       <div className="actions-cell-inner">
                         <button
                           type="button"
-                          className="icon-btn"
+                          className="icon-btn icon-btn-plain"
                           onClick={() => openEdit(request)}
                           aria-label={t('common.edit')}
+                          data-tooltip={t('common.edit')}
                           data-testid={`leave-edit-${request.id}`}
                         >
                           <PencilIcon />
                         </button>
                         <button
                           type="button"
-                          className="icon-btn icon-btn-danger"
+                          className="icon-btn icon-btn-danger icon-btn-plain"
                           onClick={() => setDeletingRequest(request)}
                           aria-label={t('common.delete')}
+                          data-tooltip={t('common.delete')}
                           data-testid={`leave-delete-${request.id}`}
                         >
                           <TrashIcon />

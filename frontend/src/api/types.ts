@@ -62,6 +62,18 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface UpdateProfilePayload {
+  email: string;
+  phone: string;
+  department: Department;
+  position: Position;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface CreateLeaveRequestPayload {
   type: LeaveType;
   startDate: string;

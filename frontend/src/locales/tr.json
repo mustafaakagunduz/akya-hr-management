@@ -21,6 +21,7 @@
     "panel": "Taleplerim",
     "createLeave": "İzin Talebi Oluştur",
     "manager": "İzin Yönetimi",
+    "users": "Kullanıcılar",
     "profile": "Profil",
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat"
@@ -104,6 +105,7 @@
     "myRequests": "İzin Taleplerim",
     "noRequests": "Henüz izin talebiniz yok",
     "annualBalance": "Kalan Yıllık İzin Bakiyesi: {{count}} gün",
+    "annualBalanceShort": "Yıllık İzin Bakiyesi",
     "confirmTitle": "İzin Talebini Onayla",
     "confirmSubtitle": "Aşağıdaki bilgilerle izin talebi oluşturulacak",
     "editTitle": "İzin Talebini Düzenle",
@@ -111,17 +113,33 @@
     "deleteSubtitle": "Bu izin talebini silmek istediğinize emin misiniz?"
   },
   "panel": {
-    "newRequest": "Yeni İzin Talebi Oluştur"
+    "newRequest": "İzin Talebi Oluştur"
   },
   "profile": {
     "role": "Rol",
     "roles": {
       "EMPLOYEE": "Personel",
       "MANAGER": "Yönetici"
+    },
+    "changePassword": {
+      "title": "Şifre Değişikliği",
+      "currentPassword": "Mevcut Şifre",
+      "newPassword": "Yeni Şifre",
+      "newPasswordConfirm": "Yeni Şifre Tekrarı",
+      "submit": "Şifreyi Değiştir",
+      "success": "Şifreniz başarıyla değiştirildi"
     }
   },
+  "users": {
+    "noUsers": "Sistemde kayıtlı kullanıcı yok",
+    "resetPassword": "Şifre Sıfırla",
+    "resetPasswordTitle": "Şifre Sıfırlandı",
+    "resetPasswordSubtitle": "Kullanıcının yeni şifresi aşağıdadır, lütfen kendisiyle güvenli bir şekilde paylaşın.",
+    "newPassword": "Yeni Şifre",
+    "resetPasswordError": "Şifre sıfırlanırken bir hata oluştu"
+  },
   "manager": {
-    "title": "Yönetici Paneli",
+    "title": "İzin Yönetimi",
     "pendingRequests": "Bekleyen Talepler",
     "noPending": "Bekleyen talep yok",
     "employee": "Personel",

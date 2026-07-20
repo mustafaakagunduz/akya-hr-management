@@ -1,5 +1,11 @@
 import { apiClient } from './client';
-import type { LoginPayload, RegisterPayload, User } from './types';
+import type {
+  ChangePasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  UpdateProfilePayload,
+  User,
+} from './types';
 
 export function login(payload: LoginPayload) {
   return apiClient
@@ -15,4 +21,14 @@ export function register(payload: RegisterPayload) {
 
 export function fetchMe() {
   return apiClient.get<User>('/auth/me').then((res) => res.data);
+}
+
+export function updateProfile(payload: UpdateProfilePayload) {
+  return apiClient.patch<User>('/users/me', payload).then((res) => res.data);
+}
+
+export function changePassword(payload: ChangePasswordPayload) {
+  return apiClient
+    .patch<{ success: boolean }>('/users/me/password', payload)
+    .then((res) => res.data);
 }

@@ -5,6 +5,7 @@ import { EmployeePanel } from './pages/EmployeePanel';
 import { CreateLeaveRequest } from './pages/CreateLeaveRequest';
 import { ManagerPanel } from './pages/ManagerPanel';
 import { Profile } from './pages/Profile';
+import { Users } from './pages/Users';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoadingScreen } from './components/LoadingScreen';
 import { useAuth } from './context/AuthContext';
@@ -62,6 +63,14 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['MANAGER']}>
             <ManagerPanel />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute allowedRoles={['MANAGER']}>
+            <Users />
           </ProtectedRoute>
         }
       />

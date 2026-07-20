@@ -81,6 +81,26 @@ export function UserIcon({ className }: IconProps) {
   );
 }
 
+export function UsersIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className} aria-hidden="true">
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 21c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5" />
+      <path d="M16.5 4.5a3.5 3.5 0 0 1 0 7" />
+      <path d="M21.5 21c0-3.1-2.13-5.7-5-6.34" />
+    </svg>
+  );
+}
+
+export function KeyIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className} aria-hidden="true">
+      <circle cx="8" cy="15" r="4" />
+      <path d="M10.85 12.15 19 4M16 7l3 3M19 4l2 2" />
+    </svg>
+  );
+}
+
 export function TrashIcon({ className }: IconProps) {
   return (
     <svg {...base} className={className} aria-hidden="true">
