@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { getDefaultRoute } from '../../utils/routing';
 import { MenuIcon } from './icons';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageToggle } from './LanguageToggle';
 
 interface NavbarProps {
   onMenuOpen: () => void;
@@ -20,10 +21,11 @@ export function Navbar({ onMenuOpen }: NavbarProps) {
           <img src="/akya-logo.png" alt={t('app.title')} className="app-navbar-logo" />
         </Link>
         <div className="app-navbar-right">
-          <ThemeToggle />
           <span className="app-navbar-user">
             {user ? `${user.firstName} ${user.lastName}` : ''}
           </span>
+          <LanguageToggle className="language-toggle-btn--framed" />
+          <ThemeToggle />
           <button
             type="button"
             className="app-navbar-menu-btn"

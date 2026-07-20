@@ -30,7 +30,8 @@
     "themeToggle": {
       "toDark": "Switch to dark theme",
       "toLight": "Switch to light theme"
-    }
+    },
+    "languageToggle": "Switch to {{language}}"
   },
   "settings": {
     "appearance": {
@@ -86,7 +87,10 @@
       "demo": {
         "title": "Demo login credentials",
         "manager": "Manager",
-        "employee": "Employee"
+        "employee": "Employee",
+        "copyEmail": "Copy email",
+        "copyPassword": "Copy password",
+        "copied": "Copied"
       }
     },
     "register": {

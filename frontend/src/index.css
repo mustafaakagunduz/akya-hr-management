@@ -576,40 +576,54 @@ button {
   color: var(--color-muted);
 }
 
-.demo-card-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 0.85rem;
-  padding: 4px 0;
+.demo-card-group {
+  padding: 8px 0;
 }
 
-.demo-card-row + .demo-card-row {
+.demo-card-group + .demo-card-group {
   border-top: 1px dashed var(--color-border);
 }
 
 .demo-card-label {
+  display: block;
   font-weight: 600;
   color: var(--color-text);
-  flex-shrink: 0;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.demo-card-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
 }
 
 .demo-card-value {
-  text-align: right;
   min-width: 0;
   overflow-wrap: anywhere;
+  font-size: 0.85rem;
+  color: var(--color-muted);
 }
 
-@media (max-width: 480px) {
-  .demo-card-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-  }
+.demo-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-brand);
+  cursor: pointer;
+}
 
-  .demo-card-value {
-    text-align: left;
-  }
+.demo-copy-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .balance {
@@ -980,6 +994,40 @@ tr:last-child td {
 
 .theme-toggle-btn[data-theme-toggle='dark'] .theme-toggle-icon {
   transform: rotate(180deg);
+}
+
+.auth-toggle-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.auth-toggle-divider {
+  color: var(--color-border);
+}
+
+.language-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 4px;
+  background: none;
+  border: none;
+  color: var(--color-brand);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.language-toggle-btn--framed {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1.5px solid var(--color-brand);
+  border-radius: 8px;
 }
 
 @media (min-width: 900px) {

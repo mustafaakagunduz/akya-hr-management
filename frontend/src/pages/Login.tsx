@@ -5,6 +5,18 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { getApiErrorMessage } from '../api/client';
 import { getDefaultRoute } from '../utils/routing';
+import { CopyIcon } from '../components/layout/icons';
+import { ThemeToggle } from '../components/layout/ThemeToggle';
+import { LanguageToggle } from '../components/layout/LanguageToggle';
+
+const DEMO_ACCOUNTS = [
+  { labelKey: 'auth.login.demo.manager', email: 'admin@sirket.com', password: 'Admin123!' },
+  {
+    labelKey: 'auth.login.demo.employee',
+    email: 'ayse.yilmaz@sirket.com',
+    password: 'Personel123!',
+  },
+] as const;
 
 export function Login() {
   const { t } = useTranslation();
@@ -16,6 +28,27 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleCopy(value: string) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      toast.success(t('auth.login.demo.copied'));
+    } catch {
+      toast.error(t('common.genericError'));
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -92,22 +125,39 @@ export function Login() {
 
           <div className="demo-card" data-testid="demo-credentials">
             <p className="demo-card-title">{t('auth.login.demo.title')}</p>
-            <div className="demo-card-row">
-              <span className="demo-card-label">
-                {t('auth.login.demo.manager')}
-              </span>
-              <span className="demo-card-value">
-                admin@sirket.com / Admin123!
-              </span>
-            </div>
-            <div className="demo-card-row">
-              <span className="demo-card-label">
-                {t('auth.login.demo.employee')}
-              </span>
-              <span className="demo-card-value">
-                ayse.yilmaz@sirket.com / Personel123!
-              </span>
-            </div>
+            {DEMO_ACCOUNTS.map((account) => (
+              <div className="demo-card-group" key={account.email}>
+                <span className="demo-card-label">{t(account.labelKey)}</span>
+                <div className="demo-card-line">
+                  <span className="demo-card-value">{account.email}</span>
+                  <button
+                    type="button"
+                    className="demo-copy-btn"
+                    onClick={() => handleCopy(account.email)}
+                    aria-label={t('auth.login.demo.copyEmail')}
+                  >
+                    <CopyIcon />
+                  </button>
+                </div>
+                <div className="demo-card-line">
+                  <span className="demo-card-value">{account.password}</span>
+                  <button
+                    type="button"
+                    className="demo-copy-btn"
+                    onClick={() => handleCopy(account.password)}
+                    aria-label={t('auth.login.demo.copyPassword')}
+                  >
+                    <CopyIcon />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="auth-toggle-row">
+            <ThemeToggle />
+            <span className="auth-toggle-divider">|</span>
+            <LanguageToggle />
           </div>
         </div>
       </div>

@@ -30,7 +30,8 @@
     "themeToggle": {
       "toDark": "Koyu temaya geç",
       "toLight": "Açık temaya geç"
-    }
+    },
+    "languageToggle": "{{language}} diline geç"
   },
   "settings": {
     "appearance": {
@@ -86,7 +87,10 @@
       "demo": {
         "title": "Demo giriş bilgileri",
         "manager": "Yönetici",
-        "employee": "Personel"
+        "employee": "Personel",
+        "copyEmail": "E-postayı kopyala",
+        "copyPassword": "Şifreyi kopyala",
+        "copied": "Kopyalandı"
       }
     },
     "register": {
