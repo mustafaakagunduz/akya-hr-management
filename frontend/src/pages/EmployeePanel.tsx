@@ -3,13 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Topbar } from '../components/Topbar';
 import { LeaveStatusBadge } from '../components/LeaveStatusBadge';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 import { createLeaveRequest, fetchMyLeaveRequests } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
 import type { LeaveRequest, LeaveType } from '../api/types';
 
 export function EmployeePanel() {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
+  const socket = useSocket();
 
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [type, setType] = useState<LeaveType>('DAILY');
@@ -27,6 +29,28 @@ export function EmployeePanel() {
   useEffect(() => {
     loadRequests();
   }, []);
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    function handleLeaveUpdated(updated: LeaveRequest) {
+      setRequests((prev) =>
+        prev.map((request) =>
+          request.id === updated.id ? updated : request,
+        ),
+      );
+      if (updated.status === 'APPROVED' && updated.type === 'ANNUAL') {
+        refreshUser();
+      }
+    }
+
+    socket.on('leave.updated', handleLeaveUpdated);
+    return () => {
+      socket.off('leave.updated', handleLeaveUpdated);
+    };
+  }, [socket, refreshUser]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();

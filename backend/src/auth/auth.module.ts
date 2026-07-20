@@ -25,5 +25,6 @@ import { SeedService } from './seed.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, SeedService],
+  exports: [JwtModule],
 })
 export class AuthModule {}

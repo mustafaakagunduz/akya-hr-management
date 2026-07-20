@@ -7,6 +7,7 @@ import {
   rejectLeaveRequest,
 } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
+import { useSocket } from '../context/SocketContext';
 import type { LeaveRequest } from '../api/types';
 
 const DESCRIPTION_TRUNCATE_LENGTH = 60;
@@ -51,6 +52,7 @@ function DescriptionCell({ text }: { text: string }) {
 
 export function ManagerPanel() {
   const { t } = useTranslation();
+  const socket = useSocket();
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -63,6 +65,21 @@ export function ManagerPanel() {
   useEffect(() => {
     loadRequests();
   }, []);
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    function handleLeaveCreated(created: LeaveRequest) {
+      setRequests((prev) => [created, ...prev]);
+    }
+
+    socket.on('leave.created', handleLeaveCreated);
+    return () => {
+      socket.off('leave.created', handleLeaveCreated);
+    };
+  }, [socket]);
 
   async function handleApprove(id: string) {
     setError(null);

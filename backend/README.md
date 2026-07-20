@@ -60,6 +60,13 @@ Uygulama ilk açılışta 3 demo personel (EMPLOYEE) hesabı da oluşturur, heps
 | PATCH | `/leaves/:id/approve` | JWT + MANAGER | Talebi onayla |
 | PATCH | `/leaves/:id/reject` | JWT + MANAGER | Talebi reddet |
 
+## WebSocket (Anlık Bildirimler)
+
+Socket.io tabanlı bir gateway (`/`) JWT ile kimlik doğrulaması yapar. Bağlantı sırasında `auth: { token }` ile JWT gönderilir.
+
+- Personel yeni izin talebi oluşturduğunda tüm MANAGER'lara `leave.created` event'i yayınlanır (yeni talep verisiyle).
+- Yönetici bir talebi onayladığında/reddettiğinde ilgili personele `leave.updated` event'i yayınlanır (güncel talep verisiyle).
+
 ## İş Kuralları
 
 - Yıllık izin onaylandığında bakiyeden düşülür (transaction içinde).

@@ -5,6 +5,7 @@ import { LeaveRequest } from './leave-request.entity';
 import { User } from '../users/user.entity';
 import { LeaveStatus, LeaveType } from '../common/enums';
 import { CreateLeaveRequestDto } from './dto/create-leave-request.dto';
+import { LeavesGateway } from './leaves.gateway';
 
 function toUtcDate(dateStr: string): Date {
   return new Date(`${dateStr}T00:00:00.000Z`);
@@ -22,6 +23,7 @@ export class LeavesService {
     @InjectRepository(LeaveRequest)
     private readonly leaveRequestRepository: Repository<LeaveRequest>,
     private readonly dataSource: DataSource,
+    private readonly leavesGateway: LeavesGateway,
   ) {}
 
   async create(user: User, dto: CreateLeaveRequestDto): Promise<LeaveRequest> {
@@ -63,6 +65,7 @@ export class LeavesService {
 
     const leaveRequest = this.leaveRequestRepository.create({
       userId: user.id,
+      user,
       type,
       startDate,
       endDate,
@@ -70,7 +73,10 @@ export class LeavesService {
       description,
     });
 
-    return this.leaveRequestRepository.save(leaveRequest);
+    const saved = await this.leaveRequestRepository.save(leaveRequest);
+    delete (saved.user as { password?: string }).password;
+    this.leavesGateway.notifyManagersOfNewRequest(saved);
+    return saved;
   }
 
   findMy(userId: string): Promise<LeaveRequest[]> {
@@ -98,7 +104,7 @@ export class LeavesService {
   }
 
   async approve(id: string): Promise<LeaveRequest> {
-    return this.dataSource.transaction(async (manager) => {
+    const saved = await this.dataSource.transaction(async (manager) => {
       const leaveRequest = await manager.findOne(LeaveRequest, {
         where: { id },
         relations: { user: true },
@@ -121,10 +127,11 @@ export class LeavesService {
       }
 
       leaveRequest.status = LeaveStatus.APPROVED;
-      const saved = await manager.save(LeaveRequest, leaveRequest);
-      delete (saved.user as { password?: string }).password;
-      return saved;
+      return manager.save(LeaveRequest, leaveRequest);
     });
+    delete (saved.user as { password?: string }).password;
+    this.leavesGateway.notifyUserOfDecision(saved.userId, saved);
+    return saved;
   }
 
   async reject(id: string): Promise<LeaveRequest> {
@@ -139,6 +146,8 @@ export class LeavesService {
     }
 
     leaveRequest.status = LeaveStatus.REJECTED;
-    return this.leaveRequestRepository.save(leaveRequest);
+    const saved = await this.leaveRequestRepository.save(leaveRequest);
+    this.leavesGateway.notifyUserOfDecision(saved.userId, saved);
+    return saved;
   }
 }
