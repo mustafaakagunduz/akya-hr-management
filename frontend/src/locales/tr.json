@@ -18,7 +18,7 @@
     "welcome": "Hoş geldiniz, {{name}}"
   },
   "nav": {
-    "panel": "Taleplerim",
+    "panel": "İzin Taleplerim",
     "createLeave": "İzin Talebi Oluştur",
     "manager": "İzin Yönetimi",
     "leaveHistory": "Geçmiş İzinler",
@@ -95,7 +95,8 @@
       "label": "Durum",
       "PENDING": "Beklemede",
       "APPROVED": "Onaylandı",
-      "REJECTED": "Reddedildi"
+      "REJECTED": "Reddedildi",
+      "CANCELLED": "İptal Edildi"
     },
     "date": "Tarih",
     "startDate": "Başlangıç Tarihi",
@@ -108,6 +109,8 @@
     "noRequests": "Henüz izin talebiniz yok",
     "annualBalance": "Kalan Yıllık İzin Bakiyesi: {{count}} gün",
     "annualBalanceShort": "Yıllık İzin Bakiyesi",
+    "defaultAnnualBalanceShort": "Normal İzin Hakkı",
+    "remainingAnnualBalanceShort": "Kalan İzin Hakkı",
     "confirmTitle": "İzin Talebini Onayla",
     "confirmSubtitle": "Aşağıdaki bilgilerle izin talebi oluşturulacak",
     "editTitle": "İzin Talebini Düzenle",
@@ -119,6 +122,8 @@
   },
   "profile": {
     "role": "Rol",
+    "defaultLeaveDays": "Varsayılan Yıllık İzin Günü",
+    "remainingLeaveDays": "Kalan Yıllık İzin Günü",
     "roles": {
       "EMPLOYEE": "Personel",
       "MANAGER": "Yönetici"
@@ -138,7 +143,24 @@
     "resetPasswordTitle": "Şifre Sıfırlandı",
     "resetPasswordSubtitle": "Kullanıcının yeni şifresi aşağıdadır, lütfen kendisiyle güvenli bir şekilde paylaşın.",
     "newPassword": "Yeni Şifre",
-    "resetPasswordError": "Şifre sıfırlanırken bir hata oluştu"
+    "resetPasswordError": "Şifre sıfırlanırken bir hata oluştu",
+    "resetBalance": "Yıllık İzin Bakiyesini Sıfırla",
+    "resetBalanceTitle": "Yıllık İzin Bakiyesini Sıfırla",
+    "resetBalanceSubtitle": "{{name}} adlı kullanıcının yıllık izin bakiyesi 14 güne sıfırlanacak. Onaylıyor musunuz?",
+    "resetBalanceError": "Bakiye sıfırlanırken bir hata oluştu",
+    "status": "Durum",
+    "active": "Aktif",
+    "inactive": "Pasif",
+    "deactivate": "Hesabı Pasifleştir",
+    "activate": "Hesabı Aktifleştir",
+    "deactivateTitle": "Hesabı Pasifleştir",
+    "activateTitle": "Hesabı Aktifleştir",
+    "deactivateSubtitle": "{{name}} adlı kullanıcının hesabı pasifleştirilecek, kullanıcı giriş yapamayacak. Onaylıyor musunuz?",
+    "activateSubtitle": "{{name}} adlı kullanıcının hesabı tekrar aktifleştirilecek. Onaylıyor musunuz?",
+    "statusUpdateError": "Durum güncellenirken bir hata oluştu",
+    "editTitle": "Kullanıcıyı Düzenle",
+    "editRole": "Rol",
+    "editAnnualLeaveBalance": "Yıllık İzin Bakiyesi"
   },
   "manager": {
     "title": "İzin Yönetimi",
@@ -150,7 +172,12 @@
     "rejectSuccess": "Talep reddedildi",
     "noHistory": "Geçmiş izin kaydı yok",
     "searchEmployee": "Personel adına göre ara",
-    "noSearchResults": "Aramanızla eşleşen kayıt bulunamadı"
+    "noSearchResults": "Aramanızla eşleşen kayıt bulunamadı",
+    "cancelLeave": "İzni İptal Et",
+    "cancelLeaveTitle": "İzni İptal Et",
+    "cancelLeaveSubtitleAnnual": "{{name}} adlı personelin onaylanmış izni iptal edilecek ve {{count}} gün yıllık izin bakiyesine geri eklenecek. Onaylıyor musunuz?",
+    "cancelLeaveSubtitleDaily": "{{name}} adlı personelin onaylanmış izni iptal edilecek. Onaylıyor musunuz?",
+    "cancelLeaveError": "İzin iptal edilirken bir hata oluştu"
   },
   "validation": {
     "required": "Bu alan zorunludur",

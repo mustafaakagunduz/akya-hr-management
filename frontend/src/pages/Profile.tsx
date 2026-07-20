@@ -193,6 +193,22 @@ export function Profile() {
               {t(`profile.roles.${user.role}`)}
             </span>
           </div>
+          <div className="modal-row">
+            <span className="modal-row-label">
+              {t('profile.defaultLeaveDays')}
+            </span>
+            <span className="modal-row-value">
+              {user.defaultAnnualLeaveBalance}
+            </span>
+          </div>
+          <div className="modal-row">
+            <span className="modal-row-label">
+              {t('profile.remainingLeaveDays')}
+            </span>
+            <span className="modal-row-value">
+              {user.annualLeaveBalance}
+            </span>
+          </div>
 
           <div className="modal-actions">
             {isEditing ? (

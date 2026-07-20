@@ -73,4 +73,10 @@ export class LeavesController {
   reject(@Param('id') id: string) {
     return this.leavesService.reject(id);
   }
+
+  @Roles(UserRole.MANAGER)
+  @Patch(':id/cancel')
+  cancel(@Param('id') id: string) {
+    return this.leavesService.cancel(id);
+  }
 }

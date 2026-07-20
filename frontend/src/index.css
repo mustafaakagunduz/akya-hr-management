@@ -287,6 +287,10 @@ button {
   border: 1px solid var(--color-primary);
 }
 
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
 .btn-sm {
   padding: 6px 12px;
   font-size: 0.85rem;
@@ -419,6 +423,18 @@ tr:last-child td {
 }
 
 .badge-REJECTED {
+  color: var(--color-danger);
+}
+
+.badge-CANCELLED {
+  color: var(--color-danger);
+}
+
+.badge-ACTIVE {
+  color: var(--color-success);
+}
+
+.badge-INACTIVE {
   color: var(--color-danger);
 }
 

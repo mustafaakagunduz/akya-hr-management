@@ -1,6 +1,6 @@
 export type UserRole = 'EMPLOYEE' | 'MANAGER';
 export type LeaveType = 'DAILY' | 'ANNUAL';
-export type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
 export type Department =
   | 'HR'
   | 'SOFTWARE'
@@ -28,6 +28,8 @@ export interface User {
   birthDate: string;
   role: UserRole;
   annualLeaveBalance: number;
+  defaultAnnualLeaveBalance: number;
+  isActive: boolean;
   createdAt: string;
 }
 
@@ -72,6 +74,20 @@ export interface UpdateProfilePayload {
 export interface ChangePasswordPayload {
   currentPassword: string;
   newPassword: string;
+}
+
+export interface AdminUpdateUserPayload {
+  firstName: string;
+  lastName: string;
+  nationalId: string;
+  email: string;
+  phone: string;
+  department: Department;
+  position: Position;
+  startDate: string;
+  birthDate: string;
+  role: UserRole;
+  annualLeaveBalance: number;
 }
 
 export interface CreateLeaveRequestPayload {

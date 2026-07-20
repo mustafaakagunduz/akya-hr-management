@@ -23,6 +23,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException('Kullanıcı bulunamadı');
     }
+    if (!user.isActive) {
+      throw new UnauthorizedException('Hesabınız pasif duruma alınmış');
+    }
     return user;
   }
 }

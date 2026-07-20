@@ -2,18 +2,52 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
 import { Modal } from '../components/Modal';
-import { KeyIcon } from '../components/layout/icons';
-import { fetchAllUsers, resetUserPassword } from '../api/users';
+import { EditUserModal } from '../components/EditUserModal';
+import {
+  BanIcon,
+  CheckCircleIcon,
+  KeyIcon,
+  PencilIcon,
+  RefreshIcon,
+} from '../components/layout/icons';
+import {
+  activateUser,
+  deactivateUser,
+  fetchAllUsers,
+  resetUserBalance,
+  resetUserPassword,
+} from '../api/users';
 import { getApiErrorMessage } from '../api/client';
 import { formatDateTR } from '../utils/date';
+import { useAuth } from '../context/AuthContext';
 import type { User } from '../api/types';
 
 export function Users() {
   const { t } = useTranslation();
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<Omit<User, 'password'>[]>([]);
   const [resettingId, setResettingId] = useState<string | null>(null);
   const [resetError, setResetError] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState<string | null>(null);
+
+  const [balanceTarget, setBalanceTarget] = useState<Omit<
+    User,
+    'password'
+  > | null>(null);
+  const [isResettingBalance, setIsResettingBalance] = useState(false);
+  const [balanceError, setBalanceError] = useState<string | null>(null);
+
+  const [statusTarget, setStatusTarget] = useState<Omit<
+    User,
+    'password'
+  > | null>(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusError, setStatusError] = useState<string | null>(null);
+
+  const [editTarget, setEditTarget] = useState<Omit<
+    User,
+    'password'
+  > | null>(null);
 
   useEffect(() => {
     fetchAllUsers().then(setUsers);
@@ -32,10 +66,142 @@ export function Users() {
     }
   }
 
+  async function handleConfirmResetBalance() {
+    if (!balanceTarget) {
+      return;
+    }
+    setBalanceError(null);
+    setIsResettingBalance(true);
+    try {
+      const updated = await resetUserBalance(balanceTarget.id);
+      setUsers((prev) =>
+        prev.map((user) => (user.id === updated.id ? updated : user)),
+      );
+      setBalanceTarget(null);
+    } catch (err) {
+      setBalanceError(getApiErrorMessage(err, t('users.resetBalanceError')));
+    } finally {
+      setIsResettingBalance(false);
+    }
+  }
+
+  async function handleConfirmToggleStatus() {
+    if (!statusTarget) {
+      return;
+    }
+    setStatusError(null);
+    setIsUpdatingStatus(true);
+    try {
+      const updated = statusTarget.isActive
+        ? await deactivateUser(statusTarget.id)
+        : await activateUser(statusTarget.id);
+      setUsers((prev) =>
+        prev.map((user) => (user.id === updated.id ? updated : user)),
+      );
+      setStatusTarget(null);
+    } catch (err) {
+      setStatusError(getApiErrorMessage(err, t('users.statusUpdateError')));
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  }
+
   return (
     <AppLayout>
       <h1>{t('nav.users')}</h1>
       {resetError && <p className="form-error">{resetError}</p>}
+
+      {balanceTarget && (
+        <Modal
+          title={t('users.resetBalanceTitle')}
+          onClose={() => setBalanceTarget(null)}
+          closeLabel={t('common.close')}
+        >
+          <p className="modal-subtitle">
+            {t('users.resetBalanceSubtitle', {
+              name: `${balanceTarget.firstName} ${balanceTarget.lastName}`,
+            })}
+          </p>
+          {balanceError && <p className="form-error">{balanceError}</p>}
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setBalanceTarget(null)}
+              disabled={isResettingBalance}
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={handleConfirmResetBalance}
+              disabled={isResettingBalance}
+              data-testid="reset-balance-confirm"
+            >
+              {t('common.confirm')}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {statusTarget && (
+        <Modal
+          title={
+            statusTarget.isActive
+              ? t('users.deactivateTitle')
+              : t('users.activateTitle')
+          }
+          onClose={() => setStatusTarget(null)}
+          closeLabel={t('common.close')}
+        >
+          <p className="modal-subtitle">
+            {t(
+              statusTarget.isActive
+                ? 'users.deactivateSubtitle'
+                : 'users.activateSubtitle',
+              {
+                name: `${statusTarget.firstName} ${statusTarget.lastName}`,
+              },
+            )}
+          </p>
+          {statusError && <p className="form-error">{statusError}</p>}
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setStatusTarget(null)}
+              disabled={isUpdatingStatus}
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              type="button"
+              className={
+                statusTarget.isActive ? 'btn btn-danger' : 'btn'
+              }
+              onClick={handleConfirmToggleStatus}
+              disabled={isUpdatingStatus}
+              data-testid="status-confirm"
+            >
+              {t('common.confirm')}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {editTarget && (
+        <EditUserModal
+          user={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSaved={(updated) => {
+            setUsers((prev) =>
+              prev.map((user) => (user.id === updated.id ? updated : user)),
+            );
+            setEditTarget(null);
+          }}
+        />
+      )}
 
       {newPassword && (
         <Modal
@@ -77,7 +243,9 @@ export function Users() {
                 <th>{t('auth.register.position')}</th>
                 <th>{t('profile.role')}</th>
                 <th>{t('auth.register.startDate')}</th>
-                <th>{t('leaves.annualBalanceShort')}</th>
+                <th>{t('leaves.defaultAnnualBalanceShort')}</th>
+                <th>{t('leaves.remainingAnnualBalanceShort')}</th>
+                <th>{t('users.status')}</th>
                 <th>{t('common.actions')}</th>
               </tr>
             </thead>
@@ -92,9 +260,28 @@ export function Users() {
                   <td>{t(`options.position.${user.position}`)}</td>
                   <td>{t(`profile.roles.${user.role}`)}</td>
                   <td>{formatDateTR(user.startDate)}</td>
+                  <td>{user.defaultAnnualLeaveBalance}</td>
                   <td>{user.annualLeaveBalance}</td>
+                  <td>
+                    <span
+                      className={`badge badge-${user.isActive ? 'ACTIVE' : 'INACTIVE'}`}
+                      data-testid={`status-badge-${user.id}`}
+                    >
+                      {t(user.isActive ? 'users.active' : 'users.inactive')}
+                    </span>
+                  </td>
                   <td className="actions-cell">
                     <div className="actions-cell-inner">
+                      <button
+                        type="button"
+                        className="icon-btn icon-btn-plain"
+                        onClick={() => setEditTarget(user)}
+                        aria-label={t('common.edit')}
+                        data-tooltip={t('common.edit')}
+                        data-testid={`edit-user-${user.id}`}
+                      >
+                        <PencilIcon />
+                      </button>
                       <button
                         type="button"
                         className="icon-btn icon-btn-plain"
@@ -106,6 +293,36 @@ export function Users() {
                       >
                         <KeyIcon />
                       </button>
+                      <button
+                        type="button"
+                        className="icon-btn icon-btn-plain"
+                        onClick={() => setBalanceTarget(user)}
+                        aria-label={t('users.resetBalance')}
+                        data-tooltip={t('users.resetBalance')}
+                        data-testid={`reset-balance-${user.id}`}
+                      >
+                        <RefreshIcon />
+                      </button>
+                      {currentUser?.id !== user.id && (
+                        <button
+                          type="button"
+                          className="icon-btn icon-btn-plain"
+                          onClick={() => setStatusTarget(user)}
+                          aria-label={t(
+                            user.isActive
+                              ? 'users.deactivate'
+                              : 'users.activate',
+                          )}
+                          data-tooltip={t(
+                            user.isActive
+                              ? 'users.deactivate'
+                              : 'users.activate',
+                          )}
+                          data-testid={`toggle-status-${user.id}`}
+                        >
+                          {user.isActive ? <BanIcon /> : <CheckCircleIcon />}
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

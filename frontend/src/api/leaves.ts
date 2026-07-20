@@ -47,3 +47,9 @@ export function rejectLeaveRequest(id: string) {
     .patch<LeaveRequest>(`/leaves/${id}/reject`)
     .then((res) => res.data);
 }
+
+export function cancelLeaveRequest(id: string) {
+  return apiClient
+    .patch<LeaveRequest>(`/leaves/${id}/cancel`)
+    .then((res) => res.data);
+}

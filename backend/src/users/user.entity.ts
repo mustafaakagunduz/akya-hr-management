@@ -50,6 +50,13 @@ export class User {
   @Column({ type: 'int', default: 14 })
   annualLeaveBalance: number;
 
+  // "Yıllık izin bakiyesini sıfırla" işlemi bakiyeyi bu değere döndürür
+  @Column({ type: 'int', default: 14 })
+  defaultAnnualLeaveBalance: number;
+
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -55,6 +55,12 @@ export class AuthService {
       throw new UnauthorizedException('E-posta veya şifre hatalı');
     }
 
+    if (!user.isActive) {
+      throw new UnauthorizedException(
+        'Hesabınız pasif duruma alınmış, giriş yapamazsınız',
+      );
+    }
+
     const payload: JwtPayload = {
       id: user.id,
       email: user.email,

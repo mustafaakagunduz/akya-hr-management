@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  BadRequestException,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
@@ -28,6 +38,33 @@ export class UsersController {
     return { newPassword };
   }
 
+  @Roles(UserRole.MANAGER)
+  @Post(':id/reset-balance')
+  async resetBalance(@Param('id') id: string) {
+    const updated = await this.usersService.resetAnnualLeaveBalance(id);
+    const { password, ...result } = updated;
+    return result;
+  }
+
+  @Roles(UserRole.MANAGER)
+  @Post(':id/deactivate')
+  async deactivate(@CurrentUser() currentUser: User, @Param('id') id: string) {
+    if (currentUser.id === id) {
+      throw new BadRequestException('Kendi hesabınızı pasifleştiremezsiniz');
+    }
+    const updated = await this.usersService.setActive(id, false);
+    const { password, ...result } = updated;
+    return result;
+  }
+
+  @Roles(UserRole.MANAGER)
+  @Post(':id/activate')
+  async activate(@Param('id') id: string) {
+    const updated = await this.usersService.setActive(id, true);
+    const { password, ...result } = updated;
+    return result;
+  }
+
   @Patch('me')
   async updateMe(@CurrentUser() user: User, @Body() dto: UpdateProfileDto) {
     const updated = await this.usersService.updateProfile(user, dto);
@@ -42,5 +79,16 @@ export class UsersController {
   ) {
     await this.usersService.changePassword(user, dto);
     return { success: true };
+  }
+
+  @Roles(UserRole.MANAGER)
+  @Patch(':id')
+  async adminUpdate(
+    @Param('id') id: string,
+    @Body() dto: AdminUpdateUserDto,
+  ) {
+    const updated = await this.usersService.adminUpdateUser(id, dto);
+    const { password, ...result } = updated;
+    return result;
   }
 }

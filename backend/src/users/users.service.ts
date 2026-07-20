@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 
 const SALT_ROUNDS = 10;
 
@@ -76,5 +77,57 @@ export class UsersService {
     await this.userRepository.save(user);
 
     return newPassword;
+  }
+
+  async resetAnnualLeaveBalance(id: string): Promise<User> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('Kullanıcı bulunamadı');
+    }
+
+    user.annualLeaveBalance = user.defaultAnnualLeaveBalance;
+    return this.userRepository.save(user);
+  }
+
+  async adminUpdateUser(id: string, dto: AdminUpdateUserDto): Promise<User> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('Kullanıcı bulunamadı');
+    }
+
+    if (dto.email !== user.email) {
+      const existingEmail = await this.findByEmail(dto.email);
+      if (existingEmail) {
+        throw new BadRequestException('Bu e-posta adresi zaten kullanılıyor');
+      }
+    }
+
+    if (dto.nationalId !== user.nationalId) {
+      const existingNationalId = await this.findByNationalId(dto.nationalId);
+      if (existingNationalId) {
+        throw new BadRequestException('Bu TC Kimlik No zaten kayıtlı');
+      }
+    }
+
+    const { annualLeaveBalance: newDefaultBalance, ...rest } = dto;
+    const balanceDelta = newDefaultBalance - user.defaultAnnualLeaveBalance;
+
+    Object.assign(user, rest);
+    user.defaultAnnualLeaveBalance = newDefaultBalance;
+    user.annualLeaveBalance = Math.max(
+      0,
+      user.annualLeaveBalance + balanceDelta,
+    );
+    return this.userRepository.save(user);
+  }
+
+  async setActive(id: string, isActive: boolean): Promise<User> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('Kullanıcı bulunamadı');
+    }
+
+    user.isActive = isActive;
+    return this.userRepository.save(user);
   }
 }

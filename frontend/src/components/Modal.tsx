@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useRef, type MouseEvent, type ReactNode } from 'react';
 import { CloseIcon } from './layout/icons';
 
 interface ModalProps {
@@ -9,8 +9,25 @@ interface ModalProps {
 }
 
 export function Modal({ title, onClose, children, closeLabel }: ModalProps) {
+  const mouseDownOnOverlay = useRef(false);
+
+  function handleOverlayMouseDown(event: MouseEvent<HTMLDivElement>) {
+    mouseDownOnOverlay.current = event.target === event.currentTarget;
+  }
+
+  function handleOverlayClick(event: MouseEvent<HTMLDivElement>) {
+    if (mouseDownOnOverlay.current && event.target === event.currentTarget) {
+      onClose();
+    }
+    mouseDownOnOverlay.current = false;
+  }
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onMouseDown={handleOverlayMouseDown}
+      onClick={handleOverlayClick}
+    >
       <div
         className="modal"
         role="dialog"

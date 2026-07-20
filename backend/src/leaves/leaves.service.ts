@@ -205,6 +205,7 @@ export class LeavesService {
       where: [
         { status: LeaveStatus.APPROVED },
         { status: LeaveStatus.REJECTED },
+        { status: LeaveStatus.CANCELLED },
       ],
       relations: { user: true },
       select: {
@@ -264,6 +265,34 @@ export class LeavesService {
 
     leaveRequest.status = LeaveStatus.REJECTED;
     const saved = await this.leaveRequestRepository.save(leaveRequest);
+    this.leavesGateway.notifyUserOfDecision(saved.userId, saved);
+    return saved;
+  }
+
+  async cancel(id: string): Promise<LeaveRequest> {
+    const saved = await this.dataSource.transaction(async (manager) => {
+      const leaveRequest = await manager.findOne(LeaveRequest, {
+        where: { id },
+        relations: { user: true },
+      });
+      if (!leaveRequest) {
+        throw new BadRequestException('İzin talebi bulunamadı');
+      }
+      if (leaveRequest.status !== LeaveStatus.APPROVED) {
+        throw new BadRequestException(
+          'Sadece onaylanmış talepler iptal edilebilir',
+        );
+      }
+
+      if (leaveRequest.type === LeaveType.ANNUAL) {
+        leaveRequest.user.annualLeaveBalance += leaveRequest.dayCount;
+        await manager.save(User, leaveRequest.user);
+      }
+
+      leaveRequest.status = LeaveStatus.CANCELLED;
+      return manager.save(LeaveRequest, leaveRequest);
+    });
+    delete (saved.user as { password?: string }).password;
     this.leavesGateway.notifyUserOfDecision(saved.userId, saved);
     return saved;
   }
