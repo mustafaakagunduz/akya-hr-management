@@ -21,7 +21,6 @@ import { LeaveRequest } from './leaves/leave-request.entity';
         ssl: { rejectUnauthorized: false },
         entities: [User, LeaveRequest],
         autoLoadEntities: true,
-        // Demo proje için synchronize kullanılıyor; prod'da migration kullanılır.
         synchronize: true,
       }),
     }),

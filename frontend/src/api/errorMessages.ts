@@ -1,5 +1,3 @@
-// Maps the fixed Turkish strings the backend throws to frontend i18n keys,
-// so API error messages can be shown in the active UI language.
 export const BACKEND_MESSAGE_KEYS: Record<string, string> = {
   'Bu e-posta adresi zaten kayıtlı': 'errors.api.emailAlreadyRegistered',
   'Bu TC Kimlik No zaten kayıtlı': 'errors.api.nationalIdAlreadyRegistered',

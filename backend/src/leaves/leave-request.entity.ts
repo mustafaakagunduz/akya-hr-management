@@ -30,7 +30,6 @@ export class LeaveRequest {
   @Column({ type: 'date' })
   endDate: string;
 
-  // Backend'de tarihlerden hesaplanır, frontend'den gelen değere güvenilmez
   @Column({ type: 'int' })
   dayCount: number;
 

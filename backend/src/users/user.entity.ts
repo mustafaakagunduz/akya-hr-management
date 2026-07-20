@@ -40,7 +40,6 @@ export class User {
   @Column({ type: 'date' })
   birthDate: string;
 
-  // Veritabanına sadece bcrypt hash olarak yazılır
   @Column()
   password: string;
 
@@ -50,7 +49,6 @@ export class User {
   @Column({ type: 'int', default: 14 })
   annualLeaveBalance: number;
 
-  // "Yıllık izin bakiyesini sıfırla" işlemi bakiyeyi bu değere döndürür
   @Column({ type: 'int', default: 14 })
   defaultAnnualLeaveBalance: number;
 

@@ -76,7 +76,6 @@ export function Calendar({ value, onSelect, onClose }: CalendarProps) {
     monthFormatter.format(new Date(2000, m, 1)),
   );
 
-  // Weeks start on Monday.
   const weekdays = Array.from({ length: 7 }, (_, i) =>
     weekdayFormatter.format(new Date(2000, 0, 3 + i)),
   );
@@ -93,7 +92,7 @@ export function Calendar({ value, onSelect, onClose }: CalendarProps) {
 
   const firstOfMonth = new Date(viewYear, viewMonth, 1);
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-  const firstWeekday = (firstOfMonth.getDay() + 6) % 7; // Monday = 0
+  const firstWeekday = (firstOfMonth.getDay() + 6) % 7;
 
   const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
   const cells: { day: number; month: number; year: number; outside: boolean }[] =

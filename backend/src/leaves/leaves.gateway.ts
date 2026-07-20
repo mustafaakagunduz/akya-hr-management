@@ -56,9 +56,7 @@ export class LeavesGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  handleDisconnect() {
-    // socket.io odalardan kendiliğinden temizler, ek işlem gerekmiyor.
-  }
+  handleDisconnect() {}
 
   notifyManagersOfNewRequest(leaveRequest: LeaveRequest) {
     this.server.to(MANAGERS_ROOM).emit('leave.created', leaveRequest);
