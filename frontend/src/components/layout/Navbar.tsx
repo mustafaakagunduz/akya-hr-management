@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { getDefaultRoute } from '../../utils/routing';
 import { MenuIcon } from './icons';
 
 interface NavbarProps {
@@ -13,7 +15,9 @@ export function Navbar({ onMenuOpen }: NavbarProps) {
   return (
     <header className="app-navbar">
       <div className="app-navbar-inner">
-        <img src="/akya-logo.png" alt={t('app.title')} className="app-navbar-logo" />
+        <Link to={user ? getDefaultRoute(user) : '/login'} className="app-navbar-logo-link">
+          <img src="/akya-logo.png" alt={t('app.title')} className="app-navbar-logo" />
+        </Link>
         <span className="app-navbar-user">
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </span>

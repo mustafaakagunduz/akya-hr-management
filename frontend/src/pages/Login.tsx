@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { getApiErrorMessage } from '../api/client';
+import { getDefaultRoute } from '../utils/routing';
 
 export function Login() {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ export function Login() {
     try {
       const user = await login({ email, password });
       toast.success(t('auth.login.success'));
-      navigate(user.role === 'MANAGER' ? '/leave-requests' : '/my-leaves');
+      navigate(getDefaultRoute(user));
     } catch (err) {
       const message = getApiErrorMessage(err, t('common.genericError'));
       setError(message);

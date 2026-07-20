@@ -10,6 +10,7 @@ import { Users } from './pages/Users';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoadingScreen } from './components/LoadingScreen';
 import { useAuth } from './context/AuthContext';
+import { getDefaultRoute } from './utils/routing';
 
 function DefaultRedirect() {
   const { user, isLoading } = useAuth();
@@ -23,10 +24,7 @@ function DefaultRedirect() {
   }
 
   return (
-    <Navigate
-      to={user.role === 'MANAGER' ? '/leave-requests' : '/my-leaves'}
-      replace
-    />
+    <Navigate to={getDefaultRoute(user)} replace />
   );
 }
 
