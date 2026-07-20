@@ -4,6 +4,7 @@ import { Register } from './pages/Register';
 import { EmployeePanel } from './pages/EmployeePanel';
 import { CreateLeaveRequest } from './pages/CreateLeaveRequest';
 import { ManagerPanel } from './pages/ManagerPanel';
+import { LeaveHistory } from './pages/LeaveHistory';
 import { Profile } from './pages/Profile';
 import { Users } from './pages/Users';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -63,6 +64,14 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['MANAGER']}>
             <ManagerPanel />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/leave-history"
+        element={
+          <ProtectedRoute allowedRoles={['MANAGER']}>
+            <LeaveHistory />
           </ProtectedRoute>
         }
       />

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { DateField } from './DateField';
 import type { LeaveType } from '../api/types';
 
 interface LeaveRequestFieldsProps {
@@ -28,6 +29,18 @@ export function LeaveRequestFields({
 }: LeaveRequestFieldsProps) {
   const { t } = useTranslation();
 
+  function handleTypeChange(nextType: LeaveType) {
+    onTypeChange(nextType);
+    if (nextType === 'DAILY') {
+      onEndDateChange(startDate);
+    }
+  }
+
+  function handleDailyDateChange(value: string) {
+    onStartDateChange(value);
+    onEndDateChange(value);
+  }
+
   return (
     <>
       <div className="field">
@@ -35,39 +48,42 @@ export function LeaveRequestFields({
         <select
           id={`${idPrefix}-type`}
           value={type}
-          onChange={(e) => onTypeChange(e.target.value as LeaveType)}
+          onChange={(e) => handleTypeChange(e.target.value as LeaveType)}
           data-testid={`${testIdPrefix}-type`}
         >
           <option value="DAILY">{t('leaves.type.DAILY')}</option>
           <option value="ANNUAL">{t('leaves.type.ANNUAL')}</option>
         </select>
       </div>
-      <div className="form-grid">
-        <div className="field">
-          <label htmlFor={`${idPrefix}-startDate`}>
-            {t('leaves.startDate')}
-          </label>
-          <input
+      {type === 'DAILY' ? (
+        <DateField
+          id={`${idPrefix}-startDate`}
+          label={t('leaves.date')}
+          value={startDate}
+          onChange={handleDailyDateChange}
+          required
+          testId={`${testIdPrefix}-start-date`}
+        />
+      ) : (
+        <div className="form-grid">
+          <DateField
             id={`${idPrefix}-startDate`}
-            type="date"
+            label={t('leaves.startDate')}
             value={startDate}
-            onChange={(e) => onStartDateChange(e.target.value)}
+            onChange={onStartDateChange}
             required
-            data-testid={`${testIdPrefix}-start-date`}
+            testId={`${testIdPrefix}-start-date`}
           />
-        </div>
-        <div className="field">
-          <label htmlFor={`${idPrefix}-endDate`}>{t('leaves.endDate')}</label>
-          <input
+          <DateField
             id={`${idPrefix}-endDate`}
-            type="date"
+            label={t('leaves.endDate')}
             value={endDate}
-            onChange={(e) => onEndDateChange(e.target.value)}
+            onChange={onEndDateChange}
             required
-            data-testid={`${testIdPrefix}-end-date`}
+            testId={`${testIdPrefix}-end-date`}
           />
         </div>
-      </div>
+      )}
       <div className="field">
         <label htmlFor={`${idPrefix}-description`}>
           {t('leaves.description')}

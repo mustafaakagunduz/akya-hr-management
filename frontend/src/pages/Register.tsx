@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../api/auth';
 import { getApiErrorMessage } from '../api/client';
+import { DateField } from '../components/DateField';
 import type { Department, Position, RegisterPayload } from '../api/types';
 
 const DEPARTMENT_VALUES: Department[] = [
@@ -172,13 +173,14 @@ export function Register() {
               onChange={(v) => update('lastName', v)}
               error={fieldErrors.lastName}
             />
-            <TextField
+            <DateField
               id="birthDate"
               label={t('auth.register.birthDate')}
-              type="date"
               value={form.birthDate}
               onChange={(v) => update('birthDate', v)}
               error={fieldErrors.birthDate}
+              required
+              testId="register-birthDate"
             />
             <TextField
               id="nationalId"
@@ -218,13 +220,14 @@ export function Register() {
                 label: t(`options.position.${value}`),
               }))}
             />
-            <TextField
+            <DateField
               id="startDate"
               label={t('auth.register.startDate')}
-              type="date"
               value={form.startDate}
               onChange={(v) => update('startDate', v)}
               error={fieldErrors.startDate}
+              required
+              testId="register-startDate"
             />
           </div>
           <button

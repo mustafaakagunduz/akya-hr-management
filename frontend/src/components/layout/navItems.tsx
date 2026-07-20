@@ -3,6 +3,7 @@ import type { UserRole } from '../../api/types';
 import {
   CalendarIcon,
   ClipboardIcon,
+  HistoryIcon,
   PlusIcon,
   UserIcon,
   UsersIcon,
@@ -20,6 +21,12 @@ export const navItems: NavItem[] = [
     to: '/leave-requests',
     labelKey: 'nav.manager',
     icon: <ClipboardIcon />,
+    roles: ['MANAGER'],
+  },
+  {
+    to: '/leave-history',
+    labelKey: 'nav.leaveHistory',
+    icon: <HistoryIcon />,
     roles: ['MANAGER'],
   },
   { to: '/my-leaves', labelKey: 'nav.panel', icon: <CalendarIcon /> },

@@ -21,6 +21,7 @@
     "panel": "Taleplerim",
     "createLeave": "İzin Talebi Oluştur",
     "manager": "İzin Yönetimi",
+    "leaveHistory": "Geçmiş İzinler",
     "users": "Kullanıcılar",
     "profile": "Profil",
     "openMenu": "Menüyü aç",
@@ -96,6 +97,7 @@
       "APPROVED": "Onaylandı",
       "REJECTED": "Reddedildi"
     },
+    "date": "Tarih",
     "startDate": "Başlangıç Tarihi",
     "endDate": "Bitiş Tarihi",
     "description": "Açıklama",
@@ -145,7 +147,10 @@
     "employee": "Personel",
     "department": "Departman",
     "approveSuccess": "Talep onaylandı",
-    "rejectSuccess": "Talep reddedildi"
+    "rejectSuccess": "Talep reddedildi",
+    "noHistory": "Geçmiş izin kaydı yok",
+    "searchEmployee": "Personel adına göre ara",
+    "noSearchResults": "Aramanızla eşleşen kayıt bulunamadı"
   },
   "validation": {
     "required": "Bu alan zorunludur",
@@ -153,6 +158,7 @@
     "nationalIdLength": "TC Kimlik No 11 haneli olmalı",
     "minPasswordLength": "Şifre en az 6 karakter olmalı",
     "passwordMismatch": "Şifreler eşleşmiyor",
-    "endBeforeStart": "Bitiş tarihi başlangıç tarihinden önce olamaz"
+    "endBeforeStart": "Bitiş tarihi başlangıç tarihinden önce olamaz",
+    "incompleteDate": "Geçerli bir tarih girin (GG.AA.YYYY)"
   }
 }

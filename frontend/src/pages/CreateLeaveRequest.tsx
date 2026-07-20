@@ -21,6 +21,7 @@ export function CreateLeaveRequest() {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [formKey, setFormKey] = useState(0);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -49,6 +50,7 @@ export function CreateLeaveRequest() {
       setStartDate('');
       setEndDate('');
       setDescription('');
+      setFormKey((k) => k + 1);
     } catch (err) {
       setIsConfirmOpen(false);
       setError(getApiErrorMessage(err, t('common.genericError')));
@@ -73,6 +75,7 @@ export function CreateLeaveRequest() {
         )}
         <form onSubmit={handleSubmit}>
           <LeaveRequestFields
+            key={formKey}
             idPrefix="leave"
             testIdPrefix="leave"
             type={type}
@@ -106,14 +109,31 @@ export function CreateLeaveRequest() {
             <span className="modal-row-label">{t('leaves.type.label')}</span>
             <span className="modal-row-value">{t(`leaves.type.${type}`)}</span>
           </div>
-          <div className="modal-row">
-            <span className="modal-row-label">{t('leaves.startDate')}</span>
-            <span className="modal-row-value">{formatDateTR(startDate)}</span>
-          </div>
-          <div className="modal-row">
-            <span className="modal-row-label">{t('leaves.endDate')}</span>
-            <span className="modal-row-value">{formatDateTR(endDate)}</span>
-          </div>
+          {type === 'DAILY' ? (
+            <div className="modal-row">
+              <span className="modal-row-label">{t('leaves.date')}</span>
+              <span className="modal-row-value">
+                {formatDateTR(startDate)}
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className="modal-row">
+                <span className="modal-row-label">
+                  {t('leaves.startDate')}
+                </span>
+                <span className="modal-row-value">
+                  {formatDateTR(startDate)}
+                </span>
+              </div>
+              <div className="modal-row">
+                <span className="modal-row-label">{t('leaves.endDate')}</span>
+                <span className="modal-row-value">
+                  {formatDateTR(endDate)}
+                </span>
+              </div>
+            </>
+          )}
           <div className="modal-actions">
             <button
               type="button"

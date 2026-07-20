@@ -213,6 +213,11 @@ form {
   gap: 6px;
 }
 
+.search-bar {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
 label {
   font-size: 0.85rem;
   font-weight: 600;
@@ -227,10 +232,6 @@ textarea {
   border-radius: 8px;
   font-size: 0.95rem;
   font-family: inherit;
-}
-
-input[type='date']::-webkit-calendar-picker-indicator {
-  cursor: pointer;
 }
 
 input:focus,

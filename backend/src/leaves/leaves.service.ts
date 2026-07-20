@@ -200,6 +200,26 @@ export class LeavesService {
     });
   }
 
+  findHistory(): Promise<LeaveRequest[]> {
+    return this.leaveRequestRepository.find({
+      where: [
+        { status: LeaveStatus.APPROVED },
+        { status: LeaveStatus.REJECTED },
+      ],
+      relations: { user: true },
+      select: {
+        user: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          department: true,
+          position: true,
+        },
+      },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async approve(id: string): Promise<LeaveRequest> {
     const saved = await this.dataSource.transaction(async (manager) => {
       const leaveRequest = await manager.findOne(LeaveRequest, {

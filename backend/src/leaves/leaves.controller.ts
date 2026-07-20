@@ -57,6 +57,12 @@ export class LeavesController {
   }
 
   @Roles(UserRole.MANAGER)
+  @Get('history')
+  findHistory() {
+    return this.leavesService.findHistory();
+  }
+
+  @Roles(UserRole.MANAGER)
   @Patch(':id/approve')
   approve(@Param('id') id: string) {
     return this.leavesService.approve(id);

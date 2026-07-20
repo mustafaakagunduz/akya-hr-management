@@ -146,6 +146,7 @@ export function EmployeePanel() {
           <form onSubmit={handleEditSubmit}>
             {editError && <p className="form-error">{editError}</p>}
             <LeaveRequestFields
+              key={editingRequest.id}
               idPrefix="leave-edit"
               testIdPrefix="leave-edit"
               type={editType}

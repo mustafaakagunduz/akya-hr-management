@@ -30,6 +30,12 @@ export function fetchPendingLeaveRequests() {
     .then((res) => res.data);
 }
 
+export function fetchLeaveHistory() {
+  return apiClient
+    .get<LeaveRequest[]>('/leaves/history')
+    .then((res) => res.data);
+}
+
 export function approveLeaveRequest(id: string) {
   return apiClient
     .patch<LeaveRequest>(`/leaves/${id}/approve`)
