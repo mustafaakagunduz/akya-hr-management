@@ -9,6 +9,46 @@ import {
 import { getApiErrorMessage } from '../api/client';
 import type { LeaveRequest } from '../api/types';
 
+const DESCRIPTION_TRUNCATE_LENGTH = 60;
+
+function DescriptionCell({ text }: { text: string }) {
+  const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
+
+  if (text.length <= DESCRIPTION_TRUNCATE_LENGTH) {
+    return <>{text}</>;
+  }
+
+  return (
+    <div className="description-cell">
+      <span>
+        {expanded ? text : `${text.slice(0, DESCRIPTION_TRUNCATE_LENGTH)}...`}
+      </span>
+      <button
+        type="button"
+        className="description-toggle"
+        onClick={() => setExpanded((prev) => !prev)}
+        aria-expanded={expanded}
+        aria-label={expanded ? t('common.showLess') : t('common.showMore')}
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={expanded ? 'chevron chevron-up' : 'chevron'}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
 export function ManagerPanel() {
   const { t } = useTranslation();
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
@@ -96,26 +136,34 @@ export function ManagerPanel() {
                   <td>{request.startDate}</td>
                   <td>{request.endDate}</td>
                   <td>{request.dayCount}</td>
-                  <td>{request.description || '-'}</td>
+                  <td>
+                    {request.description ? (
+                      <DescriptionCell text={request.description} />
+                    ) : (
+                      '-'
+                    )}
+                  </td>
                   <td className="actions-cell">
-                    <button
-                      type="button"
-                      className="btn btn-sm"
-                      disabled={processingId === request.id}
-                      onClick={() => handleApprove(request.id)}
-                      data-testid={`approve-${request.id}`}
-                    >
-                      {t('common.approve')}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-sm"
-                      disabled={processingId === request.id}
-                      onClick={() => handleReject(request.id)}
-                      data-testid={`reject-${request.id}`}
-                    >
-                      {t('common.reject')}
-                    </button>
+                    <div className="actions-cell-inner">
+                      <button
+                        type="button"
+                        className="btn btn-sm"
+                        disabled={processingId === request.id}
+                        onClick={() => handleApprove(request.id)}
+                        data-testid={`approve-${request.id}`}
+                      >
+                        {t('common.approve')}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        disabled={processingId === request.id}
+                        onClick={() => handleReject(request.id)}
+                        data-testid={`reject-${request.id}`}
+                      >
+                        {t('common.reject')}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

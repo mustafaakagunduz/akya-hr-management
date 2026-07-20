@@ -10,6 +10,8 @@
     "approve": "Onayla",
     "reject": "Reddet",
     "actions": "İşlemler",
+    "showMore": "Devamını göster",
+    "showLess": "Daha az göster",
     "genericError": "Bir hata oluştu, lütfen tekrar deneyin",
     "welcome": "Hoş geldiniz, {{name}}"
   },

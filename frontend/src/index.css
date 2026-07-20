@@ -275,10 +275,41 @@ tr:last-child td {
 }
 
 .actions-cell {
+  vertical-align: middle;
+}
+
+.actions-cell-inner {
   display: flex;
   gap: 8px;
 }
 
 .muted {
   color: var(--color-muted);
+}
+
+.description-cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  max-width: 280px;
+}
+
+.description-toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-muted);
+}
+
+.chevron {
+  transition: transform 0.15s ease;
+}
+
+.chevron-up {
+  transform: rotate(180deg);
 }
