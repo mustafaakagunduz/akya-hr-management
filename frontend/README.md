@@ -48,7 +48,7 @@ npx playwright install chromium   # ilk kurulumda bir kez
 npm run test:e2e
 ```
 
-Testler `e2e/` klasöründedir ve gerçek backend + frontend'e karşı çalışır (`playwright.config.ts` frontend dev sunucusunu otomatik başlatır, backend'in ayrıca `npm run start:dev` ile çalışıyor olması gerekir). Kapsanan senaryolar:
+Testler `e2e/` klasöründedir ve gerçek backend + frontend'e karşı çalışır (`playwright.config.ts` frontend dev sunucusunu otomatik başlatır, backend'in ayrıca `npm run dev` ile çalışıyor olması gerekir). Kapsanan senaryolar:
 
 - Kayıt ol → giriş yap
 - Personel izin talebi oluşturur, "Taleplerim" tablosunda BEKLEMEDE rozetiyle görür

@@ -28,7 +28,7 @@ Monorepo yapısı:
 cd backend
 npm install
 cp .env.example .env   # gerçek DATABASE_URL ve JWT_SECRET değerlerini girin
-npm run start:dev
+npm run dev
 
 # frontend (ayrı terminalde)
 cd frontend

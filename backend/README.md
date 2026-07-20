@@ -26,8 +26,10 @@ cp .env.example .env
 ## Çalıştırma
 
 ```bash
-npm run start:dev
+npm run dev
 ```
+
+Kod değişikliklerinde otomatik yeniden başlatma (watch mode) isteniyorsa: `npm run start:dev`.
 
 Sunucu `http://localhost:3000` adresinde ayağa kalkar. `TypeOrmModule` `synchronize: true` ile yapılandırıldığı için (demo proje — prod'da migration kullanılmalıdır) tablolar ilk açılışta otomatik oluşturulur.
 
