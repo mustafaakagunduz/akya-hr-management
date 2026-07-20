@@ -6,6 +6,7 @@ import { Modal } from '../components/Modal';
 import { CloseIcon } from '../components/layout/icons';
 import { cancelLeaveRequest, fetchLeaveHistory } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import type { LeaveRequest } from '../api/types';
 
@@ -14,6 +15,8 @@ const DESCRIPTION_TRUNCATE_LENGTH = 60;
 export function LeaveHistory() {
   const { t } = useTranslation();
   const toast = useToast();
+  const { user } = useAuth();
+  const isManager = user?.role === 'MANAGER';
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [search, setSearch] = useState('');
 
@@ -76,15 +79,17 @@ export function LeaveHistory() {
     <AppLayout>
       <h1>{t('nav.leaveHistory')}</h1>
 
-      <input
-        type="text"
-        className="search-bar"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder={t('manager.searchEmployee')}
-        aria-label={t('manager.searchEmployee')}
-        data-testid="leave-history-search"
-      />
+      {isManager && (
+        <input
+          type="text"
+          className="search-bar"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t('manager.searchEmployee')}
+          aria-label={t('manager.searchEmployee')}
+          data-testid="leave-history-search"
+        />
+      )}
 
       {cancelTarget && (
         <Modal
@@ -145,15 +150,19 @@ export function LeaveHistory() {
           <table className="table-responsive" data-testid="leave-history-table">
             <thead>
               <tr>
-                <th>{t('manager.employee')}</th>
-                <th>{t('manager.department')}</th>
+                {isManager && (
+                  <>
+                    <th>{t('manager.employee')}</th>
+                    <th>{t('manager.department')}</th>
+                  </>
+                )}
                 <th>{t('leaves.type.label')}</th>
                 <th>{t('leaves.startDate')}</th>
                 <th>{t('leaves.endDate')}</th>
                 <th>{t('leaves.dayCount')}</th>
                 <th>{t('leaves.description')}</th>
                 <th>{t('leaves.status.label')}</th>
-                <th>{t('common.actions')}</th>
+                {isManager && <th>{t('common.actions')}</th>}
               </tr>
             </thead>
             <tbody>
@@ -165,16 +174,20 @@ export function LeaveHistory() {
 
                 return (
                 <tr key={request.id} data-testid="leave-history-row">
-                  <td data-label={t('manager.employee')}>
-                    {request.user
-                      ? `${request.user.firstName} ${request.user.lastName}`
-                      : '-'}
-                  </td>
-                  <td data-label={t('manager.department')}>
-                    {request.user
-                      ? t(`options.department.${request.user.department}`)
-                      : '-'}
-                  </td>
+                  {isManager && (
+                    <>
+                      <td data-label={t('manager.employee')}>
+                        {request.user
+                          ? `${request.user.firstName} ${request.user.lastName}`
+                          : '-'}
+                      </td>
+                      <td data-label={t('manager.department')}>
+                        {request.user
+                          ? t(`options.department.${request.user.department}`)
+                          : '-'}
+                      </td>
+                    </>
+                  )}
                   <td data-label={t('leaves.type.label')}>
                     {t(`leaves.type.${request.type}`)}
                   </td>
@@ -216,24 +229,26 @@ export function LeaveHistory() {
                   <td className="status-cell" data-label={t('leaves.status.label')}>
                     <LeaveStatusBadge status={request.status} />
                   </td>
-                  <td className="actions-cell" data-label={t('common.actions')}>
-                    {request.status === 'APPROVED' ? (
-                      <div className="actions-cell-inner accent-actions-inner">
-                        <button
-                          type="button"
-                          className="icon-btn icon-btn-plain accent-icon-btn reject-icon-btn"
-                          onClick={() => setCancelTarget(request)}
-                          aria-label={t('manager.cancelLeaveButton')}
-                          data-tooltip={t('manager.cancelLeaveButton')}
-                          data-testid={`cancel-leave-${request.id}`}
-                        >
-                          <CloseIcon />
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="muted">-</span>
-                    )}
-                  </td>
+                  {isManager && (
+                    <td className="actions-cell" data-label={t('common.actions')}>
+                      {request.status === 'APPROVED' ? (
+                        <div className="actions-cell-inner accent-actions-inner">
+                          <button
+                            type="button"
+                            className="icon-btn icon-btn-plain accent-icon-btn reject-icon-btn"
+                            onClick={() => setCancelTarget(request)}
+                            aria-label={t('manager.cancelLeaveButton')}
+                            data-tooltip={t('manager.cancelLeaveButton')}
+                            data-testid={`cancel-leave-${request.id}`}
+                          >
+                            <CloseIcon />
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="muted">-</span>
+                      )}
+                    </td>
+                  )}
                 </tr>
                 );
               })}

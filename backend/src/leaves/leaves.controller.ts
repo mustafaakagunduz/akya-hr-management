@@ -56,10 +56,12 @@ export class LeavesController {
     return this.leavesService.findPending();
   }
 
-  @Roles(UserRole.MANAGER)
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER)
   @Get('history')
-  findHistory() {
-    return this.leavesService.findHistory();
+  findHistory(@CurrentUser() user: User) {
+    return this.leavesService.findHistory(
+      user.role === UserRole.MANAGER ? undefined : user.id,
+    );
   }
 
   @Roles(UserRole.MANAGER)

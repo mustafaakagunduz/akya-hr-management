@@ -15,7 +15,7 @@ const HEADINGS: Record<Language, Record<string, string>> = {
   tr: {
     login: 'Giriş Yap',
     register: 'Kayıt Ol',
-    myLeaves: 'İzin Taleplerim',
+    myLeaves: 'Bekleyen İzin Taleplerim',
     createLeave: 'İzin Talebi Oluştur',
     leaveRequests: 'İzin Yönetimi',
     leaveHistory: 'Geçmiş İzinler',
@@ -26,7 +26,7 @@ const HEADINGS: Record<Language, Record<string, string>> = {
   en: {
     login: 'Log In',
     register: 'Sign Up',
-    myLeaves: 'My Leave Requests',
+    myLeaves: 'My Pending Leave Requests',
     createLeave: 'Create Leave Request',
     leaveRequests: 'Leave Management',
     leaveHistory: 'Leave History',

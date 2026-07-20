@@ -200,13 +200,16 @@ export class LeavesService {
     });
   }
 
-  findHistory(): Promise<LeaveRequest[]> {
+  findHistory(userId?: string): Promise<LeaveRequest[]> {
+    const statuses = [
+      LeaveStatus.APPROVED,
+      LeaveStatus.REJECTED,
+      LeaveStatus.CANCELLED,
+    ];
     return this.leaveRequestRepository.find({
-      where: [
-        { status: LeaveStatus.APPROVED },
-        { status: LeaveStatus.REJECTED },
-        { status: LeaveStatus.CANCELLED },
-      ],
+      where: statuses.map((status) =>
+        userId ? { status, userId } : { status },
+      ),
       relations: { user: true },
       select: {
         user: {

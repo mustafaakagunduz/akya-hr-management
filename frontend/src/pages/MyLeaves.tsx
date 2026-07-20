@@ -59,6 +59,10 @@ export function MyLeaves() {
     });
   }
 
+  const pendingRequests = requests.filter(
+    (request) => request.status === 'PENDING',
+  );
+
   function loadRequests() {
     fetchMyLeaveRequests().then(setRequests);
   }
@@ -255,7 +259,7 @@ export function MyLeaves() {
       )}
 
       <div className="section">
-        {requests.length === 0 ? (
+        {pendingRequests.length === 0 ? (
           <p className="muted">{t('leaves.noRequests')}</p>
         ) : (
           <table className="table-responsive" data-testid="my-requests-table">
@@ -271,7 +275,7 @@ export function MyLeaves() {
               </tr>
             </thead>
             <tbody>
-              {requests.map((request) => {
+              {pendingRequests.map((request) => {
                 const description = request.description ?? '';
                 const isLong =
                   description.length > DESCRIPTION_TRUNCATE_LENGTH;

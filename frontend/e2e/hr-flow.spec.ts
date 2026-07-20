@@ -59,14 +59,21 @@ test.describe.serial('İK izin yönetim akışı', () => {
     await page.getByTestId('logout-button').click();
   });
 
-  test('personel onaylanan talebi görebilir', async ({ page }) => {
+  test('personel onaylanan talebi geçmiş izinlerde görebilir', async ({
+    page,
+  }) => {
     await page.goto('/login');
     await page.getByTestId('login-email').fill(employee.email);
     await page.getByTestId('login-password').fill(employee.password);
     await page.getByTestId('login-submit').click();
 
     await expect(page).toHaveURL(/\/my-leaves$/);
-    const row = page.getByTestId('my-requests-table').locator('tbody tr').first();
+
+    await page.goto('/leave-history');
+    const row = page
+      .getByTestId('leave-history-table')
+      .locator('tbody tr')
+      .first();
     await expect(row.getByTestId('status-badge-APPROVED')).toBeVisible();
   });
 });

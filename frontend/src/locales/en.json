@@ -136,7 +136,7 @@
     "dayCount": "Day Count",
     "submit": "Create Request",
     "createSuccess": "Your leave request has been created",
-    "myRequests": "My Leave Requests",
+    "myRequests": "My Pending Leave Requests",
     "noRequests": "You don't have any leave requests yet",
     "annualBalance": "Remaining Annual Leave Balance: {{count}} days",
     "annualBalanceShort": "Annual Leave Balance",

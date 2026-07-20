@@ -136,7 +136,7 @@
     "dayCount": "Gün Sayısı",
     "submit": "Talep Oluştur",
     "createSuccess": "İzin talebiniz oluşturuldu",
-    "myRequests": "İzin Taleplerim",
+    "myRequests": "Bekleyen İzin Taleplerim",
     "noRequests": "Henüz izin talebiniz yok",
     "annualBalance": "Kalan Yıllık İzin Bakiyesi: {{count}} gün",
     "annualBalanceShort": "Yıllık İzin Bakiyesi",

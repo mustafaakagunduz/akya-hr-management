@@ -24,13 +24,12 @@ export const navItems: NavItem[] = [
     icon: <ClipboardIcon />,
     roles: ['MANAGER'],
   },
+  { to: '/my-leaves', labelKey: 'nav.panel', icon: <CalendarIcon /> },
   {
     to: '/leave-history',
     labelKey: 'nav.leaveHistory',
     icon: <HistoryIcon />,
-    roles: ['MANAGER'],
   },
-  { to: '/my-leaves', labelKey: 'nav.panel', icon: <CalendarIcon /> },
   { to: '/create-leave', labelKey: 'nav.createLeave', icon: <PlusIcon /> },
   {
     to: '/users',
