@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Topbar } from '../components/Topbar';
+import { AppLayout } from '../components/layout/AppLayout';
 import {
   approveLeaveRequest,
   fetchPendingLeaveRequests,
@@ -9,46 +9,6 @@ import {
 import { getApiErrorMessage } from '../api/client';
 import { useSocket } from '../context/SocketContext';
 import type { LeaveRequest } from '../api/types';
-
-const DESCRIPTION_TRUNCATE_LENGTH = 60;
-
-function DescriptionCell({ text }: { text: string }) {
-  const { t } = useTranslation();
-  const [expanded, setExpanded] = useState(false);
-
-  if (text.length <= DESCRIPTION_TRUNCATE_LENGTH) {
-    return <>{text}</>;
-  }
-
-  return (
-    <div className="description-cell">
-      <span>
-        {expanded ? text : `${text.slice(0, DESCRIPTION_TRUNCATE_LENGTH)}...`}
-      </span>
-      <button
-        type="button"
-        className="description-toggle"
-        onClick={() => setExpanded((prev) => !prev)}
-        aria-expanded={expanded}
-        aria-label={expanded ? t('common.showLess') : t('common.showMore')}
-      >
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={expanded ? 'chevron chevron-up' : 'chevron'}
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
-    </div>
-  );
-}
 
 export function ManagerPanel() {
   const { t } = useTranslation();
@@ -75,9 +35,23 @@ export function ManagerPanel() {
       setRequests((prev) => [created, ...prev]);
     }
 
+    function handleLeaveEdited(edited: LeaveRequest) {
+      setRequests((prev) =>
+        prev.map((request) => (request.id === edited.id ? edited : request)),
+      );
+    }
+
+    function handleLeaveDeleted({ id }: { id: string }) {
+      setRequests((prev) => prev.filter((request) => request.id !== id));
+    }
+
     socket.on('leave.created', handleLeaveCreated);
+    socket.on('leave.edited', handleLeaveEdited);
+    socket.on('leave.deleted', handleLeaveDeleted);
     return () => {
       socket.off('leave.created', handleLeaveCreated);
+      socket.off('leave.edited', handleLeaveEdited);
+      socket.off('leave.deleted', handleLeaveDeleted);
     };
   }, [socket]);
 
@@ -112,8 +86,7 @@ export function ManagerPanel() {
   }
 
   return (
-    <div className="page">
-      <Topbar />
+    <AppLayout>
       <h1>{t('manager.title')}</h1>
       {error && <p className="form-error">{error}</p>}
       {message && (
@@ -157,18 +130,14 @@ export function ManagerPanel() {
                   <td>{request.startDate}</td>
                   <td>{request.endDate}</td>
                   <td>{request.dayCount}</td>
-                  <td>
-                    {request.description ? (
-                      <DescriptionCell text={request.description} />
-                    ) : (
-                      '-'
-                    )}
+                  <td className="description-cell">
+                    {request.description || '-'}
                   </td>
                   <td className="actions-cell">
                     <div className="actions-cell-inner">
                       <button
                         type="button"
-                        className="btn btn-sm"
+                        className="btn btn-success btn-sm"
                         disabled={processingId === request.id}
                         onClick={() => handleApprove(request.id)}
                         data-testid={`approve-${request.id}`}
@@ -192,6 +161,6 @@ export function ManagerPanel() {
           </table>
         )}
       </div>
-    </div>
+    </AppLayout>
   );
 }

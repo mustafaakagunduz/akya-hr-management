@@ -2,8 +2,31 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { EmployeePanel } from './pages/EmployeePanel';
+import { CreateLeaveRequest } from './pages/CreateLeaveRequest';
 import { ManagerPanel } from './pages/ManagerPanel';
+import { Profile } from './pages/Profile';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { LoadingScreen } from './components/LoadingScreen';
+import { useAuth } from './context/AuthContext';
+
+function DefaultRedirect() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <Navigate
+      to={user.role === 'MANAGER' ? '/leave-requests' : '/my-leaves'}
+      replace
+    />
+  );
+}
 
 function App() {
   return (
@@ -19,6 +42,22 @@ function App() {
         }
       />
       <Route
+        path="/create-leave"
+        element={
+          <ProtectedRoute>
+            <CreateLeaveRequest />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/leave-requests"
         element={
           <ProtectedRoute allowedRoles={['MANAGER']}>
@@ -26,8 +65,8 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to="/my-leaves" replace />} />
-      <Route path="*" element={<Navigate to="/my-leaves" replace />} />
+      <Route path="/" element={<DefaultRedirect />} />
+      <Route path="*" element={<DefaultRedirect />} />
     </Routes>
   );
 }

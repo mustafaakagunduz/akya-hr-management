@@ -12,7 +12,7 @@ import type { LoginPayload, User } from '../api/types';
 interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
-  login: (payload: LoginPayload) => Promise<void>;
+  login: (payload: LoginPayload) => Promise<User>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthToken(accessToken);
     const me = await fetchMe();
     setUser(me);
+    return me;
   }
 
   function logout() {

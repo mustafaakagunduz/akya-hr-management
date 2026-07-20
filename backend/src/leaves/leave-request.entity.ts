@@ -34,8 +34,8 @@ export class LeaveRequest {
   @Column({ type: 'int' })
   dayCount: number;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ type: 'varchar', nullable: true })
+  description: string | null;
 
   @Column({ type: 'enum', enum: LeaveStatus, default: LeaveStatus.PENDING })
   status: LeaveStatus;

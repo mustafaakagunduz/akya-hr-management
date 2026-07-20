@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import type { UserRole } from '../api/types';
-import { useTranslation } from 'react-i18next';
+import { LoadingScreen } from './LoadingScreen';
 
 export function ProtectedRoute({
   children,
@@ -12,10 +12,9 @@ export function ProtectedRoute({
   allowedRoles?: UserRole[];
 }) {
   const { user, isLoading } = useAuth();
-  const { t } = useTranslation();
 
   if (isLoading) {
-    return <p>{t('common.loading')}</p>;
+    return <LoadingScreen />;
   }
 
   if (!user) {

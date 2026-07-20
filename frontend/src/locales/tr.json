@@ -10,14 +10,20 @@
     "approve": "Onayla",
     "reject": "Reddet",
     "actions": "İşlemler",
-    "showMore": "Devamını göster",
-    "showLess": "Daha az göster",
+    "confirm": "Onayla",
+    "close": "Kapat",
+    "edit": "Düzenle",
+    "delete": "Sil",
     "genericError": "Bir hata oluştu, lütfen tekrar deneyin",
     "welcome": "Hoş geldiniz, {{name}}"
   },
   "nav": {
-    "panel": "İzin Talebi",
-    "manager": "İzin Yönetimi"
+    "panel": "Taleplerim",
+    "createLeave": "İzin Talebi Oluştur",
+    "manager": "İzin Yönetimi",
+    "profile": "Profil",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
   },
   "options": {
     "select": "Seçiniz",
@@ -95,13 +101,24 @@
     "dayCount": "Gün Sayısı",
     "submit": "Talep Oluştur",
     "createSuccess": "İzin talebiniz oluşturuldu",
-    "myRequests": "Taleplerim",
+    "myRequests": "İzin Taleplerim",
     "noRequests": "Henüz izin talebiniz yok",
-    "annualBalance": "Kalan Yıllık İzin Bakiyesi: {{count}} gün"
+    "annualBalance": "Kalan Yıllık İzin Bakiyesi: {{count}} gün",
+    "confirmTitle": "İzin Talebini Onayla",
+    "confirmSubtitle": "Aşağıdaki bilgilerle izin talebi oluşturulacak",
+    "editTitle": "İzin Talebini Düzenle",
+    "deleteTitle": "İzin Talebini Sil",
+    "deleteSubtitle": "Bu izin talebini silmek istediğinize emin misiniz?"
   },
   "panel": {
-    "title": "Personel Paneli",
-    "newRequest": "Yeni İzin Talebi"
+    "newRequest": "Yeni İzin Talebi Oluştur"
+  },
+  "profile": {
+    "role": "Rol",
+    "roles": {
+      "EMPLOYEE": "Personel",
+      "MANAGER": "Yönetici"
+    }
   },
   "manager": {
     "title": "Yönetici Paneli",

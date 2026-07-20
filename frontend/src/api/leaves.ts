@@ -7,6 +7,19 @@ export function createLeaveRequest(payload: CreateLeaveRequestPayload) {
     .then((res) => res.data);
 }
 
+export function updateLeaveRequest(
+  id: string,
+  payload: CreateLeaveRequestPayload,
+) {
+  return apiClient
+    .patch<LeaveRequest>(`/leaves/${id}`, payload)
+    .then((res) => res.data);
+}
+
+export function deleteLeaveRequest(id: string) {
+  return apiClient.delete<void>(`/leaves/${id}`).then(() => undefined);
+}
+
 export function fetchMyLeaveRequests() {
   return apiClient.get<LeaveRequest[]>('/leaves/my').then((res) => res.data);
 }

@@ -45,13 +45,17 @@ test.describe.serial('İK izin yönetim akışı', () => {
     await expect(page).toHaveURL(/\/my-leaves$/);
     await expect(page.getByTestId('annual-balance')).toContainText('14');
 
+    await page.goto('/create-leave');
     await page.getByTestId('leave-type').selectOption('DAILY');
     await page.getByTestId('leave-start-date').fill('2026-08-20');
     await page.getByTestId('leave-end-date').fill('2026-08-20');
     await page.getByTestId('leave-description').fill('Doktor randevusu');
     await page.getByTestId('leave-submit').click();
+    await page.getByTestId('leave-confirm-submit').click();
 
     await expect(page.getByTestId('leave-create-success')).toBeVisible();
+
+    await page.goto('/my-leaves');
     const row = page.getByTestId('my-requests-table').locator('tbody tr').first();
     await expect(row).toContainText('Günlük');
     await expect(row.getByTestId('status-badge-PENDING')).toBeVisible();
@@ -66,8 +70,6 @@ test.describe.serial('İK izin yönetim akışı', () => {
     await page.getByTestId('login-password').fill(ADMIN_PASSWORD);
     await page.getByTestId('login-submit').click();
 
-    await expect(page).toHaveURL(/\/my-leaves$/);
-    await page.getByRole('link', { name: 'Yönetici Paneli' }).click();
     await expect(page).toHaveURL(/\/leave-requests$/);
 
     const row = page.getByTestId('pending-row').filter({

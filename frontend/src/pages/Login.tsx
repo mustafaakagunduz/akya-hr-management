@@ -19,8 +19,8 @@ export function Login() {
     setError(null);
     setIsSubmitting(true);
     try {
-      await login({ email, password });
-      navigate('/my-leaves');
+      const user = await login({ email, password });
+      navigate(user.role === 'MANAGER' ? '/leave-requests' : '/my-leaves');
     } catch (err) {
       setError(getApiErrorMessage(err, t('common.genericError')));
     } finally {

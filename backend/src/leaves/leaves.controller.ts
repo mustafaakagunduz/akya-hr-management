@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -9,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { LeavesService } from './leaves.service';
 import { CreateLeaveRequestDto } from './dto/create-leave-request.dto';
+import { UpdateLeaveRequestDto } from './dto/update-leave-request.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
@@ -30,6 +32,22 @@ export class LeavesController {
   @Get('my')
   findMy(@CurrentUser() user: User) {
     return this.leavesService.findMy(user.id);
+  }
+
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER)
+  @Patch(':id')
+  update(
+    @CurrentUser() user: User,
+    @Param('id') id: string,
+    @Body() dto: UpdateLeaveRequestDto,
+  ) {
+    return this.leavesService.update(user, id, dto);
+  }
+
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER)
+  @Delete(':id')
+  remove(@CurrentUser() user: User, @Param('id') id: string) {
+    return this.leavesService.remove(user, id);
   }
 
   @Roles(UserRole.MANAGER)

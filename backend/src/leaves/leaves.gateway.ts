@@ -64,6 +64,14 @@ export class LeavesGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(MANAGERS_ROOM).emit('leave.created', leaveRequest);
   }
 
+  notifyManagersOfLeaveEdit(leaveRequest: LeaveRequest) {
+    this.server.to(MANAGERS_ROOM).emit('leave.edited', leaveRequest);
+  }
+
+  notifyManagersOfLeaveDeletion(id: string) {
+    this.server.to(MANAGERS_ROOM).emit('leave.deleted', { id });
+  }
+
   notifyUserOfDecision(userId: string, leaveRequest: LeaveRequest) {
     this.server.to(userRoom(userId)).emit('leave.updated', leaveRequest);
   }

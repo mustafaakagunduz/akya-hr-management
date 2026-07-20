@@ -1,10 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { LeaveRequest } from './leave-request.entity';
 import { User } from '../users/user.entity';
 import { LeaveStatus, LeaveType } from '../common/enums';
 import { CreateLeaveRequestDto } from './dto/create-leave-request.dto';
+import { UpdateLeaveRequestDto } from './dto/update-leave-request.dto';
 import { LeavesGateway } from './leaves.gateway';
 
 function toUtcDate(dateStr: string): Date {
@@ -26,9 +32,14 @@ export class LeavesService {
     private readonly leavesGateway: LeavesGateway,
   ) {}
 
-  async create(user: User, dto: CreateLeaveRequestDto): Promise<LeaveRequest> {
-    const { type, startDate, endDate, description } = dto;
-
+  private async validateDatesAndOverlap(
+    userId: string,
+    type: LeaveType,
+    startDate: string,
+    endDate: string,
+    balance: number,
+    excludeId?: string,
+  ): Promise<number> {
     if (toUtcDate(endDate) < toUtcDate(startDate)) {
       throw new BadRequestException(
         'Bitiş tarihi başlangıç tarihinden önce olamaz',
@@ -43,15 +54,20 @@ export class LeavesService {
 
     const dayCount = countDays(startDate, endDate);
 
-    const overlapping = await this.leaveRequestRepository
+    const overlapQuery = this.leaveRequestRepository
       .createQueryBuilder('leaveRequest')
-      .where('leaveRequest.userId = :userId', { userId: user.id })
+      .where('leaveRequest.userId = :userId', { userId })
       .andWhere('leaveRequest.status IN (:...statuses)', {
         statuses: [LeaveStatus.PENDING, LeaveStatus.APPROVED],
       })
       .andWhere('leaveRequest.startDate <= :endDate', { endDate })
-      .andWhere('leaveRequest.endDate >= :startDate', { startDate })
-      .getOne();
+      .andWhere('leaveRequest.endDate >= :startDate', { startDate });
+
+    if (excludeId) {
+      overlapQuery.andWhere('leaveRequest.id != :excludeId', { excludeId });
+    }
+
+    const overlapping = await overlapQuery.getOne();
 
     if (overlapping) {
       throw new BadRequestException(
@@ -59,9 +75,23 @@ export class LeavesService {
       );
     }
 
-    if (type === LeaveType.ANNUAL && dayCount > user.annualLeaveBalance) {
+    if (type === LeaveType.ANNUAL && dayCount > balance) {
       throw new BadRequestException('Yıllık izin bakiyeniz yetersiz');
     }
+
+    return dayCount;
+  }
+
+  async create(user: User, dto: CreateLeaveRequestDto): Promise<LeaveRequest> {
+    const { type, startDate, endDate, description } = dto;
+
+    const dayCount = await this.validateDatesAndOverlap(
+      user.id,
+      type,
+      startDate,
+      endDate,
+      user.annualLeaveBalance,
+    );
 
     const leaveRequest = this.leaveRequestRepository.create({
       userId: user.id,
@@ -77,6 +107,73 @@ export class LeavesService {
     delete (saved.user as { password?: string }).password;
     this.leavesGateway.notifyManagersOfNewRequest(saved);
     return saved;
+  }
+
+  async update(
+    user: User,
+    id: string,
+    dto: UpdateLeaveRequestDto,
+  ): Promise<LeaveRequest> {
+    const leaveRequest = await this.leaveRequestRepository.findOne({
+      where: { id },
+      relations: { user: true },
+      select: {
+        user: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          department: true,
+          position: true,
+        },
+      },
+    });
+    if (!leaveRequest) {
+      throw new NotFoundException('İzin talebi bulunamadı');
+    }
+    if (leaveRequest.userId !== user.id) {
+      throw new ForbiddenException('Bu izin talebini düzenleme yetkiniz yok');
+    }
+    if (leaveRequest.status !== LeaveStatus.PENDING) {
+      throw new BadRequestException('Sadece bekleyen talepler düzenlenebilir');
+    }
+
+    const { type, startDate, endDate, description } = dto;
+    const dayCount = await this.validateDatesAndOverlap(
+      user.id,
+      type,
+      startDate,
+      endDate,
+      user.annualLeaveBalance,
+      id,
+    );
+
+    leaveRequest.type = type;
+    leaveRequest.startDate = startDate;
+    leaveRequest.endDate = endDate;
+    leaveRequest.dayCount = dayCount;
+    leaveRequest.description = description ?? null;
+
+    const saved = await this.leaveRequestRepository.save(leaveRequest);
+    this.leavesGateway.notifyManagersOfLeaveEdit(saved);
+    return saved;
+  }
+
+  async remove(user: User, id: string): Promise<void> {
+    const leaveRequest = await this.leaveRequestRepository.findOne({
+      where: { id },
+    });
+    if (!leaveRequest) {
+      throw new NotFoundException('İzin talebi bulunamadı');
+    }
+    if (leaveRequest.userId !== user.id) {
+      throw new ForbiddenException('Bu izin talebini silme yetkiniz yok');
+    }
+    if (leaveRequest.status !== LeaveStatus.PENDING) {
+      throw new BadRequestException('Sadece bekleyen talepler silinebilir');
+    }
+
+    await this.leaveRequestRepository.remove(leaveRequest);
+    this.leavesGateway.notifyManagersOfLeaveDeletion(id);
   }
 
   findMy(userId: string): Promise<LeaveRequest[]> {

@@ -1,11 +1,19 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Topbar } from '../components/Topbar';
+import { AppLayout } from '../components/layout/AppLayout';
 import { LeaveStatusBadge } from '../components/LeaveStatusBadge';
+import { LeaveRequestFields } from '../components/LeaveRequestFields';
+import { Modal } from '../components/Modal';
+import { PencilIcon, TrashIcon } from '../components/layout/icons';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
-import { createLeaveRequest, fetchMyLeaveRequests } from '../api/leaves';
+import {
+  deleteLeaveRequest,
+  fetchMyLeaveRequests,
+  updateLeaveRequest,
+} from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
+import { formatDateTR } from '../utils/date';
 import type { LeaveRequest, LeaveType } from '../api/types';
 
 export function EmployeePanel() {
@@ -14,13 +22,22 @@ export function EmployeePanel() {
   const socket = useSocket();
 
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
-  const [type, setType] = useState<LeaveType>('DAILY');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [editingRequest, setEditingRequest] = useState<LeaveRequest | null>(
+    null,
+  );
+  const [editType, setEditType] = useState<LeaveType>('DAILY');
+  const [editStartDate, setEditStartDate] = useState('');
+  const [editEndDate, setEditEndDate] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editError, setEditError] = useState<string | null>(null);
+  const [isEditSubmitting, setIsEditSubmitting] = useState(false);
+
+  const [deletingRequest, setDeletingRequest] = useState<LeaveRequest | null>(
+    null,
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   function loadRequests() {
     fetchMyLeaveRequests().then(setRequests);
@@ -52,112 +69,165 @@ export function EmployeePanel() {
     };
   }, [socket, refreshUser]);
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    setError(null);
-    setSuccess(false);
+  function openEdit(request: LeaveRequest) {
+    setEditingRequest(request);
+    setEditType(request.type);
+    setEditStartDate(request.startDate);
+    setEditEndDate(request.endDate);
+    setEditDescription(request.description ?? '');
+    setEditError(null);
+  }
 
-    if (new Date(endDate) < new Date(startDate)) {
-      setError(t('validation.endBeforeStart'));
+  async function handleEditSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!editingRequest) {
+      return;
+    }
+    setEditError(null);
+
+    if (new Date(editEndDate) < new Date(editStartDate)) {
+      setEditError(t('validation.endBeforeStart'));
       return;
     }
 
-    setIsSubmitting(true);
+    setIsEditSubmitting(true);
     try {
-      const created = await createLeaveRequest({
-        type,
-        startDate,
-        endDate,
-        description: description || undefined,
+      const updated = await updateLeaveRequest(editingRequest.id, {
+        type: editType,
+        startDate: editStartDate,
+        endDate: editEndDate,
+        description: editDescription || undefined,
       });
-      setRequests((prev) => [created, ...prev]);
-      setSuccess(true);
-      setStartDate('');
-      setEndDate('');
-      setDescription('');
+      setRequests((prev) =>
+        prev.map((request) =>
+          request.id === updated.id ? updated : request,
+        ),
+      );
+      setEditingRequest(null);
     } catch (err) {
-      setError(getApiErrorMessage(err, t('common.genericError')));
+      setEditError(getApiErrorMessage(err, t('common.genericError')));
     } finally {
-      setIsSubmitting(false);
+      setIsEditSubmitting(false);
+    }
+  }
+
+  async function handleConfirmDelete() {
+    if (!deletingRequest) {
+      return;
+    }
+    setDeleteError(null);
+    setIsDeleting(true);
+    try {
+      await deleteLeaveRequest(deletingRequest.id);
+      setRequests((prev) =>
+        prev.filter((request) => request.id !== deletingRequest.id),
+      );
+      setDeletingRequest(null);
+    } catch (err) {
+      setDeleteError(getApiErrorMessage(err, t('common.genericError')));
+    } finally {
+      setIsDeleting(false);
     }
   }
 
   return (
-    <div className="page">
-      <Topbar />
-      <h1>{t('panel.title')}</h1>
+    <AppLayout>
+      <h1>{t('leaves.myRequests')}</h1>
       <p className="balance" data-testid="annual-balance">
         {t('leaves.annualBalance', { count: user?.annualLeaveBalance ?? 0 })}
       </p>
 
-      <div className="section card">
-        <h2>{t('panel.newRequest')}</h2>
-        {error && <p className="form-error">{error}</p>}
-        {success && (
-          <p className="form-success" data-testid="leave-create-success">
-            {t('leaves.createSuccess')}
-          </p>
-        )}
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label htmlFor="type">{t('leaves.type.label')}</label>
-            <select
-              id="type"
-              value={type}
-              onChange={(e) => setType(e.target.value as LeaveType)}
-              data-testid="leave-type"
-            >
-              <option value="DAILY">{t('leaves.type.DAILY')}</option>
-              <option value="ANNUAL">{t('leaves.type.ANNUAL')}</option>
-            </select>
-          </div>
-          <div className="form-grid">
-            <div className="field">
-              <label htmlFor="startDate">{t('leaves.startDate')}</label>
-              <input
-                id="startDate"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                required
-                data-testid="leave-start-date"
-              />
-            </div>
-            <div className="field">
-              <label htmlFor="endDate">{t('leaves.endDate')}</label>
-              <input
-                id="endDate"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                required
-                data-testid="leave-end-date"
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label htmlFor="description">{t('leaves.description')}</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-              data-testid="leave-description"
+      {editingRequest && (
+        <Modal
+          title={t('leaves.editTitle')}
+          onClose={() => setEditingRequest(null)}
+          closeLabel={t('common.close')}
+        >
+          <form onSubmit={handleEditSubmit}>
+            {editError && <p className="form-error">{editError}</p>}
+            <LeaveRequestFields
+              idPrefix="leave-edit"
+              testIdPrefix="leave-edit"
+              type={editType}
+              onTypeChange={setEditType}
+              startDate={editStartDate}
+              onStartDateChange={setEditStartDate}
+              endDate={editEndDate}
+              onEndDateChange={setEditEndDate}
+              description={editDescription}
+              onDescriptionChange={setEditDescription}
             />
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setEditingRequest(null)}
+                disabled={isEditSubmitting}
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                type="submit"
+                className="btn"
+                disabled={isEditSubmitting}
+                data-testid="leave-edit-submit"
+              >
+                {t('common.save')}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {deletingRequest && (
+        <Modal
+          title={t('leaves.deleteTitle')}
+          onClose={() => setDeletingRequest(null)}
+          closeLabel={t('common.close')}
+        >
+          <p className="modal-subtitle">{t('leaves.deleteSubtitle')}</p>
+          {deleteError && <p className="form-error">{deleteError}</p>}
+          <div className="modal-row">
+            <span className="modal-row-label">{t('leaves.type.label')}</span>
+            <span className="modal-row-value">
+              {t(`leaves.type.${deletingRequest.type}`)}
+            </span>
           </div>
-          <button
-            type="submit"
-            className="btn"
-            disabled={isSubmitting}
-            data-testid="leave-submit"
-          >
-            {t('leaves.submit')}
-          </button>
-        </form>
-      </div>
+          <div className="modal-row">
+            <span className="modal-row-label">{t('leaves.startDate')}</span>
+            <span className="modal-row-value">
+              {formatDateTR(deletingRequest.startDate)}
+            </span>
+          </div>
+          <div className="modal-row">
+            <span className="modal-row-label">{t('leaves.endDate')}</span>
+            <span className="modal-row-value">
+              {formatDateTR(deletingRequest.endDate)}
+            </span>
+          </div>
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setDeletingRequest(null)}
+              disabled={isDeleting}
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              data-testid="leave-delete-confirm"
+            >
+              {t('common.delete')}
+            </button>
+          </div>
+        </Modal>
+      )}
 
       <div className="section">
-        <h2>{t('leaves.myRequests')}</h2>
         {requests.length === 0 ? (
           <p className="muted">{t('leaves.noRequests')}</p>
         ) : (
@@ -170,6 +240,7 @@ export function EmployeePanel() {
                 <th>{t('leaves.dayCount')}</th>
                 <th>{t('leaves.description')}</th>
                 <th>{t('leaves.status.label')}</th>
+                <th>{t('common.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -179,9 +250,37 @@ export function EmployeePanel() {
                   <td>{request.startDate}</td>
                   <td>{request.endDate}</td>
                   <td>{request.dayCount}</td>
-                  <td>{request.description || '-'}</td>
+                  <td className="description-cell">
+                    {request.description || '-'}
+                  </td>
                   <td>
                     <LeaveStatusBadge status={request.status} />
+                  </td>
+                  <td className="actions-cell">
+                    {request.status === 'PENDING' ? (
+                      <div className="actions-cell-inner">
+                        <button
+                          type="button"
+                          className="icon-btn"
+                          onClick={() => openEdit(request)}
+                          aria-label={t('common.edit')}
+                          data-testid={`leave-edit-${request.id}`}
+                        >
+                          <PencilIcon />
+                        </button>
+                        <button
+                          type="button"
+                          className="icon-btn icon-btn-danger"
+                          onClick={() => setDeletingRequest(request)}
+                          aria-label={t('common.delete')}
+                          data-testid={`leave-delete-${request.id}`}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="muted">-</span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -189,6 +288,6 @@ export function EmployeePanel() {
           </table>
         )}
       </div>
-    </div>
+    </AppLayout>
   );
 }
