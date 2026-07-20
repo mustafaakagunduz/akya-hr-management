@@ -151,6 +151,7 @@ VITE_API_URL=http://localhost:3000
 - Gereksiz bağımlılık ekleme; liste dışında büyük kütüphane kurulmayacak (i18n için `react-i18next`+`i18next`, test için `@playwright/test` bu kuralın istisnasıdır).
 - Her iki proje için de `README.md` yaz: kurulum adımları, ortam değişkenleri, demo yönetici bilgileri, API listesi.
 - Kod parça parça değil çalışır bütün halinde teslim edilecek; backend `npm run start:dev`, frontend `npm run dev` ile hatasız ayağa kalkmalı.
+- **Bu proje bir iş başvurusu için hazırlanıyor.** Git commit'lerinde ve GitHub üzerinde Claude/AI hiçbir şekilde yazar veya katkıda bulunan (contributor) olarak görünmeyecek: commit mesajlarına `Co-Authored-By: Claude` veya benzeri bir satır **asla** eklenmeyecek, commit author/committer bilgisi her zaman kullanıcının kendi git kimliği (mevcut `user.name`/`user.email`) olacak.
 
 ## Mevcut Durum
 
