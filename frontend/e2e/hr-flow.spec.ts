@@ -1,39 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { ADMIN, registerEmployee, uniqueEmployeeData } from './helpers';
 
-const unique = Date.now().toString().slice(-9);
-const employee = {
-  firstName: 'Test',
-  lastName: `Personel${unique}`,
-  nationalId: unique.padStart(11, '1'),
-  email: `test.personel.${unique}@sirket.com`,
-  phone: '5551234567',
-  department: 'IT',
-  position: 'Test Uzmanı',
-  startDate: '2024-01-01',
-  birthDate: '1996-06-15',
-  password: 'Sifre123',
-};
+const employee = uniqueEmployeeData();
 
-const ADMIN_EMAIL = 'admin@sirket.com';
-const ADMIN_PASSWORD = 'Admin123!';
+const ADMIN_EMAIL = ADMIN.email;
+const ADMIN_PASSWORD = ADMIN.password;
 
 test.describe.serial('İK izin yönetim akışı', () => {
   test('personel kayıt olabilir', async ({ page }) => {
-    await page.goto('/register');
-    await page.getByTestId('register-firstName').fill(employee.firstName);
-    await page.getByTestId('register-lastName').fill(employee.lastName);
-    await page.getByTestId('register-nationalId').fill(employee.nationalId);
-    await page.getByTestId('register-email').fill(employee.email);
-    await page.getByTestId('register-phone').fill(employee.phone);
-    await page.getByTestId('register-department').fill(employee.department);
-    await page.getByTestId('register-position').fill(employee.position);
-    await page.getByTestId('register-startDate').fill(employee.startDate);
-    await page.getByTestId('register-birthDate').fill(employee.birthDate);
-    await page.getByTestId('register-password').fill(employee.password);
-    await page.getByTestId('register-submit').click();
-
-    await expect(page.getByTestId('register-success')).toBeVisible();
-    await expect(page).toHaveURL(/\/login$/, { timeout: 5000 });
+    await registerEmployee(page, employee);
   });
 
   test('personel giriş yapıp izin talebi oluşturabilir', async ({ page }) => {
@@ -47,8 +22,8 @@ test.describe.serial('İK izin yönetim akışı', () => {
 
     await page.goto('/create-leave');
     await page.getByTestId('leave-type').selectOption('DAILY');
-    await page.getByTestId('leave-start-date').fill('2026-08-20');
-    await page.getByTestId('leave-end-date').fill('2026-08-20');
+    await page.getByTestId('leave-start-date').fill('20082026');
+    await page.keyboard.press('Escape');
     await page.getByTestId('leave-description').fill('Doktor randevusu');
     await page.getByTestId('leave-submit').click();
     await page.getByTestId('leave-confirm-submit').click();

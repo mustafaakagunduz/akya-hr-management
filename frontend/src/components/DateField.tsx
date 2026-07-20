@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type FocusEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar } from './Calendar';
 import { CalendarIcon } from './layout/icons';
@@ -58,11 +58,19 @@ export function DateField({
   const [digits, setDigits] = useState(() => isoToDigits(value));
   const [touched, setTouched] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const rawDigits = event.target.value.replace(/\D/g, '').slice(0, 8);
     setDigits(rawDigits);
     onChange(digitsToIso(rawDigits));
+  }
+
+  function handleWrapBlur(event: FocusEvent<HTMLDivElement>) {
+    const nextFocusTarget = event.relatedTarget as Node | null;
+    if (!nextFocusTarget || !wrapRef.current?.contains(nextFocusTarget)) {
+      setCalendarOpen(false);
+    }
   }
 
   function handleCalendarSelect(isoValue: string) {
@@ -81,7 +89,11 @@ export function DateField({
   return (
     <div className="field date-field">
       <label htmlFor={id}>{label}</label>
-      <div className="date-field-input-wrap">
+      <div
+        className="date-field-input-wrap"
+        ref={wrapRef}
+        onBlur={handleWrapBlur}
+      >
         <input
           id={id}
           type="text"
