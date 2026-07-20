@@ -117,6 +117,43 @@ body {
   }
 }
 
+@media (max-width: 899px) {
+  .auth-split {
+    position: relative;
+    background: none;
+    isolation: isolate;
+  }
+
+  .auth-split::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('/auth-bg.jpg') center / cover no-repeat;
+    z-index: -2;
+  }
+
+  .auth-split::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.65)
+    );
+    z-index: -1;
+  }
+
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+}
+
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -374,6 +411,24 @@ button {
   font-weight: 600;
   color: var(--color-text);
   flex-shrink: 0;
+}
+
+.demo-card-value {
+  text-align: right;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .demo-card-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .demo-card-value {
+    text-align: left;
+  }
 }
 
 .balance {
@@ -696,7 +751,7 @@ tr:last-child td {
   height: 36px;
   background: none;
   border: none;
-  color: var(--color-navy);
+  color: rgb(215, 76, 39);
 }
 
 @media (min-width: 900px) {

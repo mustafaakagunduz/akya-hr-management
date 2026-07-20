@@ -95,13 +95,17 @@ export function Login() {
               <span className="demo-card-label">
                 {t('auth.login.demo.manager')}
               </span>
-              <span>admin@sirket.com / Admin123!</span>
+              <span className="demo-card-value">
+                admin@sirket.com / Admin123!
+              </span>
             </div>
             <div className="demo-card-row">
               <span className="demo-card-label">
                 {t('auth.login.demo.employee')}
               </span>
-              <span>ayse.yilmaz@sirket.com / Personel123!</span>
+              <span className="demo-card-value">
+                ayse.yilmaz@sirket.com / Personel123!
+              </span>
             </div>
           </div>
         </div>
