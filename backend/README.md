@@ -40,6 +40,13 @@ Uygulama ilk açılışta, yoksa otomatik olarak bir yönetici hesabı oluşturu
 - **E-posta:** `admin@sirket.com`
 - **Şifre:** `Admin123!`
 
+## Demo Personel Hesapları
+
+Uygulama ilk açılışta 3 demo personel (EMPLOYEE) hesabı da oluşturur, hepsinin şifresi `Personel123!`. Örnek:
+
+- **E-posta:** `ayse.yilmaz@sirket.com`
+- **Şifre:** `Personel123!`
+
 ## API Uç Noktaları
 
 | Metot | Yol | Erişim | Açıklama |

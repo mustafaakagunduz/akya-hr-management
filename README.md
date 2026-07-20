@@ -46,3 +46,10 @@ Detaylı kurulum, ortam değişkenleri, API listesi ve deploy talimatları için
 
 - E-posta: `admin@sirket.com`
 - Şifre: `Admin123!`
+
+## Demo Personel Hesabı
+
+Uygulama ilk açılışta 3 demo personel (EMPLOYEE) hesabı da oluşturur, hepsinin şifresi `Personel123!`. Örnek:
+
+- E-posta: `ayse.yilmaz@sirket.com`
+- Şifre: `Personel123!`
