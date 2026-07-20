@@ -92,6 +92,7 @@ export function EditUserModal({ user, onClose, onSaved }: EditUserModalProps) {
       title={t('users.editTitle')}
       onClose={onClose}
       closeLabel={t('common.close')}
+      size="large"
     >
       <form onSubmit={handleSubmit}>
         {error && <p className="form-error">{error}</p>}

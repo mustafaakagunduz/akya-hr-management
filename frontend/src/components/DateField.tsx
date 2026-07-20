@@ -1,4 +1,10 @@
-import { useRef, useState, type ChangeEvent, type FocusEvent } from 'react';
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Calendar } from './Calendar';
 import { CalendarIcon } from './layout/icons';
@@ -58,19 +64,43 @@ export function DateField({
   const [digits, setDigits] = useState(() => isoToDigits(value));
   const [touched, setTouched] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
   const wrapRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!calendarOpen) {
+      return;
+    }
+    function updatePosition() {
+      const rect = wrapRef.current?.getBoundingClientRect();
+      if (!rect) {
+        return;
+      }
+      const popoverHeight = popoverRef.current?.offsetHeight ?? 0;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const openUpward =
+        popoverHeight > 0 &&
+        spaceBelow < popoverHeight + 12 &&
+        rect.top > popoverHeight + 12;
+      const top = openUpward
+        ? rect.top - popoverHeight - 6
+        : rect.bottom + 6;
+      setCalendarPosition({ top, left: rect.left });
+    }
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [calendarOpen]);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const rawDigits = event.target.value.replace(/\D/g, '').slice(0, 8);
     setDigits(rawDigits);
     onChange(digitsToIso(rawDigits));
-  }
-
-  function handleWrapBlur(event: FocusEvent<HTMLDivElement>) {
-    const nextFocusTarget = event.relatedTarget as Node | null;
-    if (!nextFocusTarget || !wrapRef.current?.contains(nextFocusTarget)) {
-      setCalendarOpen(false);
-    }
   }
 
   function handleCalendarSelect(isoValue: string) {
@@ -89,11 +119,7 @@ export function DateField({
   return (
     <div className="field date-field">
       <label htmlFor={id}>{label}</label>
-      <div
-        className="date-field-input-wrap"
-        ref={wrapRef}
-        onBlur={handleWrapBlur}
-      >
+      <div className="date-field-input-wrap" ref={wrapRef}>
         <input
           id={id}
           type="text"
@@ -117,13 +143,24 @@ export function DateField({
         >
           <CalendarIcon />
         </button>
-        {calendarOpen && (
-          <Calendar
-            value={digitsToIso(digits)}
-            onSelect={handleCalendarSelect}
-            onClose={() => setCalendarOpen(false)}
-          />
-        )}
+        {calendarOpen &&
+          createPortal(
+            <div
+              ref={popoverRef}
+              className="date-field-calendar-portal"
+              style={{
+                top: calendarPosition.top,
+                left: calendarPosition.left,
+              }}
+            >
+              <Calendar
+                value={digitsToIso(digits)}
+                onSelect={handleCalendarSelect}
+                onClose={() => setCalendarOpen(false)}
+              />
+            </div>,
+            document.body,
+          )}
       </div>
       {displayError && <span className="field-error">{displayError}</span>}
     </div>

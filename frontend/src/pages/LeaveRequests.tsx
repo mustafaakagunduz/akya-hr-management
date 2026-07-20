@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
+import { CheckIcon, CloseIcon } from '../components/layout/icons';
 import {
   approveLeaveRequest,
   fetchPendingLeaveRequests,
@@ -222,24 +223,28 @@ export function LeaveRequests() {
                     )}
                   </td>
                   <td className="actions-cell" data-label={t('common.actions')}>
-                    <div className="actions-cell-inner">
+                    <div className="actions-cell-inner accent-actions-inner">
                       <button
                         type="button"
-                        className="btn btn-success btn-sm"
+                        className="icon-btn icon-btn-plain accent-icon-btn leave-action-icon-btn approve-icon-btn"
                         disabled={processingId === request.id}
                         onClick={() => handleApprove(request.id)}
+                        aria-label={t('common.approve')}
+                        data-tooltip={t('common.approve')}
                         data-testid={`approve-${request.id}`}
                       >
-                        {t('common.approve')}
+                        <CheckIcon />
                       </button>
                       <button
                         type="button"
-                        className="btn btn-danger btn-sm"
+                        className="icon-btn icon-btn-plain accent-icon-btn leave-action-icon-btn reject-icon-btn"
                         disabled={processingId === request.id}
                         onClick={() => handleReject(request.id)}
+                        aria-label={t('common.reject')}
+                        data-tooltip={t('common.reject')}
                         data-testid={`reject-${request.id}`}
                       >
-                        {t('common.reject')}
+                        <CloseIcon />
                       </button>
                     </div>
                   </td>

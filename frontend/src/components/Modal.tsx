@@ -6,9 +6,16 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
   closeLabel: string;
+  size?: 'default' | 'large';
 }
 
-export function Modal({ title, onClose, children, closeLabel }: ModalProps) {
+export function Modal({
+  title,
+  onClose,
+  children,
+  closeLabel,
+  size = 'default',
+}: ModalProps) {
   const mouseDownOnOverlay = useRef(false);
 
   useEffect(() => {
@@ -37,7 +44,7 @@ export function Modal({ title, onClose, children, closeLabel }: ModalProps) {
       onClick={handleOverlayClick}
     >
       <div
-        className="modal"
+        className={size === 'large' ? 'modal modal--large' : 'modal'}
         role="dialog"
         aria-modal="true"
         onClick={(event) => event.stopPropagation()}

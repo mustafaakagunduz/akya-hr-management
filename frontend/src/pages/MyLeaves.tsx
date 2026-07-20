@@ -328,10 +328,10 @@ export function MyLeaves() {
                   </td>
                   <td className="actions-cell" data-label={t('common.actions')}>
                     {request.status === 'PENDING' ? (
-                      <div className="actions-cell-inner">
+                      <div className="actions-cell-inner accent-actions-inner">
                         <button
                           type="button"
-                          className="icon-btn icon-btn-plain"
+                          className="icon-btn icon-btn-plain accent-icon-btn"
                           onClick={() => openEdit(request)}
                           aria-label={t('common.edit')}
                           data-tooltip={t('common.edit')}
@@ -341,7 +341,7 @@ export function MyLeaves() {
                         </button>
                         <button
                           type="button"
-                          className="icon-btn icon-btn-danger icon-btn-plain"
+                          className="icon-btn icon-btn-plain accent-icon-btn reject-icon-btn"
                           onClick={() => setDeletingRequest(request)}
                           aria-label={t('common.delete')}
                           data-tooltip={t('common.delete')}

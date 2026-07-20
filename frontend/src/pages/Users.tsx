@@ -374,10 +374,10 @@ export function Users() {
                     </span>
                   </td>
                   <td className="actions-cell" data-label={t('common.actions')}>
-                    <div className="actions-cell-inner">
+                    <div className="actions-cell-inner accent-actions-inner users-actions-align">
                       <button
                         type="button"
-                        className="icon-btn icon-btn-plain"
+                        className="icon-btn icon-btn-plain accent-icon-btn"
                         onClick={() => setEditTarget(user)}
                         aria-label={t('common.edit')}
                         data-tooltip={t('common.edit')}
@@ -387,7 +387,7 @@ export function Users() {
                       </button>
                       <button
                         type="button"
-                        className="icon-btn icon-btn-plain"
+                        className="icon-btn icon-btn-plain accent-icon-btn warning-icon-btn"
                         onClick={() => setResetPasswordTarget(user)}
                         aria-label={t('users.resetPassword')}
                         data-tooltip={t('users.resetPassword')}
@@ -397,7 +397,7 @@ export function Users() {
                       </button>
                       <button
                         type="button"
-                        className="icon-btn icon-btn-plain"
+                        className="icon-btn icon-btn-plain accent-icon-btn approve-icon-btn"
                         onClick={() => setBalanceTarget(user)}
                         aria-label={t('users.resetBalance')}
                         data-tooltip={t('users.resetBalance')}
@@ -405,26 +405,35 @@ export function Users() {
                       >
                         <RefreshIcon />
                       </button>
-                      {currentUser?.id !== user.id && (
-                        <button
-                          type="button"
-                          className="icon-btn icon-btn-plain"
-                          onClick={() => setStatusTarget(user)}
-                          aria-label={t(
-                            user.isActive
+                      <button
+                        type="button"
+                        className={`icon-btn icon-btn-plain accent-icon-btn ${
+                          currentUser?.id === user.id
+                            ? 'self-disabled-icon-btn'
+                            : user.isActive
+                              ? 'reject-icon-btn'
+                              : 'approve-icon-btn'
+                        }`}
+                        onClick={() => setStatusTarget(user)}
+                        disabled={currentUser?.id === user.id}
+                        aria-label={t(
+                          currentUser?.id === user.id
+                            ? 'users.cannotDeactivateSelf'
+                            : user.isActive
                               ? 'users.deactivate'
                               : 'users.activate',
-                          )}
-                          data-tooltip={t(
-                            user.isActive
+                        )}
+                        data-tooltip={t(
+                          currentUser?.id === user.id
+                            ? 'users.cannotDeactivateSelf'
+                            : user.isActive
                               ? 'users.deactivate'
                               : 'users.activate',
-                          )}
-                          data-testid={`toggle-status-${user.id}`}
-                        >
-                          {user.isActive ? <BanIcon /> : <CheckCircleIcon />}
-                        </button>
-                      )}
+                        )}
+                        data-testid={`toggle-status-${user.id}`}
+                      >
+                        {user.isActive ? <BanIcon /> : <CheckCircleIcon />}
+                      </button>
                     </div>
                   </td>
                 </tr>

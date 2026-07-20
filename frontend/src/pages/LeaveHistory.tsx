@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
 import { LeaveStatusBadge } from '../components/LeaveStatusBadge';
 import { Modal } from '../components/Modal';
-import { BanIcon } from '../components/layout/icons';
+import { CloseIcon } from '../components/layout/icons';
 import { cancelLeaveRequest, fetchLeaveHistory } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
 import { useToast } from '../context/ToastContext';
@@ -101,10 +101,16 @@ export function LeaveHistory() {
                 name: cancelTarget.user
                   ? `${cancelTarget.user.firstName} ${cancelTarget.user.lastName}`
                   : '',
-                count: cancelTarget.dayCount,
               },
             )}
           </p>
+          {cancelTarget.type === 'ANNUAL' && (
+            <p className="modal-info">
+              {t('manager.cancelLeaveDaysInfo', {
+                count: cancelTarget.dayCount,
+              })}
+            </p>
+          )}
           {cancelError && <p className="form-error">{cancelError}</p>}
           <div className="modal-actions">
             <button
@@ -212,16 +218,16 @@ export function LeaveHistory() {
                   </td>
                   <td className="actions-cell" data-label={t('common.actions')}>
                     {request.status === 'APPROVED' ? (
-                      <div className="actions-cell-inner">
+                      <div className="actions-cell-inner accent-actions-inner">
                         <button
                           type="button"
-                          className="icon-btn icon-btn-danger icon-btn-plain"
+                          className="icon-btn icon-btn-plain accent-icon-btn reject-icon-btn"
                           onClick={() => setCancelTarget(request)}
-                          aria-label={t('manager.cancelLeave')}
-                          data-tooltip={t('manager.cancelLeave')}
+                          aria-label={t('manager.cancelLeaveButton')}
+                          data-tooltip={t('manager.cancelLeaveButton')}
                           data-testid={`cancel-leave-${request.id}`}
                         >
-                          <BanIcon />
+                          <CloseIcon />
                         </button>
                       </div>
                     ) : (
