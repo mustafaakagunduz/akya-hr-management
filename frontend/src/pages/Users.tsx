@@ -28,7 +28,13 @@ export function Users() {
   const { user: currentUser } = useAuth();
   const toast = useToast();
   const [users, setUsers] = useState<Omit<User, 'password'>[]>([]);
-  const [resettingId, setResettingId] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+
+  const [resetPasswordTarget, setResetPasswordTarget] = useState<Omit<
+    User,
+    'password'
+  > | null>(null);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [resetError, setResetError] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState<string | null>(null);
 
@@ -55,11 +61,33 @@ export function Users() {
     fetchAllUsers().then(setUsers);
   }, []);
 
-  async function handleResetPassword(id: string) {
+  const normalizedSearch = search.trim().toLocaleLowerCase('tr');
+  const filteredUsers = (
+    normalizedSearch
+      ? users.filter((user) =>
+          `${user.firstName} ${user.lastName}`
+            .toLocaleLowerCase('tr')
+            .includes(normalizedSearch),
+        )
+      : users
+  ).slice().sort((a, b) =>
+    `${a.firstName} ${a.lastName}`.localeCompare(
+      `${b.firstName} ${b.lastName}`,
+      'tr',
+    ),
+  );
+
+  async function handleConfirmResetPassword() {
+    if (!resetPasswordTarget) {
+      return;
+    }
     setResetError(null);
-    setResettingId(id);
+    setIsResettingPassword(true);
     try {
-      const { newPassword: password } = await resetUserPassword(id);
+      const { newPassword: password } = await resetUserPassword(
+        resetPasswordTarget.id,
+      );
+      setResetPasswordTarget(null);
       setNewPassword(password);
       toast.success(t('users.resetPasswordSuccess'));
     } catch (err) {
@@ -67,7 +95,7 @@ export function Users() {
       setResetError(message);
       toast.error(message);
     } finally {
-      setResettingId(null);
+      setIsResettingPassword(false);
     }
   }
 
@@ -123,7 +151,50 @@ export function Users() {
   return (
     <AppLayout>
       <h1>{t('nav.users')}</h1>
-      {resetError && <p className="form-error">{resetError}</p>}
+
+      <input
+        type="text"
+        className="search-bar"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder={t('users.searchPlaceholder')}
+        aria-label={t('users.searchPlaceholder')}
+        data-testid="users-search"
+      />
+
+      {resetPasswordTarget && (
+        <Modal
+          title={t('users.resetPasswordConfirmTitle')}
+          onClose={() => setResetPasswordTarget(null)}
+          closeLabel={t('common.close')}
+        >
+          <p className="modal-subtitle">
+            {t('users.resetPasswordConfirmSubtitle', {
+              name: `${resetPasswordTarget.firstName} ${resetPasswordTarget.lastName}`,
+            })}
+          </p>
+          {resetError && <p className="form-error">{resetError}</p>}
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setResetPasswordTarget(null)}
+              disabled={isResettingPassword}
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleConfirmResetPassword}
+              disabled={isResettingPassword}
+              data-testid="reset-password-confirm"
+            >
+              {t('common.confirm')}
+            </button>
+          </div>
+        </Modal>
+      )}
 
       {balanceTarget && (
         <Modal
@@ -245,14 +316,17 @@ export function Users() {
       )}
 
       <div className="section">
-        {users.length === 0 ? (
-          <p className="muted">{t('users.noUsers')}</p>
+        {filteredUsers.length === 0 ? (
+          <p className="muted">
+            {users.length === 0
+              ? t('users.noUsers')
+              : t('users.noSearchResults')}
+          </p>
         ) : (
-          <table data-testid="users-table">
+          <table className="table-responsive" data-testid="users-table">
             <thead>
               <tr>
-                <th>{t('auth.register.firstName')}</th>
-                <th>{t('auth.register.lastName')}</th>
+                <th>{t('users.fullName')}</th>
                 <th>{t('auth.register.email')}</th>
                 <th>{t('auth.register.phone')}</th>
                 <th>{t('auth.register.department')}</th>
@@ -266,19 +340,32 @@ export function Users() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user.id} data-testid="user-row">
-                  <td>{user.firstName}</td>
-                  <td>{user.lastName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                  <td>{t(`options.department.${user.department}`)}</td>
-                  <td>{t(`options.position.${user.position}`)}</td>
-                  <td>{t(`profile.roles.${user.role}`)}</td>
-                  <td>{formatDateTR(user.startDate)}</td>
-                  <td>{user.defaultAnnualLeaveBalance}</td>
-                  <td>{user.annualLeaveBalance}</td>
-                  <td>
+                  <td data-label={t('users.fullName')}>
+                    {user.firstName} {user.lastName}
+                  </td>
+                  <td data-label={t('auth.register.email')}>{user.email}</td>
+                  <td data-label={t('auth.register.phone')}>{user.phone}</td>
+                  <td data-label={t('auth.register.department')}>
+                    {t(`options.department.${user.department}`)}
+                  </td>
+                  <td data-label={t('auth.register.position')}>
+                    {t(`options.position.${user.position}`)}
+                  </td>
+                  <td data-label={t('profile.role')}>
+                    {t(`profile.roles.${user.role}`)}
+                  </td>
+                  <td data-label={t('auth.register.startDate')}>
+                    {formatDateTR(user.startDate)}
+                  </td>
+                  <td data-label={t('leaves.defaultAnnualBalanceShort')}>
+                    {user.defaultAnnualLeaveBalance}
+                  </td>
+                  <td data-label={t('leaves.remainingAnnualBalanceShort')}>
+                    {user.annualLeaveBalance}
+                  </td>
+                  <td data-label={t('users.status')}>
                     <span
                       className={`badge badge-${user.isActive ? 'ACTIVE' : 'INACTIVE'}`}
                       data-testid={`status-badge-${user.id}`}
@@ -286,7 +373,7 @@ export function Users() {
                       {t(user.isActive ? 'users.active' : 'users.inactive')}
                     </span>
                   </td>
-                  <td className="actions-cell">
+                  <td className="actions-cell" data-label={t('common.actions')}>
                     <div className="actions-cell-inner">
                       <button
                         type="button"
@@ -301,8 +388,7 @@ export function Users() {
                       <button
                         type="button"
                         className="icon-btn icon-btn-plain"
-                        onClick={() => handleResetPassword(user.id)}
-                        disabled={resettingId === user.id}
+                        onClick={() => setResetPasswordTarget(user)}
                         aria-label={t('users.resetPassword')}
                         data-tooltip={t('users.resetPassword')}
                         data-testid={`reset-password-${user.id}`}

@@ -11,14 +11,33 @@ import { useSocket } from '../context/SocketContext';
 import { useToast } from '../context/ToastContext';
 import type { LeaveRequest } from '../api/types';
 
-export function ManagerPanel() {
+const DESCRIPTION_TRUNCATE_LENGTH = 60;
+
+export function LeaveRequests() {
   const { t } = useTranslation();
   const socket = useSocket();
   const toast = useToast();
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [search, setSearch] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [processingId, setProcessingId] = useState<string | null>(null);
+
+  const [expandedDescriptions, setExpandedDescriptions] = useState<
+    Set<string>
+  >(new Set());
+
+  function toggleDescription(id: string) {
+    setExpandedDescriptions((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
 
   function loadRequests() {
     fetchPendingLeaveRequests().then(setRequests);
@@ -56,6 +75,15 @@ export function ManagerPanel() {
       socket.off('leave.deleted', handleLeaveDeleted);
     };
   }, [socket]);
+
+  const normalizedSearch = search.trim().toLocaleLowerCase('tr');
+  const filteredRequests = normalizedSearch
+    ? requests.filter((request) =>
+        `${request.user?.firstName ?? ''} ${request.user?.lastName ?? ''}`
+          .toLocaleLowerCase('tr')
+          .includes(normalizedSearch),
+      )
+    : requests;
 
   async function handleApprove(id: string) {
     setError(null);
@@ -96,6 +124,17 @@ export function ManagerPanel() {
   return (
     <AppLayout>
       <h1>{t('manager.title')}</h1>
+
+      <input
+        type="text"
+        className="search-bar"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder={t('manager.searchEmployee')}
+        aria-label={t('manager.searchEmployee')}
+        data-testid="pending-requests-search"
+      />
+
       {error && <p className="form-error">{error}</p>}
       {message && (
         <p className="form-success" data-testid="manager-action-message">
@@ -105,10 +144,14 @@ export function ManagerPanel() {
 
       <div className="section">
         <h2>{t('manager.pendingRequests')}</h2>
-        {requests.length === 0 ? (
-          <p className="muted">{t('manager.noPending')}</p>
+        {filteredRequests.length === 0 ? (
+          <p className="muted">
+            {requests.length === 0
+              ? t('manager.noPending')
+              : t('manager.noSearchResults')}
+          </p>
         ) : (
-          <table data-testid="pending-requests-table">
+          <table className="table-responsive" data-testid="pending-requests-table">
             <thead>
               <tr>
                 <th>{t('manager.employee')}</th>
@@ -122,26 +165,63 @@ export function ManagerPanel() {
               </tr>
             </thead>
             <tbody>
-              {requests.map((request) => (
+              {filteredRequests.map((request) => {
+                const description = request.description ?? '';
+                const isLong =
+                  description.length > DESCRIPTION_TRUNCATE_LENGTH;
+                const isExpanded = expandedDescriptions.has(request.id);
+
+                return (
                 <tr key={request.id} data-testid="pending-row">
-                  <td>
+                  <td data-label={t('manager.employee')}>
                     {request.user
                       ? `${request.user.firstName} ${request.user.lastName}`
                       : '-'}
                   </td>
-                  <td>
+                  <td data-label={t('manager.department')}>
                     {request.user
                       ? t(`options.department.${request.user.department}`)
                       : '-'}
                   </td>
-                  <td>{t(`leaves.type.${request.type}`)}</td>
-                  <td>{request.startDate}</td>
-                  <td>{request.endDate}</td>
-                  <td>{request.dayCount}</td>
-                  <td className="description-cell">
-                    {request.description || '-'}
+                  <td data-label={t('leaves.type.label')}>
+                    {t(`leaves.type.${request.type}`)}
                   </td>
-                  <td className="actions-cell">
+                  <td data-label={t('leaves.startDate')}>
+                    {request.startDate}
+                  </td>
+                  <td data-label={t('leaves.endDate')}>{request.endDate}</td>
+                  <td data-label={t('leaves.dayCount')}>
+                    {request.dayCount}
+                  </td>
+                  <td className="description-cell" data-label={t('leaves.description')}>
+                    {description ? (
+                      <>
+                        <span className="description-text-full">
+                          {description}
+                        </span>
+                        <span className="description-text-mobile">
+                          {isExpanded || !isLong
+                            ? description
+                            : `${description.slice(0, DESCRIPTION_TRUNCATE_LENGTH).trimEnd()}...`}
+                        </span>
+                        {isLong && (
+                          <button
+                            type="button"
+                            className="description-toggle"
+                            onClick={() => toggleDescription(request.id)}
+                            data-testid={`pending-description-toggle-${request.id}`}
+                          >
+                            {isExpanded
+                              ? t('leaves.showLess')
+                              : t('leaves.showMore')}
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      '-'
+                    )}
+                  </td>
+                  <td className="actions-cell" data-label={t('common.actions')}>
                     <div className="actions-cell-inner">
                       <button
                         type="button"
@@ -164,7 +244,8 @@ export function ManagerPanel() {
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         )}

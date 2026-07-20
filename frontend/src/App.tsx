@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
-import { EmployeePanel } from './pages/EmployeePanel';
-import { CreateLeaveRequest } from './pages/CreateLeaveRequest';
-import { ManagerPanel } from './pages/ManagerPanel';
+import { MyLeaves } from './pages/MyLeaves';
+import { CreateLeave } from './pages/CreateLeave';
+import { LeaveRequests } from './pages/LeaveRequests';
 import { LeaveHistory } from './pages/LeaveHistory';
 import { Profile } from './pages/Profile';
 import { Users } from './pages/Users';
@@ -39,7 +39,7 @@ function App() {
         path="/my-leaves"
         element={
           <ProtectedRoute>
-            <EmployeePanel />
+            <MyLeaves />
           </ProtectedRoute>
         }
       />
@@ -47,7 +47,7 @@ function App() {
         path="/create-leave"
         element={
           <ProtectedRoute>
-            <CreateLeaveRequest />
+            <CreateLeave />
           </ProtectedRoute>
         }
       />
@@ -63,7 +63,7 @@ function App() {
         path="/leave-requests"
         element={
           <ProtectedRoute allowedRoles={['MANAGER']}>
-            <ManagerPanel />
+            <LeaveRequests />
           </ProtectedRoute>
         }
       />

@@ -10,7 +10,7 @@ import { getApiErrorMessage } from '../api/client';
 import { formatDateTR } from '../utils/date';
 import type { LeaveType } from '../api/types';
 
-export function CreateLeaveRequest() {
+export function CreateLeave() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const toast = useToast();

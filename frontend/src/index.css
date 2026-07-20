@@ -241,6 +241,11 @@ textarea:focus {
   outline-offset: 1px;
 }
 
+.auto-grow-textarea {
+  resize: none;
+  overflow: hidden;
+}
+
 button {
   cursor: pointer;
   font-family: inherit;
@@ -404,6 +409,115 @@ th {
 
 tr:last-child td {
   border-bottom: none;
+}
+
+.description-text-mobile {
+  display: none;
+}
+
+.description-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  table.table-responsive thead {
+    display: none;
+  }
+
+  table.table-responsive,
+  table.table-responsive tbody,
+  table.table-responsive tr,
+  table.table-responsive td {
+    display: block;
+    width: 100%;
+  }
+
+  table.table-responsive {
+    border: none;
+    background: none;
+  }
+
+  table.table-responsive tr {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 4px 14px;
+  }
+
+  table.table-responsive td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: right;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  table.table-responsive td:last-child {
+    border-bottom: none;
+  }
+
+  table.table-responsive td::before {
+    content: attr(data-label);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-muted);
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  table.table-responsive td.actions-cell {
+    justify-content: flex-start;
+    order: 3;
+  }
+
+  table.table-responsive .actions-cell-inner {
+    justify-content: flex-end;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  table.table-responsive td.status-cell {
+    order: 1;
+  }
+
+  table.table-responsive td.description-cell {
+    order: 2;
+    display: block;
+    text-align: left;
+    max-width: none;
+  }
+
+  table.table-responsive td.description-cell::before {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .description-text-full {
+    display: none;
+  }
+
+  .description-text-mobile {
+    display: block;
+  }
+
+  .description-toggle {
+    display: inline-block;
+    margin-top: 6px;
+  }
 }
 
 .badge {

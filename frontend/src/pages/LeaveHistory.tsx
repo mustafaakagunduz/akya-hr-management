@@ -9,6 +9,8 @@ import { getApiErrorMessage } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import type { LeaveRequest } from '../api/types';
 
+const DESCRIPTION_TRUNCATE_LENGTH = 60;
+
 export function LeaveHistory() {
   const { t } = useTranslation();
   const toast = useToast();
@@ -18,6 +20,22 @@ export function LeaveHistory() {
   const [cancelTarget, setCancelTarget] = useState<LeaveRequest | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancelError, setCancelError] = useState<string | null>(null);
+
+  const [expandedDescriptions, setExpandedDescriptions] = useState<
+    Set<string>
+  >(new Set());
+
+  function toggleDescription(id: string) {
+    setExpandedDescriptions((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
 
   useEffect(() => {
     fetchLeaveHistory().then(setRequests);
@@ -118,7 +136,7 @@ export function LeaveHistory() {
               : t('manager.noSearchResults')}
           </p>
         ) : (
-          <table data-testid="leave-history-table">
+          <table className="table-responsive" data-testid="leave-history-table">
             <thead>
               <tr>
                 <th>{t('manager.employee')}</th>
@@ -133,30 +151,67 @@ export function LeaveHistory() {
               </tr>
             </thead>
             <tbody>
-              {filteredRequests.map((request) => (
+              {filteredRequests.map((request) => {
+                const description = request.description ?? '';
+                const isLong =
+                  description.length > DESCRIPTION_TRUNCATE_LENGTH;
+                const isExpanded = expandedDescriptions.has(request.id);
+
+                return (
                 <tr key={request.id} data-testid="leave-history-row">
-                  <td>
+                  <td data-label={t('manager.employee')}>
                     {request.user
                       ? `${request.user.firstName} ${request.user.lastName}`
                       : '-'}
                   </td>
-                  <td>
+                  <td data-label={t('manager.department')}>
                     {request.user
                       ? t(`options.department.${request.user.department}`)
                       : '-'}
                   </td>
-                  <td>{t(`leaves.type.${request.type}`)}</td>
-                  <td>{request.startDate}</td>
-                  <td>{request.endDate}</td>
-                  <td>{request.dayCount}</td>
-                  <td className="description-cell">
-                    {request.description || '-'}
+                  <td data-label={t('leaves.type.label')}>
+                    {t(`leaves.type.${request.type}`)}
                   </td>
-                  <td>
+                  <td data-label={t('leaves.startDate')}>
+                    {request.startDate}
+                  </td>
+                  <td data-label={t('leaves.endDate')}>{request.endDate}</td>
+                  <td data-label={t('leaves.dayCount')}>
+                    {request.dayCount}
+                  </td>
+                  <td className="description-cell" data-label={t('leaves.description')}>
+                    {description ? (
+                      <>
+                        <span className="description-text-full">
+                          {description}
+                        </span>
+                        <span className="description-text-mobile">
+                          {isExpanded || !isLong
+                            ? description
+                            : `${description.slice(0, DESCRIPTION_TRUNCATE_LENGTH).trimEnd()}...`}
+                        </span>
+                        {isLong && (
+                          <button
+                            type="button"
+                            className="description-toggle"
+                            onClick={() => toggleDescription(request.id)}
+                            data-testid={`leave-history-description-toggle-${request.id}`}
+                          >
+                            {isExpanded
+                              ? t('leaves.showLess')
+                              : t('leaves.showMore')}
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      '-'
+                    )}
+                  </td>
+                  <td className="status-cell" data-label={t('leaves.status.label')}>
                     <LeaveStatusBadge status={request.status} />
                   </td>
-                  <td className="actions-cell">
-                    {request.status === 'APPROVED' && (
+                  <td className="actions-cell" data-label={t('common.actions')}>
+                    {request.status === 'APPROVED' ? (
                       <div className="actions-cell-inner">
                         <button
                           type="button"
@@ -169,10 +224,13 @@ export function LeaveHistory() {
                           <BanIcon />
                         </button>
                       </div>
+                    ) : (
+                      <span className="muted">-</span>
                     )}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         )}

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DateField } from './DateField';
 import type { LeaveType } from '../api/types';
@@ -28,6 +29,16 @@ export function LeaveRequestFields({
   onDescriptionChange,
 }: LeaveRequestFieldsProps) {
   const { t } = useTranslation();
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = descriptionRef.current;
+    if (!textarea) {
+      return;
+    }
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, [description]);
 
   function handleTypeChange(nextType: LeaveType) {
     onTypeChange(nextType);
@@ -90,6 +101,8 @@ export function LeaveRequestFields({
         </label>
         <textarea
           id={`${idPrefix}-description`}
+          ref={descriptionRef}
+          className="auto-grow-textarea"
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           rows={3}
