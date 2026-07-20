@@ -32,16 +32,21 @@ function getStoredPreference(): ThemePreference {
 interface ThemeContextValue {
   theme: ThemePreference;
   setTheme: (theme: ThemePreference) => void;
+  resolvedTheme: EffectiveTheme;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemePreference>(getStoredPreference);
+  const [resolvedTheme, setResolvedTheme] = useState<EffectiveTheme>(() =>
+    resolveEffectiveTheme(getStoredPreference()),
+  );
 
   useEffect(() => {
     const effective = resolveEffectiveTheme(theme);
     document.documentElement.setAttribute('data-theme', effective);
+    setResolvedTheme(effective);
     localStorage.setItem(STORAGE_KEY, theme);
 
     if (theme !== 'system') {
@@ -50,14 +55,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
-      document.documentElement.setAttribute('data-theme', getSystemTheme());
+      const systemTheme = getSystemTheme();
+      document.documentElement.setAttribute('data-theme', systemTheme);
+      setResolvedTheme(systemTheme);
     };
     media.addEventListener('change', handleChange);
     return () => media.removeEventListener('change', handleChange);
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}
     </ThemeContext.Provider>
   );

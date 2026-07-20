@@ -147,6 +147,15 @@ export function SettingsIcon({ className }: IconProps) {
   );
 }
 
+export function SunMoonIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className} aria-hidden="true">
+      <path d="M12 3v1M12 20v1M3 12h1M20 12h1M5.6 5.6l.7.7M17.7 17.7l.7.7M5.6 18.4l.7-.7M17.7 6.3l.7-.7" />
+      <path d="M12 7a5 5 0 0 0 5 5 5 5 0 0 1-5 5 5 5 0 0 1 0-10z" />
+    </svg>
+  );
+}
+
 export function TrashIcon({ className }: IconProps) {
   return (
     <svg {...base} className={className} aria-hidden="true">

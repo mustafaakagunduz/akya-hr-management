@@ -936,12 +936,18 @@ tr:last-child td {
   display: block;
 }
 
+.app-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 .app-navbar-user {
   display: none;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-brand);
-  margin-left: auto;
 }
 
 .app-navbar-menu-btn {
@@ -953,6 +959,27 @@ tr:last-child td {
   background: none;
   border: none;
   color: var(--color-brand);
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-brand);
+  cursor: pointer;
+}
+
+.theme-toggle-icon {
+  transition: transform 0.4s ease;
+}
+
+.theme-toggle-btn[data-theme-toggle='dark'] .theme-toggle-icon {
+  transform: rotate(180deg);
 }
 
 @media (min-width: 900px) {

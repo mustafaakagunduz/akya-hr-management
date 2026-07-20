@@ -26,7 +26,11 @@
     "profile": "Profile",
     "settings": "Settings",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "themeToggle": {
+      "toDark": "Switch to dark theme",
+      "toLight": "Switch to light theme"
+    }
   },
   "settings": {
     "appearance": {

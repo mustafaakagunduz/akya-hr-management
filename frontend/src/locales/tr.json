@@ -26,7 +26,11 @@
     "profile": "Profil",
     "settings": "Ayarlar",
     "openMenu": "Menüyü aç",
-    "closeMenu": "Menüyü kapat"
+    "closeMenu": "Menüyü kapat",
+    "themeToggle": {
+      "toDark": "Koyu temaya geç",
+      "toLight": "Açık temaya geç"
+    }
   },
   "settings": {
     "appearance": {
