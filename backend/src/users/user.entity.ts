@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserRole } from '../common/enums';
+import { Department, Position, UserRole } from '../common/enums';
 import { LeaveRequest } from '../leaves/leave-request.entity';
 
 @Entity('users')
@@ -28,11 +28,11 @@ export class User {
   @Column()
   phone: string;
 
-  @Column()
-  department: string;
+  @Column({ type: 'enum', enum: Department })
+  department: Department;
 
-  @Column()
-  position: string;
+  @Column({ type: 'enum', enum: Position })
+  position: Position;
 
   @Column({ type: 'date' })
   startDate: string;

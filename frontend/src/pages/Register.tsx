@@ -3,7 +3,24 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../api/auth';
 import { getApiErrorMessage } from '../api/client';
-import type { RegisterPayload } from '../api/types';
+import type { Department, Position, RegisterPayload } from '../api/types';
+
+const DEPARTMENT_VALUES: Department[] = [
+  'HR',
+  'SOFTWARE',
+  'SALES',
+  'MARKETING',
+  'FINANCE',
+  'OPERATIONS',
+];
+
+const POSITION_VALUES: Position[] = [
+  'INTERN',
+  'SPECIALIST',
+  'TEAM_LEAD',
+  'MANAGER',
+  'DIRECTOR',
+];
 
 const EMPTY_FORM: RegisterPayload = {
   firstName: '',
@@ -25,10 +42,14 @@ export function Register() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState<RegisterPayload>(EMPTY_FORM);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const passwordMismatch =
+    passwordConfirm.length > 0 && form.password !== passwordConfirm;
 
   function update<K extends keyof RegisterPayload>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -72,7 +93,7 @@ export function Register() {
 
     const errors = validate();
     setFieldErrors(errors);
-    if (Object.keys(errors).length > 0) {
+    if (Object.keys(errors).length > 0 || passwordMismatch || !passwordConfirm) {
       return;
     }
 
@@ -81,6 +102,7 @@ export function Register() {
       await register(form);
       setSuccess(true);
       setForm(EMPTY_FORM);
+      setPasswordConfirm('');
       setTimeout(() => navigate('/login'), 1200);
     } catch (err) {
       setSubmitError(getApiErrorMessage(err, t('common.genericError')));
@@ -90,9 +112,19 @@ export function Register() {
   }
 
   return (
-    <div className="auth-page">
-      <div className="card auth-card wide" data-testid="register-card">
+    <div className="auth-split">
+      <div className="auth-visual">
+        <img src="/auth-bg.jpg" alt="" />
+        <div className="auth-visual-overlay">
+          <h2>{t('auth.visual.title')}</h2>
+          <p>{t('auth.visual.subtitle')}</p>
+        </div>
+      </div>
+
+      <div className="auth-form-panel wide">
+      <div className="auth-card wide" data-testid="register-card">
         <h1>{t('auth.register.title')}</h1>
+        <p className="auth-subtitle">{t('auth.register.subtitle')}</p>
         {submitError && <p className="form-error">{submitError}</p>}
         {success && (
           <p className="form-success" data-testid="register-success">
@@ -100,6 +132,31 @@ export function Register() {
           </p>
         )}
         <form onSubmit={handleSubmit} noValidate>
+          <TextField
+            id="email"
+            label={t('auth.register.email')}
+            type="email"
+            value={form.email}
+            onChange={(v) => update('email', v)}
+            error={fieldErrors.email}
+            hint={t('auth.register.emailHint')}
+          />
+          <TextField
+            id="password"
+            label={t('auth.register.password')}
+            type="password"
+            value={form.password}
+            onChange={(v) => update('password', v)}
+            error={fieldErrors.password}
+          />
+          <TextField
+            id="passwordConfirm"
+            label={t('auth.register.passwordConfirm')}
+            type="password"
+            value={passwordConfirm}
+            onChange={setPasswordConfirm}
+            error={passwordMismatch ? t('validation.passwordMismatch') : undefined}
+          />
           <div className="form-grid">
             <TextField
               id="firstName"
@@ -116,51 +173,6 @@ export function Register() {
               error={fieldErrors.lastName}
             />
             <TextField
-              id="nationalId"
-              label={t('auth.register.nationalId')}
-              value={form.nationalId}
-              onChange={(v) => update('nationalId', v)}
-              error={fieldErrors.nationalId}
-              maxLength={11}
-            />
-            <TextField
-              id="email"
-              label={t('auth.register.email')}
-              type="email"
-              value={form.email}
-              onChange={(v) => update('email', v)}
-              error={fieldErrors.email}
-            />
-            <TextField
-              id="phone"
-              label={t('auth.register.phone')}
-              value={form.phone}
-              onChange={(v) => update('phone', v)}
-              error={fieldErrors.phone}
-            />
-            <TextField
-              id="department"
-              label={t('auth.register.department')}
-              value={form.department}
-              onChange={(v) => update('department', v)}
-              error={fieldErrors.department}
-            />
-            <TextField
-              id="position"
-              label={t('auth.register.position')}
-              value={form.position}
-              onChange={(v) => update('position', v)}
-              error={fieldErrors.position}
-            />
-            <TextField
-              id="startDate"
-              label={t('auth.register.startDate')}
-              type="date"
-              value={form.startDate}
-              onChange={(v) => update('startDate', v)}
-              error={fieldErrors.startDate}
-            />
-            <TextField
               id="birthDate"
               label={t('auth.register.birthDate')}
               type="date"
@@ -169,12 +181,50 @@ export function Register() {
               error={fieldErrors.birthDate}
             />
             <TextField
-              id="password"
-              label={t('auth.register.password')}
-              type="password"
-              value={form.password}
-              onChange={(v) => update('password', v)}
-              error={fieldErrors.password}
+              id="nationalId"
+              label={t('auth.register.nationalId')}
+              value={form.nationalId}
+              onChange={(v) => update('nationalId', v)}
+              error={fieldErrors.nationalId}
+              maxLength={11}
+            />
+            <TextField
+              id="phone"
+              label={t('auth.register.phone')}
+              value={form.phone}
+              onChange={(v) => update('phone', v)}
+              error={fieldErrors.phone}
+              placeholder="05XX XXX XX XX"
+            />
+            <SelectField
+              id="department"
+              label={t('auth.register.department')}
+              value={form.department}
+              onChange={(v) => update('department', v as Department)}
+              error={fieldErrors.department}
+              options={DEPARTMENT_VALUES.map((value) => ({
+                value,
+                label: t(`options.department.${value}`),
+              }))}
+            />
+            <SelectField
+              id="position"
+              label={t('auth.register.position')}
+              value={form.position}
+              onChange={(v) => update('position', v as Position)}
+              error={fieldErrors.position}
+              options={POSITION_VALUES.map((value) => ({
+                value,
+                label: t(`options.position.${value}`),
+              }))}
+            />
+            <TextField
+              id="startDate"
+              label={t('auth.register.startDate')}
+              type="date"
+              value={form.startDate}
+              onChange={(v) => update('startDate', v)}
+              error={fieldErrors.startDate}
             />
           </div>
           <button
@@ -191,6 +241,7 @@ export function Register() {
           <Link to="/login">{t('auth.register.loginLink')}</Link>
         </p>
       </div>
+      </div>
     </div>
   );
 }
@@ -201,16 +252,20 @@ function TextField({
   value,
   onChange,
   error,
+  hint,
   type = 'text',
   maxLength,
+  placeholder,
 }: {
   id: string;
   label: string;
   value: string;
   onChange: (value: string) => void;
   error?: string;
+  hint?: string;
   type?: string;
   maxLength?: number;
+  placeholder?: string;
 }) {
   return (
     <div className="field">
@@ -220,9 +275,48 @@ function TextField({
         type={type}
         value={value}
         maxLength={maxLength}
+        placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         data-testid={`register-${id}`}
       />
+      {error && <span className="field-error">{error}</span>}
+      {!error && hint && <span className="field-hint">{hint}</span>}
+    </div>
+  );
+}
+
+function SelectField({
+  id,
+  label,
+  value,
+  onChange,
+  error,
+  options,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  options: { value: string; label: string }[];
+}) {
+  const { t } = useTranslation();
+  return (
+    <div className="field">
+      <label htmlFor={id}>{label}</label>
+      <select
+        id={id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        data-testid={`register-${id}`}
+      >
+        <option value="">{t('options.select')}</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       {error && <span className="field-error">{error}</span>}
     </div>
   );

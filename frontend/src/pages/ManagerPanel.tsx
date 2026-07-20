@@ -148,7 +148,11 @@ export function ManagerPanel() {
                       ? `${request.user.firstName} ${request.user.lastName}`
                       : '-'}
                   </td>
-                  <td>{request.user?.department ?? '-'}</td>
+                  <td>
+                    {request.user
+                      ? t(`options.department.${request.user.department}`)
+                      : '-'}
+                  </td>
                   <td>{t(`leaves.type.${request.type}`)}</td>
                   <td>{request.startDate}</td>
                   <td>{request.endDate}</td>

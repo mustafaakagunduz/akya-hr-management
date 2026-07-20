@@ -1,10 +1,12 @@
 import {
   IsDateString,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   Length,
   MinLength,
 } from 'class-validator';
+import { Department, Position } from '../../common/enums';
 
 export class RegisterDto {
   @IsNotEmpty({ message: 'Ad boş bırakılamaz' })
@@ -22,11 +24,11 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Telefon boş bırakılamaz' })
   phone: string;
 
-  @IsNotEmpty({ message: 'Departman boş bırakılamaz' })
-  department: string;
+  @IsEnum(Department, { message: 'Geçerli bir departman seçin' })
+  department: Department;
 
-  @IsNotEmpty({ message: 'Pozisyon boş bırakılamaz' })
-  position: string;
+  @IsEnum(Position, { message: 'Geçerli bir pozisyon seçin' })
+  position: Position;
 
   @IsDateString({}, { message: 'İşe başlama tarihi geçerli bir tarih olmalı' })
   startDate: string;

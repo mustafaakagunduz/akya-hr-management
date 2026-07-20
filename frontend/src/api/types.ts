@@ -1,6 +1,19 @@
 export type UserRole = 'EMPLOYEE' | 'MANAGER';
 export type LeaveType = 'DAILY' | 'ANNUAL';
 export type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type Department =
+  | 'HR'
+  | 'SOFTWARE'
+  | 'SALES'
+  | 'MARKETING'
+  | 'FINANCE'
+  | 'OPERATIONS';
+export type Position =
+  | 'INTERN'
+  | 'SPECIALIST'
+  | 'TEAM_LEAD'
+  | 'MANAGER'
+  | 'DIRECTOR';
 
 export interface User {
   id: string;
@@ -9,8 +22,8 @@ export interface User {
   nationalId: string;
   email: string;
   phone: string;
-  department: string;
-  position: string;
+  department: Department;
+  position: Position;
   startDate: string;
   birthDate: string;
   role: UserRole;
@@ -37,8 +50,8 @@ export interface RegisterPayload {
   nationalId: string;
   email: string;
   phone: string;
-  department: string;
-  position: string;
+  department: Department | '';
+  position: Position | '';
   startDate: string;
   birthDate: string;
   password: string;

@@ -46,6 +46,73 @@ body {
   padding: 16px;
 }
 
+.auth-split {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  background: var(--color-surface);
+}
+
+.auth-visual {
+  position: relative;
+  flex: 2 1 0;
+  display: none;
+  overflow: hidden;
+  order: 2;
+}
+
+.auth-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.auth-visual-overlay {
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
+  max-width: 380px;
+  color: #fff;
+  text-align: right;
+}
+
+.auth-visual-overlay h2 {
+  font-size: 1.5rem;
+  margin: 0 0 8px;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+
+.auth-visual-overlay p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+
+.auth-form-panel {
+  order: 1;
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+@media (min-width: 900px) {
+  .auth-visual {
+    display: block;
+  }
+
+  .auth-form-panel {
+    flex: 1 1 0;
+    padding: 48px 64px;
+  }
+}
+
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -54,13 +121,50 @@ body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
+.auth-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0 0 12px;
+}
+
 .auth-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
 }
 
 .auth-card.wide {
-  max-width: 560px;
+  max-width: 620px;
+}
+
+.auth-card h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+}
+
+.auth-card .auth-subtitle {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin: 0 0 28px;
+}
+
+.auth-card form {
+  gap: 18px;
+}
+
+.auth-card .field input {
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+
+.auth-card .btn {
+  padding: 13px 16px;
+  border-radius: 10px;
+  margin-top: 6px;
 }
 
 h1 {
@@ -81,8 +185,14 @@ form {
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .field {
@@ -105,6 +215,10 @@ textarea {
   border-radius: 8px;
   font-size: 0.95rem;
   font-family: inherit;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
 }
 
 input:focus,
@@ -162,6 +276,11 @@ button {
   font-size: 0.8rem;
 }
 
+.field-hint {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
 .form-error {
   background: var(--color-rejected-bg);
   color: var(--color-rejected);
@@ -189,6 +308,42 @@ button {
   color: var(--color-primary);
   font-weight: 600;
   text-decoration: none;
+}
+
+.demo-card {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg);
+}
+
+.demo-card-title {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.demo-card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.85rem;
+  padding: 4px 0;
+}
+
+.demo-card-row + .demo-card-row {
+  border-top: 1px dashed var(--color-border);
+}
+
+.demo-card-label {
+  font-weight: 600;
+  color: var(--color-text);
+  flex-shrink: 0;
 }
 
 .topbar {

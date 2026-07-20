@@ -13,3 +13,20 @@ export enum LeaveStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }
+
+export enum Department {
+  HR = 'HR',
+  SOFTWARE = 'SOFTWARE',
+  SALES = 'SALES',
+  MARKETING = 'MARKETING',
+  FINANCE = 'FINANCE',
+  OPERATIONS = 'OPERATIONS',
+}
+
+export enum Position {
+  INTERN = 'INTERN',
+  SPECIALIST = 'SPECIALIST',
+  TEAM_LEAD = 'TEAM_LEAD',
+  MANAGER = 'MANAGER',
+  DIRECTOR = 'DIRECTOR',
+}

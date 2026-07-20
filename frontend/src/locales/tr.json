@@ -19,27 +19,58 @@
     "panel": "İzin Talebi",
     "manager": "İzin Yönetimi"
   },
+  "options": {
+    "select": "Seçiniz",
+    "department": {
+      "HR": "İnsan Kaynakları",
+      "SOFTWARE": "Yazılım",
+      "SALES": "Satış",
+      "MARKETING": "Pazarlama",
+      "FINANCE": "Finans",
+      "OPERATIONS": "Operasyon"
+    },
+    "position": {
+      "INTERN": "Stajyer",
+      "SPECIALIST": "Uzman",
+      "TEAM_LEAD": "Takım Lideri",
+      "MANAGER": "Müdür",
+      "DIRECTOR": "Direktör"
+    }
+  },
   "auth": {
+    "visual": {
+      "title": "İzin süreçlerinizi tek yerden yönetin",
+      "subtitle": "Personel talepleri, yönetici onayları ve izin bakiyeleri güvenli ve bulut tabanlı bir sistemde."
+    },
     "login": {
       "title": "Giriş Yap",
+      "subtitle": "Devam etmek için hesabınıza giriş yapın",
       "email": "E-posta",
       "password": "Şifre",
       "submit": "Giriş Yap",
       "noAccount": "Hesabınız yok mu?",
-      "registerLink": "Kayıt olun"
+      "registerLink": "Kayıt olun",
+      "demo": {
+        "title": "Demo giriş bilgileri",
+        "manager": "Yönetici",
+        "employee": "Personel"
+      }
     },
     "register": {
       "title": "Kayıt Ol",
+      "subtitle": "Bilgilerinizi girerek personel hesabınızı oluşturun",
       "firstName": "Ad",
       "lastName": "Soyad",
       "nationalId": "TC Kimlik No",
       "email": "E-posta",
+      "emailHint": "Sisteme giriş için kullanılacaktır",
       "phone": "Telefon",
       "department": "Departman",
       "position": "Pozisyon",
       "startDate": "İşe Başlama Tarihi",
       "birthDate": "Doğum Tarihi",
       "password": "Şifre",
+      "passwordConfirm": "Şifre Tekrarı",
       "submit": "Kayıt Ol",
       "hasAccount": "Zaten hesabınız var mı?",
       "loginLink": "Giriş yapın",
@@ -86,6 +117,7 @@
     "invalidEmail": "Geçerli bir e-posta adresi girin",
     "nationalIdLength": "TC Kimlik No 11 haneli olmalı",
     "minPasswordLength": "Şifre en az 6 karakter olmalı",
+    "passwordMismatch": "Şifreler eşleşmiyor",
     "endBeforeStart": "Bitiş tarihi başlangıç tarihinden önce olamaz"
   }
 }

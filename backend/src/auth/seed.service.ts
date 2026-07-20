@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { UserRole } from '../common/enums';
+import { Department, Position, UserRole } from '../common/enums';
 
 const SALT_ROUNDS = 10;
 
@@ -23,8 +23,8 @@ export class SeedService implements OnApplicationBootstrap {
         nationalId: '00000000000',
         email: 'admin@sirket.com',
         phone: '0000000000',
-        department: 'Yönetim',
-        position: 'Yönetici',
+        department: Department.HR,
+        position: Position.DIRECTOR,
         startDate: new Date().toISOString().slice(0, 10),
         birthDate: '1990-01-01',
         password: hashedPassword,
@@ -47,8 +47,8 @@ export class SeedService implements OnApplicationBootstrap {
         nationalId: '10000000001',
         email: 'ayse.yilmaz@sirket.com',
         phone: '5551000001',
-        department: 'İnsan Kaynakları',
-        position: 'İK Uzmanı',
+        department: Department.HR,
+        position: Position.SPECIALIST,
         startDate: '2022-03-01',
         birthDate: '1994-05-12',
       },
@@ -58,8 +58,8 @@ export class SeedService implements OnApplicationBootstrap {
         nationalId: '10000000002',
         email: 'mehmet.demir@sirket.com',
         phone: '5551000002',
-        department: 'Yazılım',
-        position: 'Yazılım Geliştirici',
+        department: Department.SOFTWARE,
+        position: Position.SPECIALIST,
         startDate: '2021-07-15',
         birthDate: '1992-11-03',
       },
@@ -69,8 +69,8 @@ export class SeedService implements OnApplicationBootstrap {
         nationalId: '10000000003',
         email: 'elif.kaya@sirket.com',
         phone: '5551000003',
-        department: 'Muhasebe',
-        position: 'Muhasebe Uzmanı',
+        department: Department.FINANCE,
+        position: Position.SPECIALIST,
         startDate: '2023-01-10',
         birthDate: '1996-02-20',
       },
