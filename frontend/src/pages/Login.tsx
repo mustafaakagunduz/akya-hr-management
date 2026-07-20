@@ -26,7 +26,7 @@ export function Login() {
       toast.success(t('auth.login.success'));
       navigate(getDefaultRoute(user));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setError(message);
       toast.error(message);
     } finally {

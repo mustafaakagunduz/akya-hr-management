@@ -126,7 +126,7 @@ export function MyLeaves() {
       setEditingRequest(null);
       toast.success(t('leaves.editSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setEditError(message);
       toast.error(message);
     } finally {
@@ -148,7 +148,7 @@ export function MyLeaves() {
       setDeletingRequest(null);
       toast.success(t('leaves.deleteSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setDeleteError(message);
       toast.error(message);
     } finally {

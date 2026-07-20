@@ -55,7 +55,7 @@ export function LeaveHistory() {
       setCancelTarget(null);
       toast.success(t('manager.cancelLeaveSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('manager.cancelLeaveError'));
+      const message = getApiErrorMessage(err, t, t('manager.cancelLeaveError'));
       setCancelError(message);
       toast.error(message);
     } finally {

@@ -1,5 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Calendar } from './Calendar';
+import { CalendarIcon } from './layout/icons';
 
 interface DateFieldProps {
   id: string;
@@ -55,11 +57,19 @@ export function DateField({
   const { t } = useTranslation();
   const [digits, setDigits] = useState(() => isoToDigits(value));
   const [touched, setTouched] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const rawDigits = event.target.value.replace(/\D/g, '').slice(0, 8);
     setDigits(rawDigits);
     onChange(digitsToIso(rawDigits));
+  }
+
+  function handleCalendarSelect(isoValue: string) {
+    setDigits(isoToDigits(isoValue));
+    setTouched(true);
+    onChange(isoValue);
+    setCalendarOpen(false);
   }
 
   const incompleteError =
@@ -69,20 +79,40 @@ export function DateField({
   const displayError = error ?? incompleteError;
 
   return (
-    <div className="field">
+    <div className="field date-field">
       <label htmlFor={id}>{label}</label>
-      <input
-        id={id}
-        type="text"
-        inputMode="numeric"
-        placeholder="GG.AA.YYYY"
-        value={digitsToFormatted(digits)}
-        onChange={handleChange}
-        onBlur={() => setTouched(true)}
-        maxLength={10}
-        required={required}
-        data-testid={testId}
-      />
+      <div className="date-field-input-wrap">
+        <input
+          id={id}
+          type="text"
+          inputMode="numeric"
+          placeholder={t('validation.datePlaceholder')}
+          value={digitsToFormatted(digits)}
+          onChange={handleChange}
+          onFocus={() => setCalendarOpen(true)}
+          onBlur={() => setTouched(true)}
+          maxLength={10}
+          required={required}
+          data-testid={testId}
+          autoComplete="off"
+        />
+        <button
+          type="button"
+          className="date-field-icon-btn"
+          onClick={() => setCalendarOpen((open) => !open)}
+          aria-label={t('calendar.open')}
+          tabIndex={-1}
+        >
+          <CalendarIcon />
+        </button>
+        {calendarOpen && (
+          <Calendar
+            value={digitsToIso(digits)}
+            onSelect={handleCalendarSelect}
+            onClose={() => setCalendarOpen(false)}
+          />
+        )}
+      </div>
       {displayError && <span className="field-error">{displayError}</span>}
     </div>
   );

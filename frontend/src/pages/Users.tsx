@@ -91,7 +91,7 @@ export function Users() {
       setNewPassword(password);
       toast.success(t('users.resetPasswordSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('users.resetPasswordError'));
+      const message = getApiErrorMessage(err, t, t('users.resetPasswordError'));
       setResetError(message);
       toast.error(message);
     } finally {
@@ -113,7 +113,7 @@ export function Users() {
       setBalanceTarget(null);
       toast.success(t('users.resetBalanceSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('users.resetBalanceError'));
+      const message = getApiErrorMessage(err, t, t('users.resetBalanceError'));
       setBalanceError(message);
       toast.error(message);
     } finally {
@@ -140,7 +140,7 @@ export function Users() {
         t(wasActive ? 'users.deactivateSuccess' : 'users.activateSuccess'),
       );
     } catch (err) {
-      const message = getApiErrorMessage(err, t('users.statusUpdateError'));
+      const message = getApiErrorMessage(err, t, t('users.statusUpdateError'));
       setStatusError(message);
       toast.error(message);
     } finally {

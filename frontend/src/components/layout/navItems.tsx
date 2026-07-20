@@ -5,6 +5,7 @@ import {
   ClipboardIcon,
   HistoryIcon,
   PlusIcon,
+  SettingsIcon,
   UserIcon,
   UsersIcon,
 } from './icons';
@@ -38,4 +39,5 @@ export const navItems: NavItem[] = [
     roles: ['MANAGER'],
   },
   { to: '/profile', labelKey: 'nav.profile', icon: <UserIcon /> },
+  { to: '/settings', labelKey: 'nav.settings', icon: <SettingsIcon /> },
 ];

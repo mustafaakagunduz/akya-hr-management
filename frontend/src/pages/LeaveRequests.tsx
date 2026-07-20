@@ -95,7 +95,7 @@ export function LeaveRequests() {
       setMessage(t('manager.approveSuccess'));
       toast.success(t('manager.approveSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setError(message);
       toast.error(message);
     } finally {
@@ -113,7 +113,7 @@ export function LeaveRequests() {
       setMessage(t('manager.rejectSuccess'));
       toast.success(t('manager.rejectSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setError(message);
       toast.error(message);
     } finally {

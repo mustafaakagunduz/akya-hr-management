@@ -109,7 +109,7 @@ export function Register() {
       setPasswordConfirm('');
       setTimeout(() => navigate('/login'), 1200);
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setSubmitError(message);
       toast.error(message);
     } finally {

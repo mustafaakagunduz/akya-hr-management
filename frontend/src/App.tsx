@@ -6,6 +6,7 @@ import { CreateLeave } from './pages/CreateLeave';
 import { LeaveRequests } from './pages/LeaveRequests';
 import { LeaveHistory } from './pages/LeaveHistory';
 import { Profile } from './pages/Profile';
+import { Settings } from './pages/Settings';
 import { Users } from './pages/Users';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -54,6 +55,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         }
       />

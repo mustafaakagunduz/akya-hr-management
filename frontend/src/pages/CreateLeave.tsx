@@ -56,7 +56,7 @@ export function CreateLeave() {
       setFormKey((k) => k + 1);
     } catch (err) {
       setIsConfirmOpen(false);
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setError(message);
       toast.error(message);
     } finally {

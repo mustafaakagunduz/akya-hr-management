@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
@@ -23,6 +24,17 @@ export function Sidebar({
   const visibleItems = navItems.filter(
     (item) => !item.roles || (user && item.roles.includes(user.role)),
   );
+
+  useEffect(() => {
+    if (!mobileOpen) {
+      return;
+    }
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileOpen]);
 
   return (
     <>

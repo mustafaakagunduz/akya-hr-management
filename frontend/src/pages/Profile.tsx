@@ -66,7 +66,7 @@ export function Profile() {
       setIsEditing(false);
       toast.success(t('profile.updateSuccess'));
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setError(message);
       toast.error(message);
     } finally {

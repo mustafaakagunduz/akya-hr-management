@@ -79,7 +79,7 @@ export function EditUserModal({ user, onClose, onSaved }: EditUserModalProps) {
       });
       onSaved(updated);
     } catch (err) {
-      const message = getApiErrorMessage(err, t('common.genericError'));
+      const message = getApiErrorMessage(err, t, t('common.genericError'));
       setError(message);
       toast.error(message);
     } finally {

@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type ReactNode } from 'react';
+import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 import { CloseIcon } from './layout/icons';
 
 interface ModalProps {
@@ -10,6 +10,14 @@ interface ModalProps {
 
 export function Modal({ title, onClose, children, closeLabel }: ModalProps) {
   const mouseDownOnOverlay = useRef(false);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
   function handleOverlayMouseDown(event: MouseEvent<HTMLDivElement>) {
     mouseDownOnOverlay.current = event.target === event.currentTarget;

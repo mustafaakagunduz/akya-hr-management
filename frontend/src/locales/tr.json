@@ -24,8 +24,28 @@
     "leaveHistory": "Geçmiş İzinler",
     "users": "Kullanıcılar",
     "profile": "Profil",
+    "settings": "Ayarlar",
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat"
+  },
+  "settings": {
+    "appearance": {
+      "title": "Görünüm",
+      "themeLabel": "Tema",
+      "theme": {
+        "light": "Açık",
+        "dark": "Koyu",
+        "system": "Sistem"
+      }
+    },
+    "language": {
+      "title": "Dil",
+      "label": "Dil",
+      "options": {
+        "tr": "Türkçe",
+        "en": "İngilizce"
+      }
+    }
   },
   "options": {
     "select": "Seçiniz",
@@ -196,6 +216,47 @@
     "cancelLeaveError": "İzin iptal edilirken bir hata oluştu",
     "cancelLeaveSuccess": "İzin iptal edildi"
   },
+  "errors": {
+    "api": {
+      "emailAlreadyRegistered": "Bu e-posta adresi zaten kayıtlı",
+      "nationalIdAlreadyRegistered": "Bu TC Kimlik No zaten kayıtlı",
+      "invalidCredentials": "E-posta veya şifre hatalı",
+      "userNotFound": "Kullanıcı bulunamadı",
+      "accountInactive": "Hesabınız pasif duruma alınmış",
+      "accountInactiveLogin": "Hesabınız pasif duruma alınmış, giriş yapamazsınız",
+      "pastDateNotAllowed": "Geçmiş tarihe izin talebi girilemez",
+      "insufficientBalanceYours": "Yıllık izin bakiyeniz yetersiz",
+      "leaveRequestNotFound": "İzin talebi bulunamadı",
+      "noEditPermission": "Bu izin talebini düzenleme yetkiniz yok",
+      "onlyPendingEditable": "Sadece bekleyen talepler düzenlenebilir",
+      "noDeletePermission": "Bu izin talebini silme yetkiniz yok",
+      "onlyPendingDeletable": "Sadece bekleyen talepler silinebilir",
+      "insufficientBalance": "Yıllık izin bakiyesi yetersiz",
+      "onlyPendingRejectable": "Sadece bekleyen talepler reddedilebilir",
+      "onlyPendingApprovable": "Sadece bekleyen talepler onaylanabilir",
+      "overlappingRequest": "Bu tarih aralığında bekleyen veya onaylanmış bir talebiniz zaten var",
+      "onlyApprovedCancellable": "Sadece onaylanmış talepler iptal edilebilir",
+      "cannotDeactivateSelf": "Kendi hesabınızı pasifleştiremezsiniz",
+      "emailAlreadyInUse": "Bu e-posta adresi zaten kullanılıyor",
+      "currentPasswordIncorrect": "Mevcut şifre hatalı",
+      "passwordRequired": "Şifre boş bırakılamaz",
+      "firstNameRequired": "Ad boş bırakılamaz",
+      "lastNameRequired": "Soyad boş bırakılamaz",
+      "phoneRequired": "Telefon boş bırakılamaz",
+      "invalidDepartment": "Geçerli bir departman seçin",
+      "invalidPosition": "Geçerli bir pozisyon seçin",
+      "invalidStartDate": "İşe başlama tarihi geçerli bir tarih olmalı",
+      "invalidBirthDate": "Doğum tarihi geçerli bir tarih olmalı",
+      "invalidLeaveType": "İzin türü GUNLUK veya YILLIK olmalı",
+      "invalidLeaveStartDate": "Başlangıç tarihi geçerli bir tarih olmalı",
+      "invalidLeaveEndDate": "Bitiş tarihi geçerli bir tarih olmalı",
+      "invalidRole": "Geçerli bir rol seçin",
+      "balanceMustBeInteger": "Yıllık izin bakiyesi tam sayı olmalı",
+      "balanceCannotBeNegative": "Yıllık izin bakiyesi negatif olamaz",
+      "currentPasswordRequired": "Mevcut şifre boş bırakılamaz",
+      "newPasswordTooShort": "Yeni şifre en az 6 karakter olmalı"
+    }
+  },
   "validation": {
     "required": "Bu alan zorunludur",
     "invalidEmail": "Geçerli bir e-posta adresi girin",
@@ -203,6 +264,15 @@
     "minPasswordLength": "Şifre en az 6 karakter olmalı",
     "passwordMismatch": "Şifreler eşleşmiyor",
     "endBeforeStart": "Bitiş tarihi başlangıç tarihinden önce olamaz",
-    "incompleteDate": "Geçerli bir tarih girin (GG.AA.YYYY)"
+    "incompleteDate": "Geçerli bir tarih girin (GG.AA.YYYY)",
+    "datePlaceholder": "GG.AA.YYYY"
+  },
+  "calendar": {
+    "open": "Takvimi aç",
+    "prevMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay",
+    "month": "Ay",
+    "year": "Yıl",
+    "today": "Bugün"
   }
 }

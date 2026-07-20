@@ -1,0 +1,278 @@
+{
+  "app": {
+    "title": "HR Leave Management System"
+  },
+  "common": {
+    "logout": "Log Out",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "approve": "Approve",
+    "reject": "Reject",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "genericError": "Something went wrong, please try again",
+    "welcome": "Welcome, {{name}}"
+  },
+  "nav": {
+    "panel": "My Leave Requests",
+    "createLeave": "Create Leave Request",
+    "manager": "Leave Management",
+    "leaveHistory": "Leave History",
+    "users": "Users",
+    "profile": "Profile",
+    "settings": "Settings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "settings": {
+    "appearance": {
+      "title": "Appearance",
+      "themeLabel": "Theme",
+      "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
+    },
+    "language": {
+      "title": "Language",
+      "label": "Language",
+      "options": {
+        "tr": "Turkish",
+        "en": "English"
+      }
+    }
+  },
+  "options": {
+    "select": "Select",
+    "department": {
+      "HR": "Human Resources",
+      "SOFTWARE": "Software",
+      "SALES": "Sales",
+      "MARKETING": "Marketing",
+      "FINANCE": "Finance",
+      "OPERATIONS": "Operations"
+    },
+    "position": {
+      "INTERN": "Intern",
+      "SPECIALIST": "Specialist",
+      "TEAM_LEAD": "Team Lead",
+      "MANAGER": "Manager",
+      "DIRECTOR": "Director"
+    }
+  },
+  "auth": {
+    "visual": {
+      "title": "Manage your leave processes from a single place",
+      "subtitle": "Employee requests, manager approvals, and leave balances in a secure, cloud-based system."
+    },
+    "login": {
+      "title": "Log In",
+      "subtitle": "Log in to your account to continue",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log In",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up",
+      "success": "Login successful, welcome",
+      "demo": {
+        "title": "Demo login credentials",
+        "manager": "Manager",
+        "employee": "Employee"
+      }
+    },
+    "register": {
+      "title": "Sign Up",
+      "subtitle": "Create your employee account by entering your details",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "nationalId": "National ID",
+      "email": "Email",
+      "emailHint": "This will be used to log in to the system",
+      "phone": "Phone",
+      "department": "Department",
+      "position": "Position",
+      "startDate": "Start Date",
+      "birthDate": "Date of Birth",
+      "password": "Password",
+      "passwordConfirm": "Confirm Password",
+      "submit": "Sign Up",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "success": "Registration successful, you can now log in"
+    }
+  },
+  "leaves": {
+    "type": {
+      "label": "Leave Type",
+      "DAILY": "Daily",
+      "ANNUAL": "Annual"
+    },
+    "status": {
+      "label": "Status",
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
+    },
+    "date": "Date",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "description": "Description",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "dayCount": "Day Count",
+    "submit": "Create Request",
+    "createSuccess": "Your leave request has been created",
+    "myRequests": "My Leave Requests",
+    "noRequests": "You don't have any leave requests yet",
+    "annualBalance": "Remaining Annual Leave Balance: {{count}} days",
+    "annualBalanceShort": "Annual Leave Balance",
+    "defaultAnnualBalanceShort": "Default Leave Entitlement",
+    "remainingAnnualBalanceShort": "Remaining Leave Entitlement",
+    "confirmTitle": "Confirm Leave Request",
+    "confirmSubtitle": "A leave request will be created with the details below",
+    "editTitle": "Edit Leave Request",
+    "editSuccess": "Your leave request has been updated",
+    "deleteTitle": "Delete Leave Request",
+    "deleteSubtitle": "Are you sure you want to delete this leave request?",
+    "deleteSuccess": "Your leave request has been deleted"
+  },
+  "panel": {
+    "newRequest": "Create Leave Request"
+  },
+  "profile": {
+    "role": "Role",
+    "defaultLeaveDays": "Default Annual Leave Days",
+    "remainingLeaveDays": "Remaining Annual Leave Days",
+    "roles": {
+      "EMPLOYEE": "Employee",
+      "MANAGER": "Manager"
+    },
+    "updateSuccess": "Your profile has been updated",
+    "changePassword": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "newPasswordConfirm": "Confirm New Password",
+      "submit": "Change Password",
+      "success": "Your password has been changed successfully"
+    }
+  },
+  "users": {
+    "noUsers": "No users registered in the system",
+    "noSearchResults": "No users match your search",
+    "searchPlaceholder": "Search by full name",
+    "fullName": "Full Name",
+    "resetPassword": "Reset Password",
+    "resetPasswordConfirmTitle": "Reset Password",
+    "resetPasswordConfirmSubtitle": "The password for {{name}} will be reset and a new password will be generated. Do you confirm?",
+    "resetPasswordTitle": "Password Reset",
+    "resetPasswordSubtitle": "The user's new password is below, please share it with them securely.",
+    "newPassword": "New Password",
+    "resetPasswordError": "An error occurred while resetting the password",
+    "resetPasswordSuccess": "The user's password has been reset",
+    "resetBalance": "Reset Annual Leave Balance",
+    "resetBalanceTitle": "Reset Annual Leave Balance",
+    "resetBalanceSubtitle": "{{name}}'s annual leave balance will be reset to {{count}} days. Do you confirm?",
+    "resetBalanceError": "An error occurred while resetting the balance",
+    "resetBalanceSuccess": "The annual leave balance has been reset",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "deactivate": "Deactivate Account",
+    "activate": "Activate Account",
+    "deactivateTitle": "Deactivate Account",
+    "activateTitle": "Activate Account",
+    "deactivateSubtitle": "{{name}}'s account will be deactivated and they will not be able to log in. Do you confirm?",
+    "activateSubtitle": "{{name}}'s account will be reactivated. Do you confirm?",
+    "statusUpdateError": "An error occurred while updating the status",
+    "deactivateSuccess": "The user's account has been deactivated",
+    "activateSuccess": "The user's account has been activated",
+    "editTitle": "Edit User",
+    "editRole": "Role",
+    "editAnnualLeaveBalance": "Annual Leave Balance",
+    "editSuccess": "User information has been updated"
+  },
+  "manager": {
+    "title": "Leave Management",
+    "pendingRequests": "Pending Requests",
+    "noPending": "No pending requests",
+    "employee": "Employee",
+    "department": "Department",
+    "approveSuccess": "Request approved",
+    "rejectSuccess": "Request rejected",
+    "noHistory": "No leave history",
+    "searchEmployee": "Search by employee name",
+    "noSearchResults": "No records match your search",
+    "cancelLeave": "Cancel Leave",
+    "cancelLeaveTitle": "Cancel Leave",
+    "cancelLeaveSubtitleAnnual": "{{name}}'s approved leave will be cancelled and {{count}} days will be added back to their annual leave balance. Do you confirm?",
+    "cancelLeaveSubtitleDaily": "{{name}}'s approved leave will be cancelled. Do you confirm?",
+    "cancelLeaveError": "An error occurred while cancelling the leave",
+    "cancelLeaveSuccess": "The leave has been cancelled"
+  },
+  "errors": {
+    "api": {
+      "emailAlreadyRegistered": "This email address is already registered",
+      "nationalIdAlreadyRegistered": "This National ID is already registered",
+      "invalidCredentials": "Invalid email or password",
+      "userNotFound": "User not found",
+      "accountInactive": "Your account has been deactivated",
+      "accountInactiveLogin": "Your account has been deactivated, you cannot log in",
+      "pastDateNotAllowed": "A leave request cannot be created for a past date",
+      "insufficientBalanceYours": "Your annual leave balance is insufficient",
+      "leaveRequestNotFound": "Leave request not found",
+      "noEditPermission": "You do not have permission to edit this leave request",
+      "onlyPendingEditable": "Only pending requests can be edited",
+      "noDeletePermission": "You do not have permission to delete this leave request",
+      "onlyPendingDeletable": "Only pending requests can be deleted",
+      "insufficientBalance": "Annual leave balance is insufficient",
+      "onlyPendingRejectable": "Only pending requests can be rejected",
+      "onlyPendingApprovable": "Only pending requests can be approved",
+      "overlappingRequest": "You already have a pending or approved request in this date range",
+      "onlyApprovedCancellable": "Only approved requests can be cancelled",
+      "cannotDeactivateSelf": "You cannot deactivate your own account",
+      "emailAlreadyInUse": "This email address is already in use",
+      "currentPasswordIncorrect": "Current password is incorrect",
+      "passwordRequired": "Password cannot be empty",
+      "firstNameRequired": "First name cannot be empty",
+      "lastNameRequired": "Last name cannot be empty",
+      "phoneRequired": "Phone cannot be empty",
+      "invalidDepartment": "Select a valid department",
+      "invalidPosition": "Select a valid position",
+      "invalidStartDate": "Start date must be a valid date",
+      "invalidBirthDate": "Date of birth must be a valid date",
+      "invalidLeaveType": "Leave type must be DAILY or ANNUAL",
+      "invalidLeaveStartDate": "Start date must be a valid date",
+      "invalidLeaveEndDate": "End date must be a valid date",
+      "invalidRole": "Select a valid role",
+      "balanceMustBeInteger": "Annual leave balance must be an integer",
+      "balanceCannotBeNegative": "Annual leave balance cannot be negative",
+      "currentPasswordRequired": "Current password cannot be empty",
+      "newPasswordTooShort": "New password must be at least 6 characters"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Enter a valid email address",
+    "nationalIdLength": "National ID must be 11 digits",
+    "minPasswordLength": "Password must be at least 6 characters",
+    "passwordMismatch": "Passwords do not match",
+    "endBeforeStart": "End date cannot be before the start date",
+    "incompleteDate": "Enter a valid date (DD.MM.YYYY)",
+    "datePlaceholder": "DD.MM.YYYY"
+  },
+  "calendar": {
+    "open": "Open calendar",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "month": "Month",
+    "year": "Year",
+    "today": "Today"
+  }
+}

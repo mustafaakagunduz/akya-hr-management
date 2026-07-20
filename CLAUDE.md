@@ -116,7 +116,7 @@ Ek sistem alanları (form parametresi sayılmaz):
 - JWT localStorage yerine memory + gerekiyorsa localStorage'da tutulabilir (basitlik öncelik; bu bir demo task).
 - API adresi `VITE_API_URL` ortam değişkeninden okunur.
 - Arayüz dili tamamen **Türkçe**. Sade ve temiz bir görünüm yeterli; ağır UI kütüphanesi kurma (istenirse sadece hafif CSS veya Tailwind).
-- **i18n zorunlu, gömülü statik metin yok:** Bileşenlerde JSX içine doğrudan Türkçe string yazılmaz. `react-i18next` (veya benzeri hafif bir i18n kütüphanesi) kullanılır, tüm metinler `frontend/src/locales/tr.json` gibi **tek bir Türkçe dil dosyasında** tutulur ve `t('anahtar')` ile çağrılır. Başka bir dil dosyası eklenmeyecek (çok dilli destek şu an gerekmiyor, sadece metinlerin koddan ayrıştırılması amaçlanıyor).
+- **i18n zorunlu, gömülü statik metin yok:** Bileşenlerde JSX içine doğrudan string yazılmaz. `react-i18next` kullanılır, tüm metinler `frontend/src/locales/tr.json` ve `frontend/src/locales/en.json` dosyalarında tutulur ve `t('anahtar')` ile çağrılır. Dil, Ayarlar sayfasındaki seçiciyle değiştirilebilir (varsayılan Türkçe, `localStorage`'da saklanır).
 - **Playwright ile uçtan uca test:** Frontend'de geliştirilen her akış (login, kayıt, izin talebi oluşturma, onay/red) Playwright ile test edilecek. `frontend` içinde `@playwright/test` kurulur, testler `frontend/e2e/` altında tutulur.
 
 ## Ortam Değişkenleri
