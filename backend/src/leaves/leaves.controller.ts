@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { LeavesService } from './leaves.service';
@@ -58,10 +59,9 @@ export class LeavesController {
 
   @Roles(UserRole.EMPLOYEE, UserRole.MANAGER)
   @Get('history')
-  findHistory(@CurrentUser() user: User) {
-    return this.leavesService.findHistory(
-      user.role === UserRole.MANAGER ? undefined : user.id,
-    );
+  findHistory(@CurrentUser() user: User, @Query('scope') scope?: string) {
+    const wantsAll = user.role === UserRole.MANAGER && scope === 'all';
+    return this.leavesService.findHistory(wantsAll ? undefined : user.id);
   }
 
   @Roles(UserRole.MANAGER)

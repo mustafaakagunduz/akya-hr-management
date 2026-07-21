@@ -26,6 +26,7 @@ export function MyLeaves() {
   const toast = useToast();
 
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [showAll, setShowAll] = useState(false);
 
   const [editingRequest, setEditingRequest] = useState<LeaveRequest | null>(
     null,
@@ -62,6 +63,7 @@ export function MyLeaves() {
   const pendingRequests = requests.filter(
     (request) => request.status === 'PENDING',
   );
+  const displayedRequests = showAll ? requests : pendingRequests;
 
   function loadRequests() {
     fetchMyLeaveRequests().then(setRequests);
@@ -162,7 +164,21 @@ export function MyLeaves() {
 
   return (
     <AppLayout>
-      <h1>{t('leaves.myRequests')}</h1>
+      <div className="page-title-row">
+        <h1>{t('leaves.myRequests')}</h1>
+        <label className="switch-row">
+          <span className="switch-label">{t('leaves.showAllToggle')}</span>
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={showAll}
+              onChange={(e) => setShowAll(e.target.checked)}
+              data-testid="show-all-toggle"
+            />
+            <span className="switch-track" />
+          </span>
+        </label>
+      </div>
       <p className="balance" data-testid="annual-balance">
         {t('leaves.annualBalance', { count: user?.annualLeaveBalance ?? 0 })}
       </p>
@@ -259,7 +275,7 @@ export function MyLeaves() {
       )}
 
       <div className="section">
-        {pendingRequests.length === 0 ? (
+        {displayedRequests.length === 0 ? (
           <p className="muted">{t('leaves.noRequests')}</p>
         ) : (
           <table className="table-responsive" data-testid="my-requests-table">
@@ -275,7 +291,7 @@ export function MyLeaves() {
               </tr>
             </thead>
             <tbody>
-              {pendingRequests.map((request) => {
+              {displayedRequests.map((request) => {
                 const description = request.description ?? '';
                 const isLong =
                   description.length > DESCRIPTION_TRUNCATE_LENGTH;

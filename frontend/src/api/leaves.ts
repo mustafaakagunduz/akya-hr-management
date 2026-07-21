@@ -30,9 +30,9 @@ export function fetchPendingLeaveRequests() {
     .then((res) => res.data);
 }
 
-export function fetchLeaveHistory() {
+export function fetchLeaveHistory(scope?: 'all') {
   return apiClient
-    .get<LeaveRequest[]>('/leaves/history')
+    .get<LeaveRequest[]>('/leaves/history', { params: scope ? { scope } : undefined })
     .then((res) => res.data);
 }
 

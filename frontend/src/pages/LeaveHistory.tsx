@@ -17,6 +17,8 @@ export function LeaveHistory() {
   const toast = useToast();
   const { user } = useAuth();
   const isManager = user?.role === 'MANAGER';
+  const [showOnlyMine, setShowOnlyMine] = useState(false);
+  const viewingAll = isManager && !showOnlyMine;
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [search, setSearch] = useState('');
 
@@ -41,8 +43,8 @@ export function LeaveHistory() {
   }
 
   useEffect(() => {
-    fetchLeaveHistory().then(setRequests);
-  }, []);
+    fetchLeaveHistory(viewingAll ? 'all' : undefined).then(setRequests);
+  }, [viewingAll]);
 
   async function handleConfirmCancel() {
     if (!cancelTarget) {
@@ -67,7 +69,7 @@ export function LeaveHistory() {
   }
 
   const normalizedSearch = search.trim().toLocaleLowerCase('tr');
-  const filteredRequests = normalizedSearch
+  const filteredRequests = viewingAll && normalizedSearch
     ? requests.filter((request) =>
         `${request.user?.firstName ?? ''} ${request.user?.lastName ?? ''}`
           .toLocaleLowerCase('tr')
@@ -75,20 +77,51 @@ export function LeaveHistory() {
       )
     : requests;
 
+  const todayIso = new Date().toISOString().slice(0, 10);
+  function isOnLeave(request: LeaveRequest) {
+    return (
+      viewingAll &&
+      request.status === 'APPROVED' &&
+      request.startDate <= todayIso &&
+      request.endDate >= todayIso
+    );
+  }
+
   return (
     <AppLayout>
-      <h1>{t('nav.leaveHistory')}</h1>
+      <div className="page-title-row">
+        <h1>{t('nav.leaveHistory')}</h1>
+        {isManager && (
+          <label className="switch-row">
+            <span className="switch-label">{t('manager.onlyMineToggle')}</span>
+            <span className="switch">
+              <input
+                type="checkbox"
+                checked={showOnlyMine}
+                onChange={(e) => setShowOnlyMine(e.target.checked)}
+                data-testid="only-mine-toggle"
+              />
+              <span className="switch-track" />
+            </span>
+          </label>
+        )}
+      </div>
 
-      {isManager && (
-        <input
-          type="text"
-          className="search-bar"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={t('manager.searchEmployee')}
-          aria-label={t('manager.searchEmployee')}
-          data-testid="leave-history-search"
-        />
+      {viewingAll && (
+        <>
+          <input
+            type="text"
+            className="search-bar"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t('manager.searchEmployee')}
+            aria-label={t('manager.searchEmployee')}
+            data-testid="leave-history-search"
+          />
+          <p className="on-leave-info" data-testid="on-leave-info">
+            {t('manager.onLeaveInfo')}
+          </p>
+        </>
       )}
 
       {cancelTarget && (
@@ -150,7 +183,7 @@ export function LeaveHistory() {
           <table className="table-responsive" data-testid="leave-history-table">
             <thead>
               <tr>
-                {isManager && (
+                {viewingAll && (
                   <>
                     <th>{t('manager.employee')}</th>
                     <th>{t('manager.department')}</th>
@@ -173,8 +206,12 @@ export function LeaveHistory() {
                 const isExpanded = expandedDescriptions.has(request.id);
 
                 return (
-                <tr key={request.id} data-testid="leave-history-row">
-                  {isManager && (
+                <tr
+                  key={request.id}
+                  data-testid="leave-history-row"
+                  className={isOnLeave(request) ? 'row-on-leave' : undefined}
+                >
+                  {viewingAll && (
                     <>
                       <td data-label={t('manager.employee')}>
                         {request.user
