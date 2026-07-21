@@ -72,8 +72,7 @@
   },
   "auth": {
     "visual": {
-      "title": "İzin süreçlerinizi tek yerden yönetin",
-      "subtitle": "Personel talepleri, yönetici onayları ve izin bakiyeleri güvenli ve bulut tabanlı bir sistemde."
+      "title": "İzin süreçlerinizi tek yerden yönetin"
     },
     "login": {
       "title": "Giriş Yap",

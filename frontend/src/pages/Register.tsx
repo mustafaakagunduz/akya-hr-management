@@ -123,7 +123,6 @@ export function Register() {
         <img src="/auth-bg.jpg" alt="" />
         <div className="auth-visual-overlay">
           <h2>{t('auth.visual.title')}</h2>
-          <p>{t('auth.visual.subtitle')}</p>
         </div>
       </div>
 

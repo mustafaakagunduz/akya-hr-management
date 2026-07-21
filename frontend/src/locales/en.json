@@ -72,8 +72,7 @@
   },
   "auth": {
     "visual": {
-      "title": "Manage your leave processes from a single place",
-      "subtitle": "Employee requests, manager approvals, and leave balances in a secure, cloud-based system."
+      "title": "Manage your leave processes from a single place"
     },
     "login": {
       "title": "Log In",

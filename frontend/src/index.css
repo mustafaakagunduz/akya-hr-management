@@ -105,24 +105,17 @@ body {
 
 .auth-visual-overlay {
   position: absolute;
+  left: 40px;
   right: 40px;
   bottom: 40px;
-  max-width: 380px;
   color: #fff;
   text-align: right;
 }
 
 .auth-visual-overlay h2 {
   font-size: 1.5rem;
-  margin: 0 0 8px;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
-}
-
-.auth-visual-overlay p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  white-space: nowrap;
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
 }
 
