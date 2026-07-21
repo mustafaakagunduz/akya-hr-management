@@ -310,9 +310,11 @@ export function MyLeaves() {
                     {t(`leaves.type.${request.type}`)}
                   </td>
                   <td data-label={t('leaves.startDate')}>
-                    {request.startDate}
+                    {formatDateTR(request.startDate)}
                   </td>
-                  <td data-label={t('leaves.endDate')}>{request.endDate}</td>
+                  <td data-label={t('leaves.endDate')}>
+                    {formatDateTR(request.endDate)}
+                  </td>
                   <td data-label={t('leaves.dayCount')}>
                     {request.dayCount}
                   </td>

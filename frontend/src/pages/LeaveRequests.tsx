@@ -9,6 +9,7 @@ import {
   rejectLeaveRequest,
 } from '../api/leaves';
 import { getApiErrorMessage } from '../api/client';
+import { formatDateTR } from '../utils/date';
 import { useSocket } from '../context/SocketContext';
 import { useToast } from '../context/ToastContext';
 import type { LeaveRequest } from '../api/types';
@@ -195,9 +196,11 @@ export function LeaveRequests() {
                     {t(`leaves.type.${request.type}`)}
                   </td>
                   <td data-label={t('leaves.startDate')}>
-                    {request.startDate}
+                    {formatDateTR(request.startDate)}
                   </td>
-                  <td data-label={t('leaves.endDate')}>{request.endDate}</td>
+                  <td data-label={t('leaves.endDate')}>
+                    {formatDateTR(request.endDate)}
+                  </td>
                   <td data-label={t('leaves.dayCount')}>
                     {request.dayCount}
                   </td>
