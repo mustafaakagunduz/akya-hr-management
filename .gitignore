@@ -32,3 +32,4 @@ frontend/playwright/.cache/
 # bu repoya ait olmayan yerel dosyalar
 neon-db-bilgileri.png
 .claude/
+CLAUDE.md
