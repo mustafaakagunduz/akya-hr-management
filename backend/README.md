@@ -51,14 +51,26 @@ Uygulama ilk açılışta 3 demo personel (EMPLOYEE) hesabı da oluşturur, heps
 
 | Metot | Yol | Erişim | Açıklama |
 |---|---|---|---|
+| GET | `/health` | Herkese açık | Sağlık kontrolü (DB bağlantısını da doğrular) |
 | POST | `/auth/register` | Herkese açık | 10 alanlık kayıt formu |
 | POST | `/auth/login` | Herkese açık | email + şifre → JWT döner |
 | GET | `/auth/me` | JWT | Giriş yapan kullanıcının bilgileri |
 | POST | `/leaves` | JWT (EMPLOYEE + MANAGER) | Yeni izin talebi oluştur |
-| GET | `/leaves/my` | JWT | Kullanıcının kendi talepleri |
+| GET | `/leaves/my` | JWT | Kullanıcının kendi talepleri (tüm statüler) |
+| PATCH | `/leaves/:id` | JWT (sahibi) | Bekleyen talebi düzenle |
+| DELETE | `/leaves/:id` | JWT (sahibi) | Bekleyen talebi sil |
 | GET | `/leaves/pending` | JWT + MANAGER | Bekleyen tüm talepler |
+| GET | `/leaves/history` | JWT | Kendi geçmişi; MANAGER `?scope=all` ile herkesinkini görür |
 | PATCH | `/leaves/:id/approve` | JWT + MANAGER | Talebi onayla |
 | PATCH | `/leaves/:id/reject` | JWT + MANAGER | Talebi reddet |
+| PATCH | `/leaves/:id/cancel` | JWT + MANAGER | Onaylanmış izni iptal et |
+| GET | `/users` | JWT + MANAGER | Tüm kullanıcıları listele |
+| PATCH | `/users/me` | JWT | Kendi profilini güncelle |
+| PATCH | `/users/me/password` | JWT | Kendi şifresini değiştir |
+| PATCH | `/users/:id` | JWT + MANAGER | Kullanıcının rolünü/bakiyesini düzenle |
+| POST | `/users/:id/reset-password` | JWT + MANAGER | Kullanıcının şifresini sıfırla |
+| POST | `/users/:id/reset-balance` | JWT + MANAGER | Yıllık izin bakiyesini sıfırla |
+| POST | `/users/:id/activate` \| `/deactivate` | JWT + MANAGER | Hesabı aktif/pasif yap |
 
 ## WebSocket (Anlık Bildirimler)
 
@@ -78,7 +90,12 @@ Socket.io tabanlı bir gateway (`/`) JWT ile kimlik doğrulaması yapar. Bağlan
 
 ## Test
 
-Uç noktalar geliştirme sırasında curl ile manuel test edilmiştir (register/login/me, leave create/approve/reject, bakiye/çakışma/yetki senaryoları dahil).
+```bash
+npm run test       # unit testler (jest)
+npm run test:e2e   # NestJS e2e testleri
+```
+
+Ana uç noktalar ve iş kuralları (bakiye düşme, çakışma, yetki senaryoları) ayrıca frontend'deki Playwright e2e testleriyle uçtan uca doğrulanmıştır (bkz. `frontend/README.md`).
 
 ## Deploy (Render.com)
 
@@ -87,3 +104,4 @@ Uç noktalar geliştirme sırasında curl ile manuel test edilmiştir (register/
 3. Start komutu: `npm run start:prod`
 4. Environment sekmesinden `DATABASE_URL`, `JWT_SECRET`, `JWT_EXPIRES`, `PORT` değişkenlerini `.env` dosyasındaki gerçek değerlerle girin.
 5. Deploy sonrası verilen URL'yi frontend'in `VITE_API_URL` değişkenine yazın.
+6. Render'ın ücretsiz planı belirli bir süre istek gelmezse servisi uykuya alır. Repo, `/health` uç noktasını 10 dakikada bir çağıran bir GitHub Actions cron job'u içerir (`.github/workflows/keep-alive.yml`) — servisi uyanık tutmak için otomatik çalışır.
