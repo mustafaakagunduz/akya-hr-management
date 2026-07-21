@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -94,6 +95,26 @@ export function DateField({
     return () => {
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [calendarOpen]);
+
+  useEffect(() => {
+    if (!calendarOpen) {
+      return;
+    }
+    function handleFocusIn(event: FocusEvent) {
+      const target = event.target as Node;
+      if (
+        wrapRef.current?.contains(target) ||
+        popoverRef.current?.contains(target)
+      ) {
+        return;
+      }
+      setCalendarOpen(false);
+    }
+    document.addEventListener('focusin', handleFocusIn);
+    return () => {
+      document.removeEventListener('focusin', handleFocusIn);
     };
   }, [calendarOpen]);
 
