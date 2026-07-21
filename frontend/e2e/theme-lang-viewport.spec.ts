@@ -19,7 +19,7 @@ const HEADINGS: Record<Language, Record<string, string>> = {
     createLeave: 'İzin Talebi Oluştur',
     leaveRequests: 'İzin Yönetimi',
     leaveHistory: 'Geçmiş İzinler',
-    users: 'Kullanıcılar',
+    users: 'Tüm Kullanıcılar',
     settings: 'Ayarlar',
     profile: 'Profil',
   },
