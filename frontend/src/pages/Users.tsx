@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
+import { SectionLoading } from '../components/SectionLoading';
 import { Modal } from '../components/Modal';
 import { EditUserModal } from '../components/EditUserModal';
 import {
@@ -28,6 +29,7 @@ export function Users() {
   const { user: currentUser } = useAuth();
   const toast = useToast();
   const [users, setUsers] = useState<Omit<User, 'password'>[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   const [resetPasswordTarget, setResetPasswordTarget] = useState<Omit<
@@ -58,7 +60,9 @@ export function Users() {
   > | null>(null);
 
   useEffect(() => {
-    fetchAllUsers().then(setUsers);
+    fetchAllUsers()
+      .then(setUsers)
+      .finally(() => setIsLoading(false));
   }, []);
 
   const normalizedSearch = search.trim().toLocaleLowerCase('tr');
@@ -316,7 +320,9 @@ export function Users() {
       )}
 
       <div className="section">
-        {filteredUsers.length === 0 ? (
+        {isLoading ? (
+          <SectionLoading />
+        ) : filteredUsers.length === 0 ? (
           <p className="muted">
             {users.length === 0
               ? t('users.noUsers')

@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
+import { SectionLoading } from '../components/SectionLoading';
 import { LeaveStatusBadge } from '../components/LeaveStatusBadge';
 import { LeaveRequestFields } from '../components/LeaveRequestFields';
 import { Modal } from '../components/Modal';
@@ -26,6 +27,7 @@ export function MyLeaves() {
   const toast = useToast();
 
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
 
   const [editingRequest, setEditingRequest] = useState<LeaveRequest | null>(
@@ -66,7 +68,10 @@ export function MyLeaves() {
   const displayedRequests = showAll ? requests : pendingRequests;
 
   function loadRequests() {
-    fetchMyLeaveRequests().then(setRequests);
+    setIsLoading(true);
+    fetchMyLeaveRequests()
+      .then(setRequests)
+      .finally(() => setIsLoading(false));
   }
 
   useEffect(() => {
@@ -275,7 +280,9 @@ export function MyLeaves() {
       )}
 
       <div className="section">
-        {displayedRequests.length === 0 ? (
+        {isLoading ? (
+          <SectionLoading />
+        ) : displayedRequests.length === 0 ? (
           <p className="muted">{t('leaves.noRequests')}</p>
         ) : (
           <table className="table-responsive" data-testid="my-requests-table">

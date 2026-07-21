@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
+import { SectionLoading } from '../components/SectionLoading';
 import { LeaveStatusBadge } from '../components/LeaveStatusBadge';
 import { Modal } from '../components/Modal';
 import { CloseIcon } from '../components/layout/icons';
@@ -20,6 +21,7 @@ export function LeaveHistory() {
   const [showOnlyMine, setShowOnlyMine] = useState(false);
   const viewingAll = isManager && !showOnlyMine;
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   const [cancelTarget, setCancelTarget] = useState<LeaveRequest | null>(null);
@@ -43,7 +45,10 @@ export function LeaveHistory() {
   }
 
   useEffect(() => {
-    fetchLeaveHistory(viewingAll ? 'all' : undefined).then(setRequests);
+    setIsLoading(true);
+    fetchLeaveHistory(viewingAll ? 'all' : undefined)
+      .then(setRequests)
+      .finally(() => setIsLoading(false));
   }, [viewingAll]);
 
   async function handleConfirmCancel() {
@@ -173,7 +178,9 @@ export function LeaveHistory() {
       )}
 
       <div className="section">
-        {filteredRequests.length === 0 ? (
+        {isLoading ? (
+          <SectionLoading />
+        ) : filteredRequests.length === 0 ? (
           <p className="muted">
             {requests.length === 0
               ? t('manager.noHistory')

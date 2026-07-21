@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from '../components/layout/AppLayout';
+import { SectionLoading } from '../components/SectionLoading';
 import { CheckIcon, CloseIcon } from '../components/layout/icons';
 import {
   approveLeaveRequest,
@@ -19,6 +20,7 @@ export function LeaveRequests() {
   const socket = useSocket();
   const toast = useToast();
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -41,7 +43,10 @@ export function LeaveRequests() {
   }
 
   function loadRequests() {
-    fetchPendingLeaveRequests().then(setRequests);
+    setIsLoading(true);
+    fetchPendingLeaveRequests()
+      .then(setRequests)
+      .finally(() => setIsLoading(false));
   }
 
   useEffect(() => {
@@ -145,7 +150,9 @@ export function LeaveRequests() {
 
       <div className="section">
         <h2>{t('manager.pendingRequests')}</h2>
-        {filteredRequests.length === 0 ? (
+        {isLoading ? (
+          <SectionLoading />
+        ) : filteredRequests.length === 0 ? (
           <p className="muted">
             {requests.length === 0
               ? t('manager.noPending')

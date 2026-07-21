@@ -1453,6 +1453,25 @@ tr:last-child td {
   }
 }
 
+.section-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.section-loading-spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  animation: loading-spin 0.7s linear infinite;
+}
+
 .mobile-drawer-overlay {
   position: fixed;
   inset: 0;
