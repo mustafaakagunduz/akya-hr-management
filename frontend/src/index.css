@@ -1162,12 +1162,49 @@ tr:last-child td {
   cursor: pointer;
 }
 
-.language-toggle-btn--framed {
-  width: 36px;
+.lang-switch {
+  position: relative;
+  display: inline-flex;
+  width: 68px;
   height: 36px;
-  padding: 0;
+  padding: 3px;
+  background: none;
   border: 1.5px solid var(--color-brand);
   border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.lang-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  background: var(--color-brand);
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+
+.lang-switch-thumb--right {
+  transform: translateX(100%);
+}
+
+.lang-switch-option {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--color-brand);
+  transition: color 0.2s ease;
+}
+
+.lang-switch-option--active {
+  color: #fff;
 }
 
 @media (min-width: 900px) {

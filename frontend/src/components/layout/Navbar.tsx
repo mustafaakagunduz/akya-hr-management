@@ -24,7 +24,7 @@ export function Navbar({ onMenuOpen }: NavbarProps) {
           <span className="app-navbar-user">
             {user ? `${user.firstName} ${user.lastName}` : ''}
           </span>
-          <LanguageToggle className="language-toggle-btn--framed" />
+          <LanguageToggle variant="switch" />
           <ThemeToggle />
           <button
             type="button"

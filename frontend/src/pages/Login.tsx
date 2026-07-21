@@ -156,7 +156,7 @@ export function Login() {
           <div className="auth-toggle-row">
             <ThemeToggle />
             <span className="auth-toggle-divider">|</span>
-            <LanguageToggle />
+            <LanguageToggle variant="switch" />
           </div>
         </div>
       </div>
