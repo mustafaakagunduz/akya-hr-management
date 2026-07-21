@@ -2,6 +2,12 @@
 
 Bir şirketin İnsan Kaynakları departmanı için bulutta çalışan izin yönetim sistemi. Personel 10 parametrelik kayıt formuyla sisteme kaydolur, günlük/yıllık izin talebi oluşturur; talepler yöneticinin onayına düşer.
 
+## Canlı Demo
+
+- **Uygulama:** https://akya-hr-management.vercel.app/
+- **API:** https://akya-hr-management.onrender.com
+- **Veritabanı:** PostgreSQL, Neon.tech üzerinde barındırılıyor
+
 Monorepo yapısı:
 
 ```
