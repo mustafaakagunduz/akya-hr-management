@@ -151,6 +151,9 @@ export function Login() {
                 </div>
               </div>
             ))}
+            <p className="demo-card-note">
+              <strong>{t('auth.login.demo.note')}</strong>
+            </p>
           </div>
 
           <div className="auth-toggle-row">

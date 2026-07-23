@@ -89,7 +89,8 @@
         "employee": "Personel",
         "copyEmail": "E-postayı kopyala",
         "copyPassword": "Şifreyi kopyala",
-        "copied": "Kopyalandı"
+        "copied": "Kopyalandı",
+        "note": "Not: Sunucu, kullanılmadığı sürelerde uykuya geçmektedir. Bu nedenle ilk girişte yaklaşık 1 dakika beklenmesi gerekebilir."
       }
     },
     "register": {

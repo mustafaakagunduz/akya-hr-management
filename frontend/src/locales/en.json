@@ -89,7 +89,8 @@
         "employee": "Employee",
         "copyEmail": "Copy email",
         "copyPassword": "Copy password",
-        "copied": "Copied"
+        "copied": "Copied",
+        "note": "Note: The server goes to sleep during periods of inactivity. Because of this, the first login may take about 1 minute."
       }
     },
     "register": {
